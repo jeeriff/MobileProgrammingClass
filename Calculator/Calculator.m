@@ -20,8 +20,6 @@
 @synthesize fullOperand;
 @synthesize operationUserHasPressed;
 
-Compute *compObj;
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.fullOperand = [[NSMutableString alloc] initWithString:@""];
@@ -73,17 +71,17 @@ Compute *compObj;
     if(operandInProgress == TRUE) {
         [operationUserHasPressed setString:sender.currentTitle];
         
-        if(compObj.isStackEmpty == 1)  {                    // if stack is empty
+        if(comp.isStackEmpty == 1)  {                    // if stack is empty
             NSLog(@"--> fullOperand is: %@", self.fullOperand);
-            [compObj pushOperand:self.fullOperand];
-            [compObj pushOperand:self.operationUserHasPressed];
+            [comp pushOperand:self.fullOperand];
+            [comp pushOperand:self.operationUserHasPressed];
         }
 
         else  {                                             // stack is not empty
             
         }
         
-        [compObj pushOperand:self.fullOperand ];
+        [comp pushOperand:self.fullOperand ];
         [self.fullOperand setString:@""];
     }
     else  {
@@ -109,8 +107,8 @@ Compute *compObj;
     // if confirm
     UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
         {
-            if(compObj.isStackEmpty != 0) {         // empty stack if not empty
-                [compObj clearStack];
+            if(comp.isStackEmpty != 0) {         // empty stack if not empty
+                [comp clearStack];
                 [self.fullOperand setString:@""];
             }
             operandInProgress = FALSE;              // no longer building operand
