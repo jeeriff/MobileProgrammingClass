@@ -7,12 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Compute.h"
 
 @interface Calculator : UIViewController
 
 @property (nonatomic, strong) Compute *comp;
 @property (nonatomic, weak) NSString *operationUserHasPressed;
-@property (strong, nonatomic) IBOutlet UITextView *display;
+@property (strong, nonatomic) IBOutlet UILabel *display;
+@property (nonatomic, weak) NSString *defaultClearValue;
+@property (nonatomic, assign) BOOL operandInProgress;
+@property (nonatomic, strong) NSMutableString *fullOperand;
+
+-(IBAction)digitPressed:(UIButton *)sender;
+-(IBAction)operationPressed:(UIButton *)sender;
+-(IBAction)equalToSignPressed:(UIButton *)sender;
+-(IBAction)clearPressed:(UIButton *)sender;
+
 
 @end
 

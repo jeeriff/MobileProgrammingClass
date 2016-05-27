@@ -9,11 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @interface Compute : NSObject
-
+ 
 @property (nonatomic, strong) NSMutableArray *programStack;
+@property (nonatomic, strong) NSMutableString *fullOperand;
 
 -(void)pushOperand:(double)operand;
 -(double)performOperation:(NSString *)operation;
 -(double)popOperand;
+-(BOOL)isStackEmpty;
+-(void)clearStack;
 
 @end

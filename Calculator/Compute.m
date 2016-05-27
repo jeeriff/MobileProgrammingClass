@@ -7,12 +7,22 @@
 //
 
 #import "Compute.h"
-#import "Calculator.h"
 
 @implementation Compute
+@synthesize programStack;
+@synthesize fullOperand;
+
+//NSMutableArray *programStack = nil;
+
 
 - (void)pushOperand:(double)operand
 {
+    //This section is supposed to push 'full operands' onto 'programStack'//*********
+    //It doesn't currently work//**********
+    NSString *opString = [NSString stringWithFormat:@"%g", operand];
+    [self.fullOperand appendString:opString];
+    //NSMutableString *intermediate = nil;
+    //[self.fullOperand appendString:[operand NSString]];
     [self.programStack addObject:[NSNumber numberWithDouble:operand]];
 }
 
@@ -26,7 +36,26 @@
         //result = operand1 + operand2;
     //}
     //Insert your code here.
+    
     return 0;
+}
+
+- (double)popOperand
+{
+    return 0;
+}
+
+- (BOOL)isStackEmpty
+{
+    if([programStack count] == 0)
+        return true;
+    else
+        return false;
+}
+
+- (void)clearStack
+{
+    [programStack removeAllObjects];
 }
 
 @end
