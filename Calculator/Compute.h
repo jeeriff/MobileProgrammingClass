@@ -15,7 +15,7 @@
 
 + (int)getOpWeight:(NSString *)op;
 + (bool)thisOp:(NSString *)op1 thatOp:(NSString *)op2;
--(void)pushOperand:(double)operand;
+-(void)pushOperand:(NSMutableString *)operand;
 -(double)performOperation:(NSString *)operation;
 -(double)popOperand;
 -(BOOL)isStackEmpty;

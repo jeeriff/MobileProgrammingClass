@@ -68,32 +68,29 @@ Compute *compObj;
 
 - (IBAction)operationPressed:(UIButton *)sender
 {
+    NSLog(@"--> Inside operationPressed");
     //Obtain the operation entered by the user
     if(operandInProgress == TRUE) {
-        self.operationUserHasPressed = sender.currentTitle;
+        [operationUserHasPressed setString:sender.currentTitle];
         
-        if(([self.operationUserHasPressed isEqualToString:@"+"])  ||
-           ([self.operationUserHasPressed isEqualToString:@"-"])  ||
-           ([self.operationUserHasPressed isEqualToString:@"*"])  ||
-           ([self.operationUserHasPressed isEqualToString:@"/"])  ||
-           ([self.operationUserHasPressed isEqualToString:@"^"])  )  {
-        
+        if(compObj.isStackEmpty == 1)  {                    // if stack is empty
+            NSLog(@"--> fullOperand is: %@", self.fullOperand);
+            [compObj pushOperand:self.fullOperand];
+            [compObj pushOperand:self.operationUserHasPressed];
         }
-        
-        else if([self.operationUserHasPressed isEqualToString:@"L"])  {           // 'L'
+
+        else  {                                             // stack is not empty
             
         }
         
-        else  {
-            
-        }
-        
-//      [compObj pushOperand:[self.fullOperand doubleValue]];
+        [compObj pushOperand:self.fullOperand ];
         [self.fullOperand setString:@""];
     }
+    else  {
+        // NSLog(@"Operand not in progress");   // this works
+    }
     
-    if(![self.operationUserHasPressed isEqualToString:@"%"])
-        operandInProgress = FALSE;
+    self.operandInProgress = FALSE;
 }
 
 - (IBAction)equalToSignPressed:(UIButton *)sender

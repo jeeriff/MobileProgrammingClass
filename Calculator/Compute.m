@@ -12,7 +12,7 @@
 @synthesize programStack;
 @synthesize fullOperand;
 
-//NSMutableArray *programStack = nil;
+NSMutableArray *programStack = nil;
 
 /* thisOp thatOp
  --------------------
@@ -49,19 +49,16 @@
         return 3;
 }
 
-- (void)pushOperand:(double)operand
-{
-    //This section is supposed to push 'full operands' onto 'programStack'//*********
-    //It doesn't currently work//**********
-    NSString *opString = [NSString stringWithFormat:@"%g", operand];
-    [self.fullOperand appendString:opString];
-    //NSMutableString *intermediate = nil;
-    //[self.fullOperand appendString:[operand NSString]];
-    [self.programStack addObject:[NSNumber numberWithDouble:operand]];
+- (void)pushOperand:(NSMutableString *)operand  {
+    NSLog(@"--> Inside pushOperand");
+    [programStack addObject:operand];
+    NSLog(@" Current operand is %@", operand);
+    for(NSMutableString *item in programStack)  {
+        NSLog(@"Array item: %@", item);
+    }
 }
 
-- (double)performOperation:(NSString *)operation
-{
+- (double)performOperation:(NSString *)operation  {
     //Perform Addition.
    // if ([operation isEqualToString:@"+"])
     //{
