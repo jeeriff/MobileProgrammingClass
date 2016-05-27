@@ -14,6 +14,40 @@
 
 //NSMutableArray *programStack = nil;
 
+/* thisOp thatOp
+ --------------------
+    op1 >= op2 return(YES)
+    op1 < op2  return(NO)
+ * */
++ (bool)thisOp:(NSString *)op1 thatOp:(NSString *)op2
+{
+    //integer_t opW1, opW2;
+    if([self getOpWeight:op1] < [self getOpWeight:op2])  {
+        return false;
+    }
+    else  {
+        return true;
+    }
+}
+
+/*  getOpWeight
+ --------------------
+    used in operator precedence processing
+    since only programmers will be using it, not error checking
+    if '+' or '-' then 1 (low)
+    else '*' or '/' then 2 (high)
+ * */
++ (integer_t)getOpWeight:(NSString *)op
+{
+    if([op isEqualToString:@"+"] || [op isEqualToString:@"-"])  {
+        return 1;
+    }
+    else if([op isEqualToString:@"*"] || [op isEqualToString:@"/"])  {
+        return 2;
+    }
+    else
+        return 3;
+}
 
 - (void)pushOperand:(double)operand
 {

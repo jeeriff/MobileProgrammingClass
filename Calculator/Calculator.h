@@ -2,7 +2,7 @@
 //  ViewController.h
 //  Calculator
 //
-//  Created by Matthew Harrison on 5/24/16.
+//  Created by Matthew Harrison and on 5/24/16.
 //  Copyright © 2016 Matthew Harrison. All rights reserved.
 //
 

@@ -13,6 +13,8 @@
 @property (nonatomic, strong) NSMutableArray *programStack;
 @property (nonatomic, strong) NSMutableString *fullOperand;
 
++ (int)getOpWeight:(NSString *)op;
++ (bool)thisOp:(NSString *)op1 thatOp:(NSString *)op2;
 -(void)pushOperand:(double)operand;
 -(double)performOperation:(NSString *)operation;
 -(double)popOperand;

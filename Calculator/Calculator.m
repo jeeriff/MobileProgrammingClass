@@ -6,6 +6,7 @@
 //  Copyright © 2016 Matthew Harrison. All rights reserved.
 //
 
+#import "math.h"
 #import "Calculator.h"
 
 @interface Calculator ()
@@ -34,21 +35,34 @@ Compute *compObj;
 
 - (IBAction)digitPressed:(UIButton *)sender
 {
-    //To obtain the number entered by the user
-    if(operandInProgress == FALSE)
+    if(operandInProgress == FALSE)                          // to obtain the number entered by the user
         [fullOperand setString:@""];
     operandInProgress = TRUE;
-    NSString *numberEntered = sender.currentTitle;
-    [fullOperand appendString:numberEntered];
-    //[compObj pushOperand:[numberEntered doubleValue]];
-    display.text = self.fullOperand;
-    //This section deals with the e button (we treat it as a digit being pressed)//*********
-
-    if([numberEntered isEqualToString:@"e"]) {
-        NSString *eString = @"2.71828";
-        display.text = eString;
-        [compObj pushOperand:[eString doubleValue]];
+    
+    NSString *numberEntered = sender.currentTitle;          // store value of button into string
+    
+    if([numberEntered isEqualToString:@"e"]) {              // 'e'
+        [fullOperand setString:@"2.71828"];
+        operandInProgress = FALSE;
     }
+    
+    else if([numberEntered isEqualToString:@"%"]) {         // '%'
+        double percentDouble = [display.text doubleValue] / 100.0;
+        fullOperand = [NSMutableString stringWithFormat:@"%g", percentDouble];
+        operandInProgress = FALSE;
+    }
+    
+    else if([numberEntered isEqualToString:@"Ln"]) {         // 'Ln'
+        double natLogged = log([display.text doubleValue]);
+        fullOperand = [NSMutableString stringWithFormat:@"%g", natLogged];
+        operandInProgress = FALSE;
+    }
+    
+    else  {
+        [fullOperand appendString:numberEntered];           // build number 'token'
+    }
+    
+    display.text = self.fullOperand;
 }
 
 
@@ -56,19 +70,28 @@ Compute *compObj;
 {
     //Obtain the operation entered by the user
     if(operandInProgress == TRUE) {
-    self.operationUserHasPressed = sender.currentTitle;
+        self.operationUserHasPressed = sender.currentTitle;
         
-    //This section deals with the % operator//*********
-        if([self.operationUserHasPressed isEqualToString:@"%"]) {
-            double percentDouble = [display.text doubleValue] / 100.0;
-            NSString *percentString = [NSString stringWithFormat:@"%g", percentDouble];
-            display.text = percentString;
-            [compObj pushOperand:[percentString doubleValue]];
+        if(([self.operationUserHasPressed isEqualToString:@"+"])  ||
+           ([self.operationUserHasPressed isEqualToString:@"-"])  ||
+           ([self.operationUserHasPressed isEqualToString:@"*"])  ||
+           ([self.operationUserHasPressed isEqualToString:@"/"])  ||
+           ([self.operationUserHasPressed isEqualToString:@"^"])  )  {
+        
         }
         
-        [compObj pushOperand:[self.fullOperand doubleValue]];
+        else if([self.operationUserHasPressed isEqualToString:@"L"])  {           // 'L'
+            
+        }
+        
+        else  {
+            
+        }
+        
+//      [compObj pushOperand:[self.fullOperand doubleValue]];
         [self.fullOperand setString:@""];
     }
+    
     if(![self.operationUserHasPressed isEqualToString:@"%"])
         operandInProgress = FALSE;
 }
@@ -84,18 +107,21 @@ Compute *compObj;
 
 - (IBAction)clearPressed:(UIButton *) sender
 {
+    // confirmation alert message
     UIAlertController *clearAlert = [UIAlertController alertControllerWithTitle:@"Clear Pressed" message:@"Are you sure you want to clear the display?" preferredStyle:UIAlertControllerStyleAlert];
+    // if confirm
     UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
         {
-            if(compObj.isStackEmpty != 0) {
+            if(compObj.isStackEmpty != 0) {         // empty stack if not empty
                 [compObj clearStack];
                 [self.fullOperand setString:@""];
             }
-            operandInProgress = FALSE;
-            defaultClearValue = @"0";
+            operandInProgress = FALSE;              // no longer building operand
+            defaultClearValue = @"0";               // reset display to default '0'
             display.text = defaultClearValue;
             [clearAlert dismissViewControllerAnimated:YES completion:nil];
         }];
+    // if cancel, just dismiss the alert
     UIAlertAction *no = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
         {
             [clearAlert dismissViewControllerAnimated:YES completion:nil];
