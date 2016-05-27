@@ -20,6 +20,8 @@
 @synthesize fullOperand;
 @synthesize operationUserHasPressed;
 
+Compute *comp;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.fullOperand = [[NSMutableString alloc] initWithString:@""];
