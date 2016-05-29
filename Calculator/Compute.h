@@ -18,8 +18,8 @@
 + (bool)thisOp:(NSString *)op1 thatOp:(NSString *)op2;
 -(void)pushOperand:(NSMutableString *)operand;
 -(void)pushOperator:(NSMutableString *)operator;
--(double)performOperation:(NSString *)operation;
--(double)popOperand;
+-(NSMutableString *)performOperation:(NSString *)operation;
+-(NSMutableString *)popOperand;
 -(NSMutableString *)popOperator;
 -(BOOL)isStackEmpty;
 -(BOOL)isOpStackEmpty;

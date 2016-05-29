@@ -51,18 +51,19 @@ NSMutableArray *programStack = nil;
 }
 
 - (void)pushOperand:(NSMutableString *)operand  {
-    [programStack addObject:operand];
-    for(NSMutableString *item in programStack)  {
+    [self.programStack addObject:operand];
+    for(NSMutableString *item in self.programStack)  {
         NSLog(@"Array item: %@", item);
     }
 }
 
 - (void)pushOperator:(NSMutableString *)operator {
-    
-
+    [self.operatorStack addObject:operator];
+    for(NSMutableString *item in self.operatorStack)
+        NSLog(@"Array item: %@", item);
 }
 
-- (double)performOperation:(NSString *)operation  {
+- (NSMutableString *)performOperation:(NSString *)operation  {
     //Perform Addition.
    // if ([operation isEqualToString:@"+"])
     //{
@@ -75,33 +76,40 @@ NSMutableArray *programStack = nil;
     return 0;
 }
 
-- (double)popOperand
+- (NSMutableString *)popOperand
 {
-    return 0;
+    NSMutableString * last = [self.programStack lastObject];
+    [self.programStack removeLastObject];
+    return last;
 }
 
 -(NSMutableString *)popOperator {
     
-    return 0;
+    NSMutableString * last = [self.operatorStack lastObject];
+    [self.operatorStack removeLastObject];
+    return last;
 }
 
 - (BOOL)isStackEmpty
 {
-    if([programStack count] == 0)
+    if([self.programStack count] == 0)
         return true;
     else
         return false;
 }
 
 -(BOOL)isOpStackEmpty {
-    return 0;
+    if([self.operatorStack count] == 0)
+        return true;
+    else
+        return false;
     
 }
 
 - (void)clearStack
 {
-    [programStack removeAllObjects];
-    [operatorStack removeAllObjects];
+    [self.programStack removeAllObjects];
+    [self.operatorStack removeAllObjects];
 }
 
 @end
