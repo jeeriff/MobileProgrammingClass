@@ -63,8 +63,8 @@ NSMutableArray *programStack = nil;
         NSLog(@"Array item: %@", item);
 }
 
-- (NSMutableString *)performOperation:(NSString *)operation  {
-    NSMutableString *op1 = [NSMutableString alloc];
+- (NSMutableString *)performOperation:(NSString *)operation  { //Perform actual operations
+    NSMutableString *op1 = [NSMutableString alloc];            //Precendence not addressed here
     double op1Double;
     NSMutableString *op2 = [NSMutableString alloc];
     double op2Double;
