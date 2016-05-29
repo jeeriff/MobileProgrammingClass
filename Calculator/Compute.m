@@ -98,6 +98,10 @@ NSMutableArray *operatorStack = nil;
         return result;
     }
     else if([operation isEqualToString:@"/"]) { //Division calculation
+        if([op2 isEqualToString:@"0"]) {
+            NSMutableString *divZero = [NSMutableString stringWithFormat:@"Divide by Zero"];
+            return divZero;
+        }
         resultDouble = op1Double / op2Double;
         result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;

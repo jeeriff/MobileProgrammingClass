@@ -87,6 +87,8 @@ Compute *comp = nil;
                 while([Calculator compObj].isOpStackEmpty == 0)  {      // while there are operators on the stack
                     [[Calculator compObj] pushOperand:self.fullOperand];
                     self.fullOperand = [[Calculator compObj] performOperation:[[Calculator compObj] popOperator]];
+                    if([self.fullOperand isEqual:@"Divide by Zero"])
+                        [self divByZero];
                 }
             }
         }
@@ -109,11 +111,13 @@ Compute *comp = nil;
         while([Calculator compObj].isOpStackEmpty == 0)  {      // while there are operators on the stack
             [[Calculator compObj] pushOperand:self.fullOperand];
             self.fullOperand = [[Calculator compObj] performOperation:[[Calculator compObj] popOperator]];
+            if([self.fullOperand isEqual:@"Divide by Zero"])
+                [self divByZero];
         }
         display.text = self.fullOperand;
     }
     
-    self.operandInProgress = FALSE;
+   // self.operandInProgress = FALSE;
 }
 
 - (IBAction)clearPressed:(UIButton *) sender
@@ -140,6 +144,28 @@ Compute *comp = nil;
     [clearAlert addAction:yes];
     [clearAlert addAction:no];
     [self presentViewController:clearAlert animated:YES completion:nil];
+}
+
+-(void)divByZero {
+    // confirmation alert message
+    UIAlertController *clearAlert = [UIAlertController alertControllerWithTitle:@"Divide by zero error" message:@"You can't divide by zero!" preferredStyle:UIAlertControllerStyleAlert];
+    // if confirm
+    UIAlertAction *yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
+                          {
+                              if([Calculator compObj].isStackEmpty != 0) {         // empty stack if not empty
+                                  [[Calculator compObj] clearStack];
+                                  [self.fullOperand setString:@""];
+                              }
+                              operandInProgress = FALSE;              // no longer building operand
+                              defaultClearValue = @"0";               // reset display to default '0'
+                              display.text = defaultClearValue;
+                              [clearAlert dismissViewControllerAnimated:YES completion:nil];
+                          }];
+    // if cancel, just dismiss the alert
+    [clearAlert addAction:yes];
+    [self presentViewController:clearAlert animated:YES completion:nil];
+
+    
 }
 
 @end

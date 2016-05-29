@@ -22,6 +22,7 @@
 -(IBAction)operationPressed:(UIButton *)sender;
 -(IBAction)equalToSignPressed:(UIButton *)sender;
 -(IBAction)clearPressed:(UIButton *)sender;
+-(void)divByZero;
 
 
 @end
