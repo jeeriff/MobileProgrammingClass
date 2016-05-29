@@ -12,6 +12,7 @@
 @synthesize programStack;
 @synthesize operatorStack;
 @synthesize fullOperand;
+@synthesize operatorStack;
 
 NSMutableArray *programStack = nil;
 NSMutableArray *operatorStack = nil;
@@ -106,6 +107,14 @@ NSMutableArray *operatorStack = nil;
         return true;
     else
         return false;
+}
+
+-(BOOL)isOpStackEmpty {
+    if([self.operatorStack count] == 0)
+        return true;
+    else
+        return false;
+    
 }
 
 - (void)clearStack

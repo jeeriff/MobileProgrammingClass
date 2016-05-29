@@ -46,30 +46,30 @@ Compute *comp = nil;
 - (IBAction)digitPressed:(UIButton *)sender
 {
     if(operandInProgress == FALSE)                          // to obtain the number entered by the user
-        [fullOperand setString:@""];
-    operandInProgress = TRUE;
+        [self.fullOperand setString:@""];
+    self.operandInProgress = TRUE;
     
     NSString *numberEntered = sender.currentTitle;          // store value of button into string
     
     if([numberEntered isEqualToString:@"e"]) {              // 'e'
-        [fullOperand setString:@"2.71828"];
-        operandInProgress = FALSE;
+        [self.fullOperand setString:@"2.71828"];
+        self.operandInProgress = FALSE;
     }
     
     else if([numberEntered isEqualToString:@"%"]) {         // '%'
         double percentDouble = [display.text doubleValue] / 100.0;
-        fullOperand = [NSMutableString stringWithFormat:@"%g", percentDouble];
-        operandInProgress = FALSE;
+        self.fullOperand = [NSMutableString stringWithFormat:@"%g", percentDouble];
+        self.operandInProgress = FALSE;
     }
     
     else if([numberEntered isEqualToString:@"Ln"]) {         // 'Ln'
         double natLogged = log([display.text doubleValue]);
-        fullOperand = [NSMutableString stringWithFormat:@"%g", natLogged];
-        operandInProgress = FALSE;
+        self.fullOperand = [NSMutableString stringWithFormat:@"%g", natLogged];
+        self.operandInProgress = FALSE;
     }
     
     else  {
-        [fullOperand appendString:numberEntered];           // build number 'token'
+        [self.fullOperand appendString:numberEntered];           // build number 'token'
     }
     
     display.text = self.fullOperand;
@@ -79,8 +79,8 @@ Compute *comp = nil;
 - (IBAction)operationPressed:(UIButton *)sender
 {
     // check there's an operand built before operator
-    if(operandInProgress == TRUE) {
-        [operationUserHasPressed setString:sender.currentTitle];
+    if(self.operandInProgress == TRUE) {
+        [self.operationUserHasPressed setString:sender.currentTitle];
         
         if([Calculator compObj].isStackEmpty == 0)  {                    // if stack is not empty
             /*  check precedence with operator on top of stack,
