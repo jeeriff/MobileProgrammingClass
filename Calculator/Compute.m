@@ -78,27 +78,27 @@ NSMutableArray *programStack = nil;
     
     if([operation isEqualToString:@"+"]) { //Addition calculation
         resultDouble = op1Double + op2Double;
-        result = [NSMutableString stringWithFormat:@"%@", result];
+        result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
     else if([operation isEqualToString:@"-"]) { //Subtraction calculation
         resultDouble = op1Double - op2Double;
-        result = [NSMutableString stringWithFormat:@"%@", result];
+        result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
     else if([operation isEqualToString:@"*"]) { //Multiplicaton calculation
         resultDouble = op1Double * op2Double;
-        result = [NSMutableString stringWithFormat:@"%@", result];
+        result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
     else if([operation isEqualToString:@"/"]) { //Division calculation
         resultDouble = op1Double / op2Double;
-        result = [NSMutableString stringWithFormat:@"%@", result];
+        result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
     else { //Exponent calculation
         resultDouble = pow(op1Double, op2Double);
-        result = [NSMutableString stringWithFormat:@"%@", result];
+        result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
 }
