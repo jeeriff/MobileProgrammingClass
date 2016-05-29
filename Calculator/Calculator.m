@@ -26,7 +26,7 @@ Compute *comp = nil;
 /* initialize Compute object as nil ^, then use class method to initialize to avoid compile issue
  * */
 + (Compute *)compObj  {
-    if( comp == nil)  {
+    if(comp == nil)  {
         comp = [[Compute alloc] init];
     }
     return comp;
