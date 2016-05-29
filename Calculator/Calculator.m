@@ -8,6 +8,7 @@
 
 #import "math.h"
 #import "Calculator.h"
+#import "Compute.h"
 
 @interface Calculator ()
 
@@ -20,7 +21,16 @@
 @synthesize fullOperand;
 @synthesize operationUserHasPressed;
 
-Compute *comp;
+Compute *comp = nil;
+
+/* initialize Compute object as nil ^, then use class method to initialize to avoid compile issue
+ * */
++ (Compute *)compObj  {
+    if( comp == nil)  {
+        comp = [[Compute alloc] init];
+    }
+    return comp;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -68,26 +78,29 @@ Compute *comp;
 
 - (IBAction)operationPressed:(UIButton *)sender
 {
-    NSLog(@"--> Inside operationPressed");
-    //Obtain the operation entered by the user
+    // check there's an operand built before operator
     if(operandInProgress == TRUE) {
         [operationUserHasPressed setString:sender.currentTitle];
         
-        if(comp.isStackEmpty == 1)  {                    // if stack is empty
-            NSLog(@"--> fullOperand is: %@", self.fullOperand);
-            [comp pushOperand:self.fullOperand];
-            [comp pushOperand:self.operationUserHasPressed];
+        if([Calculator compObj].isStackEmpty == 0)  {                    // if stack is not empty
+            /*  check precedence with operator on top of stack,
+                    if stack is higher, compute stack, push the solution, the new operand, then the operator
+             */
+            if([Compute thisOp:[Calculator compObj].programStack.lastObject thatOp:self.operationUserHasPressed])  {
+                NSLog(@"Inside operationPressed ... stack operation has precedence, TODO compute");
+            }
+            else  {
+                NSLog(@"Inside operationPressed ... operation pressed has precedence");
+            }
         }
-
-        else  {                                             // stack is not empty
-            
-        }
+        [[Calculator compObj] pushOperand:self.fullOperand];
+        [[Calculator compObj] pushOperand:self.operationUserHasPressed];
         
-        [comp pushOperand:self.fullOperand ];
+        [[Calculator compObj] pushOperand:self.fullOperand ];
         [self.fullOperand setString:@""];
     }
-    else  {
-        // NSLog(@"Operand not in progress");   // this works
+    else  {     // no operand, do nothing
+        
     }
     
     self.operandInProgress = FALSE;
@@ -109,8 +122,8 @@ Compute *comp;
     // if confirm
     UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
         {
-            if(comp.isStackEmpty != 0) {         // empty stack if not empty
-                [comp clearStack];
+            if([Calculator compObj].isStackEmpty != 0) {         // empty stack if not empty
+                [[Calculator compObj] clearStack];
                 [self.fullOperand setString:@""];
             }
             operandInProgress = FALSE;              // no longer building operand

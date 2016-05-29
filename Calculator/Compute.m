@@ -50,9 +50,7 @@ NSMutableArray *programStack = nil;
 }
 
 - (void)pushOperand:(NSMutableString *)operand  {
-    NSLog(@"--> Inside pushOperand");
     [programStack addObject:operand];
-    NSLog(@" Current operand is %@", operand);
     for(NSMutableString *item in programStack)  {
         NSLog(@"Array item: %@", item);
     }
