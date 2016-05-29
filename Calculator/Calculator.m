@@ -78,28 +78,20 @@ Compute *comp = nil;
 
 - (IBAction)operationPressed:(UIButton *)sender
 {
-    NSLog(@"Inside operationPressed ...");
     // check there's an operand built before operator COMMENT
     if(self.operandInProgress == TRUE) {
         self.operationUserHasPressed = [sender.currentTitle mutableCopy];
-        NSLog(@" operator:, %@", self.operationUserHasPressed);
 
         if([[Calculator compObj] isStackEmpty] == false)  {                    // if stack is not empty
-            NSLog(@"programStack is NOT empty !!");
             if([Compute thisOp:[Calculator compObj].operatorStack.lastObject thatOp:self.operationUserHasPressed])  {    // stack strictly has precedence
-                NSLog(@" operatorStack has precedence");
                 while([Calculator compObj].isOpStackEmpty == 0)  {      // while there are operators on the stack
-                    NSLog(@" inside loop, operatorStack NOT empty !!");
                     [[Calculator compObj] pushOperand:self.fullOperand];
-                    NSLog(@"fullOperand = %@", self.fullOperand);
                     self.fullOperand = [[Calculator compObj] performOperation:[[Calculator compObj] popOperator]];
                 }
-                NSLog(@"out of loop");
             }
         }
         
         [[Calculator compObj] pushOperand:self.fullOperand];
-        NSLog(@" pushing %@ onto programStack", self.fullOperand);
         [[Calculator compObj] pushOperator:self.operationUserHasPressed];
         display.text = self.fullOperand;
         [self.fullOperand setString:@""];

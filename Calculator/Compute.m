@@ -63,12 +63,10 @@ NSMutableArray *operatorStack = nil;
 
 - (void)pushOperand:(NSMutableString *)operand  {
     [programStack addObject:[operand mutableCopy]];
-    NSLog(@" top is %@", [self.programStack lastObject]);
 }
 
 - (void)pushOperator:(NSMutableString *)operator  {
     [operatorStack addObject:[operator mutableCopy]];
-    NSLog(@" top is %@", [self.operatorStack lastObject]);
 }
 
 - (NSMutableString *)performOperation:(NSString *)operation  { //Perform actual operations
@@ -79,10 +77,10 @@ NSMutableArray *operatorStack = nil;
     NSMutableString *result;
     double resultDouble;
     
-    op1 = [self popOperand];
-    op1Double = [op1 doubleValue];
     op2 = [self popOperand];
     op2Double = [op2 doubleValue];
+    op1 = [self popOperand];
+    op1Double = [op1 doubleValue];
     
     if([operation isEqualToString:@"+"]) { //Addition calculation
         resultDouble = op1Double + op2Double;
@@ -105,7 +103,7 @@ NSMutableArray *operatorStack = nil;
         return result;
     }
     else { //Exponent calculation
-        resultDouble = pow(op2Double, op1Double);
+        resultDouble = pow(op1Double, op2Double);
         result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
