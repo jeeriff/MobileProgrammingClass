@@ -12,7 +12,6 @@
 @synthesize programStack;
 @synthesize operatorStack;
 @synthesize fullOperand;
-@synthesize operatorStack;
 
 NSMutableArray *programStack = nil;
 NSMutableArray *operatorStack = nil;
@@ -81,14 +80,14 @@ NSMutableArray *operatorStack = nil;
 
 - (NSMutableString *)popOperand
 {
-    NSMutableString last = [self.programStack lastObject];
+    NSMutableString *last = [self.programStack lastObject];
     [self.programStack removeLastObject];
     return last;
 }
 
 - (NSMutableString *)popOperator
 {
-    NSMutableString last = [self.operatorStack lastObject];
+    NSMutableString *last = [self.operatorStack lastObject];
     [self.operatorStack removeLastObject];
     return last;
 }
@@ -107,14 +106,6 @@ NSMutableArray *operatorStack = nil;
         return true;
     else
         return false;
-}
-
--(BOOL)isOpStackEmpty {
-    if([self.operatorStack count] == 0)
-        return true;
-    else
-        return false;
-    
 }
 
 - (void)clearStack

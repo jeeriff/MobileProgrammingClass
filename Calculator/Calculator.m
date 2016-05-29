@@ -83,24 +83,20 @@ Compute *comp = nil;
         [self.operationUserHasPressed setString:sender.currentTitle];
         
         if([Calculator compObj].isStackEmpty == 0)  {                    // if stack is not empty
-            /*  check precedence with operator on top of stack,
-                    if stack is higher, compute stack, push the solution, the new operand, then the operator
-             */
-            if([Compute thisOp:[Calculator compObj].programStack.lastObject thatOp:self.operationUserHasPressed])  {
-                NSLog(@"Inside operationPressed ... stack operation has precedence, TODO compute");
-            }
-            else  {
-                NSLog(@"Inside operationPressed ... operation pressed has precedence");
+            if([Compute thisOp:[Calculator compObj].operatorStack.lastObject thatOp:self.operationUserHasPressed])  {    // stack strictly has precedence
+                while([Calculator compObj].isOpStackEmpty == 0)  {      // while there are operators on the stack
+                    [[Calculator compObj] pushOperand:self.fullOperand];
+                    self.fullOperand = [[Calculator compObj] performOperation:[[Calculator compObj] popOperator]];
+                }
             }
         }
-        [[Calculator compObj] pushOperand:self.fullOperand];
-        [[Calculator compObj] pushOperand:self.operationUserHasPressed];
         
-        [[Calculator compObj] pushOperand:self.fullOperand ];
+        [[Calculator compObj] pushOperand:self.fullOperand];
+        [[Calculator compObj] pushOperator:self.operationUserHasPressed];
         [self.fullOperand setString:@""];
     }
+    
     else  {     // no operand, do nothing
-        
     }
     
     self.operandInProgress = FALSE;
