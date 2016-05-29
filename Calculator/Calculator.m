@@ -78,7 +78,7 @@ Compute *comp = nil;
 
 - (IBAction)operationPressed:(UIButton *)sender
 {
-    // check there's an operand built before operator
+    // check there's an operand built before operator COMMENT
     if(self.operandInProgress == TRUE) {
         [self.operationUserHasPressed setString:sender.currentTitle];
         
