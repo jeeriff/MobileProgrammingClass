@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSMutableArray *operatorStack;
 @property (nonatomic, strong) NSMutableString *fullOperand;
 
+-(id)init;
 +(int)getOpWeight:(NSString *)op;
 +(bool)thisOp:(NSString *)op1 thatOp:(NSString *)op2;
 -(void)pushOperand:(NSMutableString *)operand;

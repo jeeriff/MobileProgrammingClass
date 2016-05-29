@@ -12,7 +12,7 @@
 @interface Calculator : UIViewController
 
 @property (nonatomic, strong) Compute *comp;
-@property (nonatomic, weak) NSMutableString *operationUserHasPressed;
+@property (nonatomic, strong) NSMutableString *operationUserHasPressed;
 @property (strong, nonatomic) IBOutlet UILabel *display;
 @property (nonatomic, weak) NSString *defaultClearValue;
 @property (nonatomic, assign) BOOL operandInProgress;

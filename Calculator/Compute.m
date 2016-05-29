@@ -16,6 +16,16 @@
 NSMutableArray *programStack = nil;
 NSMutableArray *operatorStack = nil;
 
+
+-(id)init  {
+    self = [super init];
+    if(self)  {
+        programStack = [[NSMutableArray alloc] init];
+        operatorStack = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
 /* thisOp thatOp
  --------------------
     op1 > op2 return(YES)
@@ -52,17 +62,13 @@ NSMutableArray *operatorStack = nil;
 }
 
 - (void)pushOperand:(NSMutableString *)operand  {
-    [self.programStack addObject:operand];
-    for(NSMutableString *item in programStack)  {
-        NSLog(@"Array item: %@", item);
-    }
+    [programStack addObject:[operand mutableCopy]];
+    NSLog(@" top is %@", [self.programStack lastObject]);
 }
 
 - (void)pushOperator:(NSMutableString *)operator  {
-    [self.operatorStack addObject:operator];
-    for(NSMutableString *item in programStack)  {
-        NSLog(@"Array item: %@", item);
-    }
+    [operatorStack addObject:[operator mutableCopy]];
+    NSLog(@" top is %@", [self.operatorStack lastObject]);
 }
 
 - (NSMutableString *)performOperation:(NSString *)operation  { //Perform actual operations
@@ -99,7 +105,7 @@ NSMutableArray *operatorStack = nil;
         return result;
     }
     else { //Exponent calculation
-        resultDouble = pow(op1Double, op2Double);
+        resultDouble = pow(op2Double, op1Double);
         result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
