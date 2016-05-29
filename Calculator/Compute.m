@@ -17,17 +17,17 @@ NSMutableArray *programStack = nil;
 
 /* thisOp thatOp
  --------------------
-    op1 >= op2 return(YES)
-    op1 < op2  return(NO)
+    op1 > op2 return(YES)
+    op1 <= op2  return(NO)
  * */
 + (bool)thisOp:(NSString *)op1 thatOp:(NSString *)op2
 {
     //integer_t opW1, opW2;
-    if([self getOpWeight:op1] < [self getOpWeight:op2])  {
-        return false;
+    if([self getOpWeight:op1] > [self getOpWeight:op2])  {
+        return true;
     }
     else  {
-        return true;
+        return false;
     }
 }
 
@@ -64,16 +64,43 @@ NSMutableArray *programStack = nil;
 }
 
 - (NSMutableString *)performOperation:(NSString *)operation  {
-    //Perform Addition.
-   // if ([operation isEqualToString:@"+"])
-    //{
-      //  operand1 = [self popOperand];
-        //operand2 = [self popOperand];
-        //result = operand1 + operand2;
-    //}
-    //Insert your code here.
+    NSMutableString *op1 = [NSMutableString alloc];
+    double op1Double;
+    NSMutableString *op2 = [NSMutableString alloc];
+    double op2Double;
+    NSMutableString *result;
+    double resultDouble;
     
-    return 0;
+    op1 = [self popOperand];
+    op1Double = [op1 doubleValue];
+    op2 = [self popOperand];
+    op2Double = [op2 doubleValue];
+    
+    if([operation isEqualToString:@"+"]) { //Addition calculation
+        resultDouble = op1Double + op2Double;
+        result = [NSMutableString stringWithFormat:@"%@", result];
+        return result;
+    }
+    else if([operation isEqualToString:@"-"]) { //Subtraction calculation
+        resultDouble = op1Double - op2Double;
+        result = [NSMutableString stringWithFormat:@"%@", result];
+        return result;
+    }
+    else if([operation isEqualToString:@"*"]) { //Multiplicaton calculation
+        resultDouble = op1Double * op2Double;
+        result = [NSMutableString stringWithFormat:@"%@", result];
+        return result;
+    }
+    else if([operation isEqualToString:@"/"]) { //Division calculation
+        resultDouble = op1Double / op2Double;
+        result = [NSMutableString stringWithFormat:@"%@", result];
+        return result;
+    }
+    else { //Exponent calculation
+        resultDouble = pow(op1Double, op2Double);
+        result = [NSMutableString stringWithFormat:@"%@", result];
+        return result;
+    }
 }
 
 - (NSMutableString *)popOperand
