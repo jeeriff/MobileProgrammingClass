@@ -11,6 +11,7 @@
 @implementation Compute
 @synthesize programStack;
 @synthesize fullOperand;
+@synthesize operatorStack;
 
 NSMutableArray *programStack = nil;
 
@@ -56,6 +57,11 @@ NSMutableArray *programStack = nil;
     }
 }
 
+- (void)pushOperator:(NSMutableString *)operator {
+    
+
+}
+
 - (double)performOperation:(NSString *)operation  {
     //Perform Addition.
    // if ([operation isEqualToString:@"+"])
@@ -74,6 +80,11 @@ NSMutableArray *programStack = nil;
     return 0;
 }
 
+-(NSMutableString *)popOperator {
+    
+    return 0;
+}
+
 - (BOOL)isStackEmpty
 {
     if([programStack count] == 0)
@@ -82,9 +93,15 @@ NSMutableArray *programStack = nil;
         return false;
 }
 
+-(BOOL)isOpStackEmpty {
+    return 0;
+    
+}
+
 - (void)clearStack
 {
     [programStack removeAllObjects];
+    [operatorStack removeAllObjects];
 }
 
 @end
