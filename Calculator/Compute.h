@@ -11,14 +11,18 @@
 @interface Compute : NSObject
  
 @property (nonatomic, strong) NSMutableArray *programStack;
+@property (nonatomic, strong) NSMutableArray *operatorStack;
 @property (nonatomic, strong) NSMutableString *fullOperand;
 
-+ (int)getOpWeight:(NSString *)op;
-+ (bool)thisOp:(NSString *)op1 thatOp:(NSString *)op2;
++(int)getOpWeight:(NSString *)op;
++(bool)thisOp:(NSString *)op1 thatOp:(NSString *)op2;
 -(void)pushOperand:(NSMutableString *)operand;
--(double)performOperation:(NSString *)operation;
--(double)popOperand;
+-(void)pushOperator:(NSMutableString *)operator;
+-(NSMutableString *)performOperation:(NSString *)operation;
+-(NSMutableString *)popOperand;
+-(NSMutableString *)popOperator;
 -(BOOL)isStackEmpty;
+-(BOOL)isOpStackEmpty;
 -(void)clearStack;
 
 @end
