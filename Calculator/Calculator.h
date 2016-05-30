@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *display;
 @property (nonatomic, weak) NSString *defaultClearValue;
 @property (nonatomic, assign) BOOL operandInProgress;
+@property (nonatomic, assign) BOOL scientificOper;
 @property (nonatomic, strong) NSMutableString *fullOperand;
 
 -(IBAction)digitPressed:(UIButton *)sender;

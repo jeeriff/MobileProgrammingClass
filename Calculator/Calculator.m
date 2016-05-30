@@ -18,6 +18,7 @@
 @synthesize display;
 @synthesize defaultClearValue;
 @synthesize operandInProgress;
+@synthesize scientificOper;
 @synthesize fullOperand;
 @synthesize operationUserHasPressed;
 
@@ -45,31 +46,33 @@ Compute *comp = nil;
 
 - (IBAction)digitPressed:(UIButton *)sender
 {
-    if(operandInProgress == FALSE)                          // to obtain the number entered by the user
+    if(operandInProgress == FALSE || scientificOper == TRUE)// to obtain the number entered by the user
         [self.fullOperand setString:@""];
     self.operandInProgress = TRUE;
+    scientificOper = FALSE;
     
     NSString *numberEntered = sender.currentTitle;          // store value of button into string
     
     if([numberEntered isEqualToString:@"e"]) {              // 'e'
         [self.fullOperand setString:@"2.71828"];
-        self.operandInProgress = FALSE;
+        scientificOper = TRUE;
     }
     
     else if([numberEntered isEqualToString:@"%"]) {         // '%'
         double percentDouble = [display.text doubleValue] / 100.0;
         self.fullOperand = [NSMutableString stringWithFormat:@"%g", percentDouble];
-        self.operandInProgress = FALSE;
+        scientificOper = TRUE;
     }
     
     else if([numberEntered isEqualToString:@"Ln"]) {         // 'Ln'
         double natLogged = log([display.text doubleValue]);
         self.fullOperand = [NSMutableString stringWithFormat:@"%g", natLogged];
-        self.operandInProgress = FALSE;
+        scientificOper = TRUE;
     }
     
     else  {
-        [self.fullOperand appendString:numberEntered];           // build number 'token'
+        [self.fullOperand appendString:numberEntered];       // build number 'token'
+        scientificOper = FALSE;
     }
     
     display.text = self.fullOperand;
@@ -129,8 +132,6 @@ Compute *comp = nil;
         }
         display.text = self.fullOperand;
     }
-    
-   // self.operandInProgress = FALSE;
 }
 
 - (IBAction)clearPressed:(UIButton *) sender
