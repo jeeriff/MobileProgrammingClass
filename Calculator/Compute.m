@@ -2,8 +2,8 @@
 //  Compute.m
 //  Calculator
 //
-//  Created by Matthew Harrison on 5/24/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
+//  Justin Dowell jed13d
+//  Matthew Harrison msh13d
 //
 
 #import "Compute.h"
@@ -16,7 +16,8 @@
 NSMutableArray *programStack = nil;
 NSMutableArray *operatorStack = nil;
 
-
+/*  initialize the stacks for use
+ * */
 -(id)init  {
     self = [super init];
     if(self)  {
@@ -28,12 +29,12 @@ NSMutableArray *operatorStack = nil;
 
 /* thisOp thatOp
  --------------------
-    op1 > op2 return(YES)
-    op1 <= op2  return(NO)
+    compares precedence of the operators sent in
+    op1 > op2 return true
+    op1 <= op2  return false
  * */
 + (bool)thisOp:(NSString *)op1 thatOp:(NSString *)op2
 {
-    //integer_t opW1, opW2;
     if([self getOpWeight:op1] > [self getOpWeight:op2])  {
         return true;
     }
@@ -61,6 +62,8 @@ NSMutableArray *operatorStack = nil;
         return 3;
 }
 
+/*  two stack pushes due to time and simplicity
+ * */
 - (void)pushOperand:(NSMutableString *)operand  {
     [programStack addObject:[operand mutableCopy]];
 }
@@ -69,8 +72,14 @@ NSMutableArray *operatorStack = nil;
     [operatorStack addObject:[operator mutableCopy]];
 }
 
-- (NSMutableString *)performOperation:(NSString *)operation  { //Perform actual operations
-    NSMutableString *op1 = [NSMutableString alloc];            //Precendence not addressed here
+/* performOperation
+ -----------------------
+    performs a single operation
+        divide by zero error returns message as result for error checking
+        precedence is taken care of outside of this method
+ * */
+- (NSMutableString *)performOperation:(NSString *)operation  {
+    NSMutableString *op1 = [NSMutableString alloc];
     double op1Double;
     NSMutableString *op2 = [NSMutableString alloc];
     double op2Double;
@@ -82,22 +91,22 @@ NSMutableArray *operatorStack = nil;
     op1 = [self popOperand];
     op1Double = [op1 doubleValue];
     
-    if([operation isEqualToString:@"+"]) { //Addition calculation
+    if([operation isEqualToString:@"+"]) {      // Addition calculation
         resultDouble = op1Double + op2Double;
         result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
-    else if([operation isEqualToString:@"-"]) { //Subtraction calculation
+    else if([operation isEqualToString:@"-"]) { // Subtraction calculation
         resultDouble = op1Double - op2Double;
         result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
-    else if([operation isEqualToString:@"*"]) { //Multiplicaton calculation
+    else if([operation isEqualToString:@"*"]) { // Multiplicaton calculation
         resultDouble = op1Double * op2Double;
         result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
-    else if([operation isEqualToString:@"/"]) { //Division calculation
+    else if([operation isEqualToString:@"/"]) { // Division calculation
         if([op2 isEqualToString:@"0"]) {
             NSMutableString *divZero = [NSMutableString stringWithFormat:@"Divide by Zero"];
             return divZero;
@@ -106,13 +115,15 @@ NSMutableArray *operatorStack = nil;
         result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
-    else { //Exponent calculation
+    else {                                      // Exponent calculation
         resultDouble = pow(op1Double, op2Double);
         result = [NSMutableString stringWithFormat:@"%g", resultDouble];
         return result;
     }
 }
 
+/*  two stack pops due to time and simplicity
+ * */
 - (NSMutableString *)popOperand
 {
     NSMutableString *last = [self.programStack lastObject];
@@ -127,6 +138,8 @@ NSMutableArray *operatorStack = nil;
     return last;
 }
 
+/*  two isStackEmpty due to time and simplicity
+ * */
 - (BOOL)isStackEmpty
 {
     if([self.programStack count] == 0)
@@ -143,6 +156,8 @@ NSMutableArray *operatorStack = nil;
         return false;
 }
 
+/*  clearStack clears boths stacks
+ * */
 - (void)clearStack
 {
     [self.programStack removeAllObjects];

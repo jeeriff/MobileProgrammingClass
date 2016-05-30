@@ -2,8 +2,8 @@
 //  ViewController.h
 //  Calculator
 //
-//  Created by Matthew Harrison and on 5/24/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
+//  Justin Dowell jed13d
+//  Matthew Harrison msh13d
 //
 
 #import <UIKit/UIKit.h>

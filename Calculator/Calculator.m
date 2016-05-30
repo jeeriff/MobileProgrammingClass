@@ -2,8 +2,8 @@
 //  ViewController.m
 //  Calculator
 //
-//  Created by Matthew Harrison on 5/24/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
+//  Justin Dowell jed13d
+//  Matthew Harrison msh13d
 //
 
 #import "math.h"
@@ -75,16 +75,24 @@ Compute *comp = nil;
     display.text = self.fullOperand;
 }
 
-
+/*  operationPressed
+   -------------------
+    if building an operand, then
+        if operatorStack is not empty, then
+            if operator on stack strictly has more precedence (not equal precedence), then
+                while loop calculates everything prior to operator pressed
+        regardless, everything that passes through gets pushed on the appropriate stack
+        and last operand dealt with (result or otherwise) is displayed
+ * */
 - (IBAction)operationPressed:(UIButton *)sender
 {
     // check there's an operand built before operator COMMENT
     if(self.operandInProgress == TRUE) {
         self.operationUserHasPressed = [sender.currentTitle mutableCopy];
 
-        if([[Calculator compObj] isStackEmpty] == false)  {                    // if stack is not empty
-            if([Compute thisOp:[Calculator compObj].operatorStack.lastObject thatOp:self.operationUserHasPressed])  {    // stack strictly has precedence
-                while([Calculator compObj].isOpStackEmpty == 0)  {      // while there are operators on the stack
+        if([[Calculator compObj] isStackEmpty] == false)  {        // if stack is not empty
+            if([Compute thisOp:[Calculator compObj].operatorStack.lastObject thatOp:self.operationUserHasPressed])  {                       // stack strictly has precedence
+                while([Calculator compObj].isOpStackEmpty == 0)  { // while there are operators on the stack
                     [[Calculator compObj] pushOperand:self.fullOperand];
                     self.fullOperand = [[Calculator compObj] performOperation:[[Calculator compObj] popOperator]];
                     if([self.fullOperand isEqual:@"Divide by Zero"])
@@ -105,6 +113,11 @@ Compute *comp = nil;
     self.operandInProgress = FALSE;
 }
 
+/* equalToSignPressed
+  --------------------
+    uses the loop from operatorPressed to calculate everything on the stack
+    doesn't clear the full operand, nor flag for progress so the result may be used in further calculations
+ * */
 - (IBAction)equalToSignPressed:(UIButton *)sender
 {
     if(self.operandInProgress == TRUE) {
@@ -163,9 +176,7 @@ Compute *comp = nil;
                           }];
     // if cancel, just dismiss the alert
     [clearAlert addAction:yes];
-    [self presentViewController:clearAlert animated:YES completion:nil];
-
-    
+    [self presentViewController:clearAlert animated:YES completion:nil];    
 }
 
 @end
