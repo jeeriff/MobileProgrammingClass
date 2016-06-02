@@ -15,6 +15,7 @@
 		5C47685C1D00D7680077D8EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C47685A1D00D7680077D8EC /* LaunchScreen.storyboard */; };
 		5C4768671D00D7680077D8EC /* ImageSharingAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4768661D00D7680077D8EC /* ImageSharingAppTests.m */; };
 		5C4768721D00D7680077D8EC /* ImageSharingAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4768711D00D7680077D8EC /* ImageSharingAppUITests.m */; };
+		5C4768801D00D8890077D8EC /* logo_android_studio_512dp.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C47687F1D00D8890077D8EC /* logo_android_studio_512dp.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		5C47686D1D00D7680077D8EC /* ImageSharingAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageSharingAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C4768711D00D7680077D8EC /* ImageSharingAppUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageSharingAppUITests.m; sourceTree = "<group>"; };
 		5C4768731D00D7680077D8EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5C47687F1D00D8890077D8EC /* logo_android_studio_512dp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_android_studio_512dp.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
 		5C47684C1D00D7680077D8EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5C47687F1D00D8890077D8EC /* logo_android_studio_512dp.png */,
 				5C47684D1D00D7680077D8EC /* main.m */,
 			);
 			name = "Supporting Files";
@@ -246,6 +249,7 @@
 				5C47685C1D00D7680077D8EC /* LaunchScreen.storyboard in Resources */,
 				5C4768591D00D7680077D8EC /* Assets.xcassets in Resources */,
 				5C4768571D00D7680077D8EC /* Main.storyboard in Resources */,
+				5C4768801D00D8890077D8EC /* logo_android_studio_512dp.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,6 +502,7 @@
 				5C4768781D00D7680077D8EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C4768791D00D7680077D8EC /* Build configuration list for PBXNativeTarget "ImageSharingAppTests" */ = {
 			isa = XCConfigurationList;
@@ -506,6 +511,7 @@
 				5C47687B1D00D7680077D8EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C47687C1D00D7680077D8EC /* Build configuration list for PBXNativeTarget "ImageSharingAppUITests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +520,7 @@
 				5C47687E1D00D7680077D8EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

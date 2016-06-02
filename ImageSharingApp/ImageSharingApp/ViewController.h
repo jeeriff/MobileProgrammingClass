@@ -10,6 +10,9 @@
 
 @interface ViewController : UIViewController
 
+@property(nonatomic,strong) IBOutlet UIImageView *imageView;
+
+-(IBAction)saveImage:(id)sender;
 
 @end
 
