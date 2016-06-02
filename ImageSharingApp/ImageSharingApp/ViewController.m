@@ -28,7 +28,7 @@
     
     UIImage *shareImage = self.imageView.image;
     
-    NSArray *activityItems = @[shareImage];
+    NSArray *activityItems = @[@"", shareImage];
     
     //Sharing part
     UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
