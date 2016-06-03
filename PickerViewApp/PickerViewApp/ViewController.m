@@ -38,7 +38,8 @@
     self.singlePicker.dataSource = self;
     self.singlePicker.delegate = self;
     
-   NSArray *prescription = [[NSArray alloc] initWithObjects:@"Ibuprofen - 800 milligrams",
+    //an array of objects to contain medication
+    NSArray *prescription = [[NSArray alloc] initWithObjects:@"Ibuprofen - 800 milligrams",
                              @"Flavored Throat Losange - 1 count",
                              @"Nyquil - 1 tablespoon",
                              @"Time - 15 minutes",
