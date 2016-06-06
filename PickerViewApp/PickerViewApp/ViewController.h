@@ -2,8 +2,7 @@
 //  ViewController.h
 //  PickerViewApp
 //
-//  Created by Matthew Harrison on 6/2/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
+//  Matthew Harrison and Justin Dowell
 //
 
 #import <UIKit/UIKit.h>
