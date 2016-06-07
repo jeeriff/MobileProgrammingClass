@@ -2,8 +2,10 @@
 //  ViewController.h
 //  PickerViewApp
 //
-//  Matthew Harrison and Justin Dowell
-//
+//  By: Matthew Harrison (msh13d) and Justin Dowell (jed13d)
+//  Project built using demo code provided by Gokila Dorai
+//  Github repository:
+//  https://github.com/jeeriff/MobileProgrammingClass
 
 #import <UIKit/UIKit.h>
 
