@@ -16,6 +16,7 @@
 		5C2966121D0B0A72000EA144 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C2966101D0B0A72000EA144 /* LaunchScreen.storyboard */; };
 		5C29661D1D0B0A72000EA144 /* ToDoAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C29661C1D0B0A72000EA144 /* ToDoAppTests.m */; };
 		5C2966281D0B0A72000EA144 /* ToDoAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2966271D0B0A72000EA144 /* ToDoAppUITests.m */; };
+		5C2966371D0F7BBC000EA144 /* ToDoInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2966361D0F7BBC000EA144 /* ToDoInstance.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		5C2966231D0B0A72000EA144 /* ToDoAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C2966271D0B0A72000EA144 /* ToDoAppUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToDoAppUITests.m; sourceTree = "<group>"; };
 		5C2966291D0B0A72000EA144 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5C2966351D0F7BBC000EA144 /* ToDoInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoInstance.h; sourceTree = "<group>"; };
+		5C2966361D0F7BBC000EA144 /* ToDoInstance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoInstance.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +111,8 @@
 				5C2966031D0B0A72000EA144 /* AppDelegate.m */,
 				5C2966051D0B0A72000EA144 /* MasterViewController.h */,
 				5C2966061D0B0A72000EA144 /* MasterViewController.m */,
+				5C2966351D0F7BBC000EA144 /* ToDoInstance.h */,
+				5C2966361D0F7BBC000EA144 /* ToDoInstance.m */,
 				5C2966081D0B0A72000EA144 /* DetailViewController.h */,
 				5C2966091D0B0A72000EA144 /* DetailViewController.m */,
 				5C29660B1D0B0A72000EA144 /* Main.storyboard */,
@@ -280,6 +285,7 @@
 			files = (
 				5C2966041D0B0A72000EA144 /* AppDelegate.m in Sources */,
 				5C2966071D0B0A72000EA144 /* MasterViewController.m in Sources */,
+				5C2966371D0F7BBC000EA144 /* ToDoInstance.m in Sources */,
 				5C2966011D0B0A72000EA144 /* main.m in Sources */,
 				5C29660A1D0B0A72000EA144 /* DetailViewController.m in Sources */,
 			);
@@ -505,6 +511,7 @@
 				5C29662E1D0B0A72000EA144 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C29662F1D0B0A72000EA144 /* Build configuration list for PBXNativeTarget "ToDoAppTests" */ = {
 			isa = XCConfigurationList;
@@ -513,6 +520,7 @@
 				5C2966311D0B0A72000EA144 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C2966321D0B0A72000EA144 /* Build configuration list for PBXNativeTarget "ToDoAppUITests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +529,7 @@
 				5C2966341D0B0A72000EA144 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
