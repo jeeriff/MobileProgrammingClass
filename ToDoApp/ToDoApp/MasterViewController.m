@@ -12,10 +12,12 @@
 
 @interface MasterViewController ()
 
-//@property NSMutableArray *objects;
+@property ToDoInstance *tempItem;
+
 @end
 
 @implementation MasterViewController
+
 
 //-awakeFromNib message prepares the receiver for service after it has been loaded from an Interface Builder archive.
 - (void)awakeFromNib {
@@ -39,6 +41,8 @@
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
 
     ToDoItems = [[NSMutableArray alloc] init];
+    _tempItem = [ToDoInstance alloc];
+    self.title = @"ToDo Application";
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -55,7 +59,6 @@
 //    if (!self.objects) {
   //      self.objects = [[NSMutableArray alloc] init];
     //}
-
     UIAlertController *alertController = [UIAlertController
                                           alertControllerWithTitle:@"New Item"
                                           message:@"Enter ToDoItems Information Here"
@@ -90,22 +93,29 @@
                                    //UITextField *dateItem = alertController.textFields[1];
                                    //UITextField *locationItem = alertController.textFields[2];
                                    //UITextField *descriptionItem = alertController.textFields[3];
-                                   NSString *test = [NSString alloc];
-                                   test = alertController.textFields[0].text;
-                                   NSLog(test);
-                                   test = alertController.textFields[1].text;
-                                   NSLog(test);
-                                   test = alertController.textFields[2].text;
-                                   NSLog(test);
-                                   test = alertController.textFields[3].text;
-                                   NSLog(test);
+                                   
+                                   _tempItem.ToDoName = alertController.textFields[0].text;
+                                   _tempItem.ToDoDate = alertController.textFields[1].text;
+                                   _tempItem.ToDoLocation = alertController.textFields[2].text;
+                                   _tempItem.ToDoDescription = alertController.textFields[3].text;
+                                   NSLog(_tempItem.ToDoName);
+                                   //NSLog(newItem.ToDoDate);
+                                   //NSLog(newItem.ToDoLocation);
+                                  // NSLog(newItem.ToDoDescription);
+                                   
+                                   [self->ToDoItems addObject:_tempItem];
 
                                }];
     
     [alertController addAction:okAction];
     
     [self presentViewController:alertController animated:YES completion:nil];
-    
+    NSLog(_tempItem.ToDoName);
+  //  NSLog(newItem.ToDoDate);
+   // NSLog(newItem.ToDoLocation);
+    //NSLog(newItem.ToDoDescription);
+
+  //  [ToDoItems addObject:newItem];
     /*
     NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
     NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
@@ -154,16 +164,25 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    
+    static NSString *simpleTableIdentifier = @"ToDoCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+    }
 
-    //NSDate *object = self.objects[indexPath.row];
-    cell.textLabel.text = [ToDoItems objectAtIndex:indexPath.row];
+    ToDoInstance *newItems = [ToDoItems objectAtIndex:indexPath.row];
+    cell.textLabel.text = newItems.ToDoName;
+   // cell.imageView.image = [UIImage imageNamed:@"PresidentsCollage.jpg"];
+    
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
-    return NO;
+    return YES;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
