@@ -1,18 +1,18 @@
 //
-//  ToDoInstance.m
-//  ToDoApp
+//  ToDoObject.m
+//  SplitViewTakeTwo
 //
-//  Created by Matthew Harrison on 6/13/16.
+//  Created by Matthew Harrison on 6/14/16.
 //  Copyright © 2016 Matthew Harrison. All rights reserved.
 //
 
 #import "ToDoInstance.h"
 
-@implementation ToDoInstance
+@implementation ToDoInstance : NSObject
 
 @synthesize ToDoName;
 @synthesize ToDoDate;
-@synthesize ToDoLocation;
-@synthesize ToDoDescription;
+@synthesize ToDoLocale;
+@synthesize ToDoDescript;
 
 @end
