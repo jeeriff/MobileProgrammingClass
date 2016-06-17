@@ -1,9 +1,9 @@
 //
 //  MasterViewController.m
-//  SplitViewTakeTwo
 //
-//  Created by Matthew Harrison on 6/14/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
+//
+//  Created by Matthew Harrison and Justin Dowell.
+//
 //
 
 #import "MasterViewController.h"
@@ -21,7 +21,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     ToDoItems = [NSMutableArray alloc];
+    
     self.title = @"To Do Application";
+    
     // Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
@@ -41,16 +43,19 @@
 }
 
 - (void)insertNewObject:(id)sender {
+    // initialize instances
     if (!self.objects) {
         self.objects = [[NSMutableArray alloc] init];
     }
     enteredItem = [ToDoInstance alloc];
     
+    // the alert box designing a new todo item
     UIAlertController *alertController = [UIAlertController
-                                          alertControllerWithTitle:@"New Item"
-                                          message:@"Enter ToDoItems Information Here"
+                                          alertControllerWithTitle:@"Creating New Item"
+                                          message:@"Enter To Do Item's Info Here"
                                           preferredStyle:UIAlertControllerStyleAlert];
     
+    // text fields within the alert box
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
      {
          textField.placeholder = NSLocalizedString(@"Name of Item", @"Name");
@@ -71,6 +76,7 @@
          textField.placeholder = NSLocalizedString(@"Enter an Item Description", @"Description");
      }];
     
+    // what happens when the OK button is pressed
     UIAlertAction *okAction = [UIAlertAction
                                actionWithTitle:NSLocalizedString(@"OK", @"OK action")
                                style:UIAlertActionStyleDefault
@@ -85,13 +91,16 @@
                                    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                                }];
     
+    // what happens when the Cancel button is pressed
+    UIAlertAction *cancelAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel Action")
+                                   style:UIAlertActionStyleCancel
+                                   handler:nil];
+    
     [alertController addAction:okAction];
+    [alertController addAction:cancelAction];
     
     [self presentViewController:alertController animated:YES completion:nil];
-    //NSString *testObj = enteredItem.ToDoCount;
-    //[self.objects insertObject:enteredItem atIndex:0];
-    //NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    //[self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Segues

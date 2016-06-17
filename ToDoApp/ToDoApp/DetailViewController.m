@@ -1,9 +1,9 @@
 //
 //  DetailViewController.m
-//  SplitViewTakeTwo
 //
-//  Created by Matthew Harrison on 6/14/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
+//
+//  Created by Matthew Harrison and Justin Dowell.
+//
 //
 
 #import "DetailViewController.h"
@@ -14,7 +14,6 @@
 
 @implementation DetailViewController
 
-@synthesize itemNameLabel;
 @synthesize itemDateLabel;
 @synthesize itemLocaleLabel;
 @synthesize itemDescrLabel;
@@ -34,7 +33,6 @@
     // Update the user interface for the detail item.
     if (self.detailItem) {
         //self.detailDescriptionLabel.text = [self.detailItem ToDoDescript];
-        itemNameLabel.text = [self.detailItem ToDoName];
         itemDateLabel.text = [self.detailItem ToDoDate];
         itemLocaleLabel.text = [self.detailItem ToDoLocale];
         itemDescrLabel.text = [self.detailItem ToDoDescript];
@@ -52,5 +50,14 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
+
+
+
+
+
+
 
 @end
