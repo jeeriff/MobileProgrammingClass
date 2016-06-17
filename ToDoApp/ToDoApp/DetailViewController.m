@@ -1,10 +1,10 @@
 //
 //  DetailViewController.m
+//  ToDoApp
 //
-//
-//  Created by Matthew Harrison and Justin Dowell.
-//
-//
+//  Created by Justin Dowell and Matthew Harrison.
+//  Github repository:
+//  https://github.com/jeeriff/MobileProgrammingClass
 
 #import "DetailViewController.h"
 
@@ -32,7 +32,6 @@
 - (void)configureView {
     // Update the user interface for the detail item.
     if (self.detailItem) {
-        //self.detailDescriptionLabel.text = [self.detailItem ToDoDescript];
         itemDateLabel.text = [self.detailItem ToDoDate];
         itemLocaleLabel.text = [self.detailItem ToDoLocale];
         itemDescrLabel.text = [self.detailItem ToDoDescript];

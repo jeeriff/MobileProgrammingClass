@@ -1,10 +1,10 @@
 //
 //  MasterViewController.h
+//  ToDoApp
 //
-//
-//  Created by Matthew Harrison and Justin Dowell.
-//
-//
+//  Created by Justin Dowell and Matthew Harrison.
+//  Github repository:
+//  https://github.com/jeeriff/MobileProgrammingClass
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
