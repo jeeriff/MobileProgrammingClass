@@ -46,6 +46,12 @@ TableViewController *tableController = nil;
     {
         [self createTable:[self getDbFilePath]];
     }
+    
+    [NSTimer scheduledTimerWithTimeInterval:2.0
+                                     target:self
+                                   selector:@selector(insert:)
+                                   userInfo:nil
+                                    repeats:YES];
 
 }
 
@@ -53,6 +59,33 @@ TableViewController *tableController = nil;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+-(int) insert:(NSString *)filePath
+{
+    NSLog(@"TesT");
+    sqlite3* db = NULL;
+    int rc=0;
+    rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString * query  = [NSString
+                             stringWithFormat:@"INSERT INTO locations (latitude, longitude, altitude) VALUES (\"%@\", \"%@\", \"%@\")", latString, longString, altString];
+        char * errMsg;
+        rc = sqlite3_exec(db, [query UTF8String] , NULL, NULL, &errMsg);
+        if(SQLITE_OK != rc)
+        {
+            NSLog(@"Failed to insert record  rc:%d, msg=%s", rc, errMsg);
+        }
+        sqlite3_close(db);
+    }
+    return rc;
+}
+
 
 -(NSString *) getDbFilePath
 {
@@ -91,7 +124,7 @@ TableViewController *tableController = nil;
     }
     else
     {
-        char * query ="CREATE TABLE IF NOT EXISTS locations ( id INTEGER PRIMARY KEY AUTOINCREMENT, latitude  TEXT, longitude TEXT )";
+        char * query ="CREATE TABLE IF NOT EXISTS locations ( id INTEGER PRIMARY KEY AUTOINCREMENT, latitude  TEXT, longitude TEXT, altitude TEXT )";
         char * errMsg;
         rc = sqlite3_exec(db, query, NULL, NULL, &errMsg);
         
@@ -133,12 +166,13 @@ TableViewController *tableController = nil;
             {
                 NSString * Latitude = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
                 NSString * Longitude = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 2)];
+                NSString * Altitude = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 3)];
                 
                 NSDictionary *location =[NSDictionary dictionaryWithObjectsAndKeys:Latitude, @"latitude",
-                                        Longitude, @"longitude", nil];
+                                        Longitude, @"longitude", Altitude, @"altitude", nil];
                 
                 [locations addObject:location];
-                NSLog(@"Latitude: %@, Longitude: %@", Latitude, Longitude);
+                NSLog(@"Latitude: %@, Longitude: %@, Altitude: %@", Latitude, Longitude, Altitude);
                 
             }
             NSLog(@"Done");

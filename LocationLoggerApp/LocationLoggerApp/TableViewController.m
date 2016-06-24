@@ -57,7 +57,7 @@
     
     NSDictionary *location =[locations objectAtIndex:indexPath.row];
     cell.textLabel.text = [NSString
-                           stringWithFormat:@"Latitude:%@, Longitude:%@", [location objectForKey:@"latitude"], [location objectForKey:@"longitude"]];
+                           stringWithFormat:@"Latitude:%@, Longitude:%@, Altitude:%@", [location objectForKey:@"latitude"], [location objectForKey:@"longitude"], [location objectForKey:@"altitude"]];
     cell.detailTextLabel.text = nil;
     // Configure the cell...
     
