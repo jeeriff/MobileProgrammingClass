@@ -2,9 +2,10 @@
 //  TableViewController.m
 //  LocationLoggerApp
 //
-//  Created by Matthew Harrison on 6/21/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
-//
+//  Created by Justin Dowell and Matthew Harrison.
+//  Project built using demo code provided by Gokila Dorai
+//  Github repository:
+//  https://github.com/jeeriff/MobileProgrammingClass
 
 #import "TableViewController.h"
 
@@ -57,8 +58,8 @@
     
     NSDictionary *location =[locations objectAtIndex:indexPath.row];
     cell.textLabel.text = [NSString
-                           stringWithFormat:@"Latitude:%@, Longitude:%@, Altitude:%@", [location objectForKey:@"latitude"], [location objectForKey:@"longitude"], [location objectForKey:@"altitude"]];
-    cell.detailTextLabel.text = nil;
+                           stringWithFormat:@"Latitude:%@, Longitude:%@", [location objectForKey:@"latitude"], [location objectForKey:@"longitude"]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Altitude:%@", [location objectForKey:@"altitude"]];;
     // Configure the cell...
     
     return cell;

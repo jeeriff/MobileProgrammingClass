@@ -2,9 +2,10 @@
 //  ViewController.m
 //  LocationLoggerApp
 //
-//  Created by Matthew Harrison on 6/21/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
-//
+//  Created by Justin Dowell and Matthew Harrison.
+//  Project built using demo code provided by Gokila Dorai
+//  Github repository:
+//  https://github.com/jeeriff/MobileProgrammingClass
 
 #import "ViewController.h"
 #import "TableViewController.h"
@@ -46,8 +47,8 @@ TableViewController *tableController = nil;
     {
         [self createTable:[self getDbFilePath]];
     }
-    
-    [NSTimer scheduledTimerWithTimeInterval:2.0
+    [self insert:[self getDbFilePath]];
+    [NSTimer scheduledTimerWithTimeInterval:300.0
                                      target:self
                                    selector:@selector(insert:)
                                    userInfo:nil
@@ -62,7 +63,6 @@ TableViewController *tableController = nil;
 
 -(int) insert:(NSString *)filePath
 {
-    NSLog(@"TesT");
     sqlite3* db = NULL;
     int rc=0;
     rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
@@ -104,7 +104,6 @@ TableViewController *tableController = nil;
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction *action)
                                {
-                                   NSLog(@"OK action");
                                }];
     [alertController addAction:okAction];
     
@@ -175,7 +174,6 @@ TableViewController *tableController = nil;
                 NSLog(@"Latitude: %@, Longitude: %@, Altitude: %@", Latitude, Longitude, Altitude);
                 
             }
-            NSLog(@"Done");
             sqlite3_finalize(stmt);
         }
         else
