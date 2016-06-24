@@ -28,6 +28,7 @@ TableViewController *tableController = nil;
     {
         [self createTable:[self getDbFilePath]];
     }
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,6 +40,24 @@ TableViewController *tableController = nil;
 {
     NSString *docsPath= NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES)[0];
     return [docsPath stringByAppendingPathComponent:@"locations.db"];
+}
+
+-(void) showMessage:(NSString*)title withMessage:(NSString*)message
+{
+    UIAlertController *alertController = [UIAlertController
+                                         alertControllerWithTitle:title
+                                         message:message
+                                         preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   NSLog(@"OK action");
+                               }];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 -(int) createTable:(NSString *) filePath
@@ -116,6 +135,32 @@ TableViewController *tableController = nil;
     return locations;
 }
 
+-(int) deleteRecords:(NSString *) filePath
+{
+    sqlite3 *db = NULL;
+    int rc=0;
+    rc = sqlite3_open_v2([filePath cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
+    
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString * query  = [NSString
+                             stringWithFormat:@"DELETE FROM locations"];
+        char * errMsg;
+        rc = sqlite3_exec(db, [query UTF8String], NULL, NULL, &errMsg);
+        if(SQLITE_OK != rc)
+        {
+            NSLog(@"Failed to delete records  rc:%d, msg=%s", rc, errMsg);
+        }
+        sqlite3_close(db);
+    }
+    
+    return  rc;
+}
 
 -(IBAction) showDBRecords:(id)sender
 {
@@ -126,7 +171,13 @@ TableViewController *tableController = nil;
 
 -(IBAction) deleteDBRecords:(id)sender
 {
-
+    int rc = [self deleteRecords:[self getDbFilePath]];
+    if(rc != SQLITE_OK)
+    {
+        [self showMessage:@"ERROR" withMessage:@"Failed to delete records"];
+    }
+    else
+        [self showMessage:@"SUCCESS" withMessage:@"Location log has been reset"];
 }
 
 @end
