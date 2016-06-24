@@ -10,7 +10,7 @@
 #import "TableViewController.h"
 #import <sqlite3.h>
 
-@interface ViewController ()
+@interface ViewController () <CLLocationManagerDelegate>
 
 @end
 
@@ -18,9 +18,27 @@ TableViewController *tableController = nil;
 
 @implementation ViewController
 
+@synthesize latString;
+@synthesize longString;
+@synthesize altString;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    [[self mapView] setShowsUserLocation:YES];
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    
+    [[self locationManager] setDelegate:self];
+    
+    // we have to setup the location maanager with permission in later iOS versions
+    if ([[self locationManager] respondsToSelector:@selector(requestWhenInUseAuthorization)])
+    {
+        [[self locationManager] requestWhenInUseAuthorization];
+    }
+    
+    [[self locationManager] setDesiredAccuracy:kCLLocationAccuracyBest];
+    [[self locationManager] startUpdatingLocation];
     
     tableController = [self.storyboard instantiateViewControllerWithIdentifier:@"TableViewController"];
     
@@ -180,4 +198,14 @@ TableViewController *tableController = nil;
         [self showMessage:@"SUCCESS" withMessage:@"Location log has been reset"];
 }
 
+-(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    
+    CLLocation *location = locations.lastObject;
+    latString = [NSString stringWithFormat:@"%.3f", location.coordinate.latitude];
+    longString = [NSString stringWithFormat:@"%.3f", location.coordinate.longitude];
+    altString = [NSString stringWithFormat:@"%.2f feet", location.altitude*3.28084];
+    
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, 2*1609.344, 2*1609.344);
+    [[self mapView] setRegion:viewRegion animated:YES];
+}
 @end
