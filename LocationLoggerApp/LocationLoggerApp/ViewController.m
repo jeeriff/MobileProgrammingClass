@@ -47,12 +47,25 @@ TableViewController *tableController = nil;
     {
         [self createTable:[self getDbFilePath]];
     }
-    [self insert:[self getDbFilePath]];
+    //Initial insert with a slight delay so the user can allow location services to work
+    [NSTimer scheduledTimerWithTimeInterval:5.0
+                                     target:self
+                                   selector:@selector(insert:)
+                                   userInfo:nil
+                                    repeats:NO];
+    //A delay for the rest of the initial 300 seconds
+    [NSTimer scheduledTimerWithTimeInterval:295.0
+                                     target:self
+                                   selector:@selector(insert:)
+                                   userInfo:nil
+                                    repeats:NO];
+    //The full 300 second interval that will repeat as long as the app is active
     [NSTimer scheduledTimerWithTimeInterval:300.0
                                      target:self
                                    selector:@selector(insert:)
                                    userInfo:nil
                                     repeats:YES];
+
 
 }
 
