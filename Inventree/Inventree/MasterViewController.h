@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+#import "DetailViewController.h"
 
 @class DetailViewController;
 
-@interface MasterViewController : UITableViewController
+@interface MasterViewController : UITableViewController <NSFetchedResultsControllerDelegate> {
+    NSMutableArray *Branches;
+}
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 

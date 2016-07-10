@@ -16,6 +16,7 @@
 		5C2967F61D2D638C000EA144 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C2967F41D2D638C000EA144 /* LaunchScreen.storyboard */; };
 		5C2968011D2D638C000EA144 /* InventreeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2968001D2D638C000EA144 /* InventreeTests.m */; };
 		5C29680C1D2D638C000EA144 /* InventreeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C29680B1D2D638C000EA144 /* InventreeUITests.m */; };
+		5C2968591D2FF4C4000EA144 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C2968581D2FF4C3000EA144 /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		5C2968071D2D638C000EA144 /* InventreeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InventreeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C29680B1D2D638C000EA144 /* InventreeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InventreeUITests.m; sourceTree = "<group>"; };
 		5C29680D1D2D638C000EA144 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5C2968581D2FF4C3000EA144 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C2968591D2FF4C4000EA144 /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +87,7 @@
 		5C2967D71D2D638C000EA144 = {
 			isa = PBXGroup;
 			children = (
+				5C2968581D2FF4C3000EA144 /* libsqlite3.tbd */,
 				5C2967E21D2D638C000EA144 /* Inventree */,
 				5C2967FF1D2D638C000EA144 /* InventreeTests */,
 				5C29680A1D2D638C000EA144 /* InventreeUITests */,
@@ -505,6 +509,7 @@
 				5C2968121D2D638C000EA144 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C2968131D2D638C000EA144 /* Build configuration list for PBXNativeTarget "InventreeTests" */ = {
 			isa = XCConfigurationList;
@@ -513,6 +518,7 @@
 				5C2968151D2D638C000EA144 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C2968161D2D638C000EA144 /* Build configuration list for PBXNativeTarget "InventreeUITests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +527,7 @@
 				5C2968181D2D638C000EA144 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
