@@ -88,7 +88,7 @@
     [alertController addAction:cancelAction];
     [alertController addAction:okAction];
     [self presentViewController:alertController animated:YES completion:nil];
-    //additional comment to commit because github is being troublesome
+
     /*[self.objects insertObject:[NSDate date] atIndex:0];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];*/
