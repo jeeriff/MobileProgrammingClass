@@ -8,11 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource> {
+    IBOutlet UIPickerView *listTypesPicker;
+    
+}
 
+@property (retain, nonatomic) UIPickerView *listTypesPicker;
+@property (strong, nonatomic) NSArray *listTypes;
 @property (weak, nonatomic) NSMutableString *branchCategory;
 @property (strong, nonatomic) id detailItem;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
-
 @end
 
