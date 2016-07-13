@@ -9,14 +9,21 @@
 #import <UIKit/UIKit.h>
 
 @interface DetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource> {
-    IBOutlet UIPickerView *listTypesPicker;
+    IBOutlet UIPickerView *inventoryList;
+    BOOL perish;
+    BOOL shop;
     
 }
 
-@property (retain, nonatomic) UIPickerView *listTypesPicker;
-@property (strong, nonatomic) NSArray *listTypes;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *listSwitcher;
+-(IBAction)listSwitch:(id)sender;
+
+@property (retain, nonatomic) UIPickerView *inventoryList;
+@property (strong, nonatomic) NSMutableArray *listItems;
+
 @property (weak, nonatomic) NSMutableString *branchCategory;
 @property (strong, nonatomic) id detailItem;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+
 @end
 

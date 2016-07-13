@@ -7,6 +7,7 @@
 //
 
 #import "DetailViewController.h"
+#import <sqlite3.h>
 
 @interface DetailViewController ()
 
@@ -14,8 +15,8 @@
 
 @implementation DetailViewController
 
-@synthesize listTypesPicker;
-@synthesize listTypes;
+@synthesize inventoryList;
+@synthesize listItems;
 
 #pragma mark - Managing the detail item
 
@@ -37,18 +38,35 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    perish = NO;
+    shop = NO;
     // Do any additional setup after loading the view, typically from a nib.
     [self configureView];
-    NSArray *typeArray = [[NSArray alloc] initWithObjects:@"All items", @"Shopping list", nil];
-    self.listTypes = typeArray;
-    self.listTypesPicker.delegate = self;
-    self.listTypesPicker.dataSource = self;
     [_branchCategory setString:[self.detailItem description]];
+    
+    if(!self.listItems)
+        listItems = [[NSMutableArray alloc] init];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(IBAction)listSwitch:(id)sender {
+    switch (self.listSwitcher.selectedSegmentIndex)
+    {
+        case 0:
+            NSLog(@"All items displayed");
+            shop = NO;
+            break;
+        case 1:
+            NSLog(@"Only shopping list items display");
+            shop = YES;
+            break;
+        default: 
+            break; 
+    }
 }
 
 //Data Source Method
@@ -63,17 +81,14 @@
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     //return the number of array elements.
-    if(pickerView == self.listTypesPicker)
-        return [listTypes count];
-    else
-        return [listTypes count]; //This is purely a placeholder until the other picker view is implemented
+    return [listItems count]; //This is purely a placeholder until the other picker view is implemented
 }
 
 //Delegate Method
 //the delegate method gives us a way to retrieve the selected item from the picker view.
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [listTypes objectAtIndex:row];
+    return [listItems objectAtIndex:row];
 }
 
 @end
