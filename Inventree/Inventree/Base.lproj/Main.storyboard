@@ -101,6 +101,9 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="292" y="125" width="62" height="30"/>
                                 </variation>
+                                <connections>
+                                    <action selector="newLeaf:" destination="JEX-9P-axG" eventType="touchUpInside" id="Dn5-bB-cur"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Eon-u3-tjm">
                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>

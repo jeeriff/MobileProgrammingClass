@@ -167,7 +167,7 @@
     }
     else
     {
-        char * query ="CREATE TABLE IF NOT EXISTS Inventory ( id INTEGER PRIMARY KEY AUTOINCREMENT, branch TEXT, leaf TEXT, expDate TEXT DEFAULT '00/00/0000', perishable BOOL DEFAULT 'NO', current REAL DEFAULT '0', thresshold REAL DEFAULT '1', shopList BOOL DEFAULT 'NO' )";
+        char * query ="CREATE TABLE IF NOT EXISTS Inventory ( id INTEGER PRIMARY KEY AUTOINCREMENT, branch TEXT, leaf TEXT, expDate TEXT DEFAULT '00/00/0000', perishable BOOL DEFAULT 'NO', current REAL DEFAULT '0', threshold REAL DEFAULT '1', shopList BOOL DEFAULT 'NO' )";
         char * errMsg;
         rc = sqlite3_exec(db, query, NULL, NULL, &errMsg);
         

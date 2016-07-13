@@ -17,9 +17,11 @@
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *listSwitcher;
 -(IBAction)listSwitch:(id)sender;
+-(IBAction)newLeaf:(id)sender;
 
 @property (retain, nonatomic) UIPickerView *inventoryList;
-@property (strong, nonatomic) NSMutableArray *listItems;
+@property (retain, nonatomic) NSMutableArray *listItems;
+
 
 @property (weak, nonatomic) NSMutableString *branchCategory;
 @property (strong, nonatomic) id detailItem;
