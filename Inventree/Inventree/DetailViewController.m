@@ -131,7 +131,7 @@
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     //return the number of array elements.
-    return [listItems count]; //This is purely a placeholder until the other picker view is implemented
+    return [listItems count];
 }
 
 //Delegate Method
@@ -189,7 +189,7 @@
     else
     {
         NSString *query = @"SELECT * from Inventory";
-        query = [query stringByAppendingFormat:@" WHERE branch = %@",[self.detailItem description]];
+        query = [query stringByAppendingFormat:@" WHERE branch = \"%@\"",[self.detailItem description]];
         //NSString  * query = [[NSString alloc] init];
         //query = [query stringByAppendingFormat:@"SELECT * from Inventory WHERE branch = %@", [self.detailItem description]];
         rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
