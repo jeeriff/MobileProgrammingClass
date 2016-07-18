@@ -48,6 +48,10 @@
         listItems = [[NSMutableArray alloc] init];
     }
     [self.listItems setArray:[self getLeaves:[self getDbFilePath]]];
+    self.inventoryList.dataSource = self;
+    self.inventoryList.delegate = self;
+    //[inventoryList reloadAllComponents];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -111,6 +115,8 @@
                                    NSNumber *threshNum = [f numberFromString:newThreshold];
                                    [self insertLeaf:[self getDbFilePath] : newLeafName : threshNum];
                                    [listItems insertObject:newLeafName atIndex:0];
+                                   //[self.listItems addObject:newLeafName];
+                                   [inventoryList reloadAllComponents];
                                }];
     
     [alertController addAction:cancelAction];

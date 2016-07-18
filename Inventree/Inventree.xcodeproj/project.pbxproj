@@ -17,6 +17,7 @@
 		5C2968011D2D638C000EA144 /* InventreeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2968001D2D638C000EA144 /* InventreeTests.m */; };
 		5C29680C1D2D638C000EA144 /* InventreeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C29680B1D2D638C000EA144 /* InventreeUITests.m */; };
 		5C2968591D2FF4C4000EA144 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C2968581D2FF4C3000EA144 /* libsqlite3.tbd */; };
+		68F3DEDA1D3C5CB6008D8096 /* Launch.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F3DED91D3C5CB6008D8096 /* Launch.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		5C29680B1D2D638C000EA144 /* InventreeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InventreeUITests.m; sourceTree = "<group>"; };
 		5C29680D1D2D638C000EA144 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C2968581D2FF4C3000EA144 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		68F3DED91D3C5CB6008D8096 /* Launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Launch.png; path = ../../../../Desktop/Launch.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
 				5C2967EF1D2D638C000EA144 /* Main.storyboard */,
 				5C2967F21D2D638C000EA144 /* Assets.xcassets */,
 				5C2967F41D2D638C000EA144 /* LaunchScreen.storyboard */,
+				68F3DED91D3C5CB6008D8096 /* Launch.png */,
 				5C2967F71D2D638C000EA144 /* Info.plist */,
 				5C2967E31D2D638C000EA144 /* Supporting Files */,
 			);
@@ -216,7 +219,7 @@
 				TargetAttributes = {
 					5C2967DF1D2D638C000EA144 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 4626DY2552;
+						DevelopmentTeam = 48VR5P8W7H;
 					};
 					5C2967FB1D2D638C000EA144 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -255,6 +258,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68F3DEDA1D3C5CB6008D8096 /* Launch.png in Resources */,
 				5C2967F61D2D638C000EA144 /* LaunchScreen.storyboard in Resources */,
 				5C2967F31D2D638C000EA144 /* Assets.xcassets in Resources */,
 				5C2967F11D2D638C000EA144 /* Main.storyboard in Resources */,
@@ -426,10 +430,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Inventree/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = COP4656.Inventree;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -437,10 +444,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Inventree/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = COP4656.Inventree;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
