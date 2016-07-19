@@ -15,6 +15,8 @@
 @property NSMutableArray *objects;
 @end
 
+#define Rgb2UIColor(r, g, b) [UIColor colorWithRed:((r)/255.0) green:((g) / 255.0) blue:((b)/255.0) alpha:1.0]
+
 @implementation MasterViewController
 
 - (void)viewDidLoad {
@@ -22,15 +24,19 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.title = @"Add or select a branch!";
+    //[self.title.text setFont:[UIFont fontWithName:@"your font name here" size:fontsizehere]];
+    [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(0, 102, 0)];
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
+    self.navigationItem.rightBarButtonItem.tintColor = Rgb2UIColor(100, 102, 100);
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
     UIView *patternView = [[UIView alloc] initWithFrame:self.tableView.frame];
-    patternView.backgroundColor = [UIColor brownColor];
+    //patternView.backgroundColor = [UIColor brownColor];
     patternView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.tableView.backgroundView = patternView;
+    //self.tableView.backgroundView = patternView;
+    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Untitled.png"]];
     
     if(![[NSFileManager defaultManager] fileExistsAtPath:[self getDbFilePath]]) //if the file does not exist
     {
@@ -47,7 +53,12 @@
     self.clearsSelectionOnViewWillAppear = self.splitViewController.isCollapsed;
     [super viewWillAppear:animated];
 }
-
+- (void)tableView: (UITableView*)tableView
+  willDisplayCell: (UITableViewCell*)cell
+forRowAtIndexPath: (NSIndexPath*)indexPath
+{
+    cell.backgroundView= [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"branch2.png"]];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -125,7 +136,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
     cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.textColor = [UIColor greenColor];
+    cell.textLabel.textColor = [UIColor grayColor];
 
     NSMutableString *object = self.objects[indexPath.row];
     cell.textLabel.text = [object description];
