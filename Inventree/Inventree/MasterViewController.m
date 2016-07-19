@@ -24,7 +24,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.title = @"Add or select a branch!";
-    //[self.title.text setFont:[UIFont fontWithName:@"your font name here" size:fontsizehere]];
+    //[self.title.font setFont:[UIFont fontWithName:@"your font name here" size:fontsizehere]];
     [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(0, 102, 0)];
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
