@@ -23,13 +23,31 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    self.navigationItem.leftBarButtonItem.tintColor = Rgb2UIColor(102, 51, 0);
     self.title = @"Add or select a branch!";
     //[self.title.font setFont:[UIFont fontWithName:@"your font name here" size:fontsizehere]];
     [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(0, 102, 0)];
+    //[[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : Rgb2UIColor(102, 51, 0)}];
 
+    NSShadow* shadow = [NSShadow new];
+    shadow.shadowOffset = CGSizeMake(0.0f, 1.0f);
+    shadow.shadowColor = [UIColor blackColor];
+    [[UINavigationBar appearance] setTitleTextAttributes: @{
+                                                            NSForegroundColorAttributeName: [UIColor greenColor],
+                                                            NSFontAttributeName: [UIFont fontWithName:@"Helvetica-Bold" size:18.0f],
+                                                            NSShadowAttributeName: shadow
+                                                            }];
+    
+    
+    
+    
+    
+    
+    
+    
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
-    self.navigationItem.rightBarButtonItem.tintColor = Rgb2UIColor(100, 102, 100);
+    self.navigationItem.rightBarButtonItem.tintColor = Rgb2UIColor(102, 51, 0);
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
     UIView *patternView = [[UIView alloc] initWithFrame:self.tableView.frame];

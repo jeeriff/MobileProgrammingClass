@@ -40,6 +40,7 @@
     [super viewDidLoad];
     perish = NO;
     shop = NO;
+    currExp = [[NSMutableString alloc] init];
     // Do any additional setup after loading the view, typically from a nib.
     [self configureView];
     [_branchCategory setString:[self.detailItem description]];
@@ -51,7 +52,20 @@
     self.inventoryList.dataSource = self;
     self.inventoryList.delegate = self;
     //[inventoryList reloadAllComponents];
-    
+    if([listItems count] > 0) {
+        NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
+        _leafName.text = listItems[0];
+        if(perish == TRUE) {
+            _expDateDisplay.text = currentRow[0];
+            currExp = currentRow[0];
+        }
+        else
+            _expDateDisplay.text = @"Not perishable";
+    }
+    else {
+        _leafName.text = @"Create a leaf now!";
+        _expDateDisplay.text = @"Create a leaf";
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,6 +86,22 @@
             break;
         default: 
             break; 
+    }
+}
+
+-(IBAction)perishSwitch:(id)sender {
+    switch (self.perishSwitcher.selectedSegmentIndex)
+    {
+        case 0:
+            _expDateDisplay.text = @"Not perishable";
+            perish = NO;
+            break;
+        case 1:
+            _expDateDisplay.text = currExp;
+            perish = YES;
+            break;
+        default:
+            break;
     }
 }
 
@@ -117,6 +147,7 @@
                                    [listItems insertObject:newLeafName atIndex:0];
                                    //[self.listItems addObject:newLeafName];
                                    [inventoryList reloadAllComponents];
+                                   _leafName.text = listItems[0];
                                }];
     
     [alertController addAction:cancelAction];
@@ -145,6 +176,15 @@
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     return [listItems objectAtIndex:row];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    // This method is triggered whenever the user makes a change to the picker selection.
+    // The parameter named row and component represents what was selected.
+    NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[row]]];
+    _leafName.text = listItems[row];
+    _expDateDisplay.text = currentRow[0];
 }
 
 
@@ -218,5 +258,43 @@
     return totalLeaves;
 }
 
+-(NSArray *) getRowData:(NSString*) filePath : (NSString *) leafName
+{
+    NSMutableArray * rowData =[[NSMutableArray alloc] init];
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READONLY , NULL);
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString *query = @"SELECT expDate from Inventory";
+        query = [query stringByAppendingFormat:@" WHERE leaf = \"%@\" AND branch = \"%@\"",leafName, [self.detailItem description]];
+        //NSString  * query = [[NSString alloc] init];
+        //query = [query stringByAppendingFormat:@"SELECT * from Inventory WHERE branch = %@", [self.detailItem description]];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            while(sqlite3_step(stmt) == SQLITE_ROW) {
+           // NSString * leafColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 2)];
+            //[rowData addObject:leafColumn];
+            NSString * expColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
+            [rowData addObject:expColumn];
+                currExp = [[NSMutableString alloc] initWithString:expColumn];
+            }
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            NSLog(@"Failed to prepare statement with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return rowData;
+}
 
 @end
