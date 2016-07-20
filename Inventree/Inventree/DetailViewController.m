@@ -40,6 +40,7 @@
     [super viewDidLoad];
     perish = NO;
     shop = NO;
+    currentIndex = 0;
     currExp = [[NSMutableString alloc] init];
     // Do any additional setup after loading the view, typically from a nib.
     [self configureView];
@@ -162,6 +163,7 @@
                                    NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
                                    _leafName.text = listItems[0];
                                    _expDateDisplay.text = currentRow[0];
+                                   currentIndex = 0;
                                }];
     
     [alertController addAction:cancelAction];
@@ -196,6 +198,7 @@
 {
     // This method is triggered whenever the user makes a change to the picker selection.
     // The parameter named row and component represents what was selected.
+    currentIndex = (int)row;
     NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[row]]];
     _leafName.text = listItems[row];
     _expDateDisplay.text = currentRow[0];

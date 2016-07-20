@@ -13,6 +13,7 @@
     BOOL perish;
     BOOL shop;
     NSMutableString *currExp;
+    int currentIndex;
     
 }
 
