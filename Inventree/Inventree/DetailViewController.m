@@ -48,7 +48,7 @@
     if(!self.listItems) {
         listItems = [[NSMutableArray alloc] init];
     }
-    [self.listItems setArray:[self getLeaves:[self getDbFilePath]]];
+    [self.listItems setArray:[self getLeaves:[self getDbFilePath] : shop]];
     self.inventoryList.dataSource = self;
     self.inventoryList.delegate = self;
     //[inventoryList reloadAllComponents];
@@ -56,11 +56,13 @@
         NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
         _leafName.text = listItems[0];
         if(perish == TRUE) {
+            [_expDateDisplay setHidden:FALSE];
             _expDateDisplay.text = currentRow[0];
             currExp = currentRow[0];
         }
-        else
-            _expDateDisplay.text = @"Not perishable";
+        else {
+            [_expDateDisplay setHidden:TRUE];
+        }
     }
     else {
         _leafName.text = @"Create a leaf now!";
@@ -77,14 +79,16 @@
     switch (self.listSwitcher.selectedSegmentIndex)
     {
         case 0:
-            NSLog(@"All items displayed");
             shop = NO;
+            [self.listItems setArray:[self getLeaves:[self getDbFilePath] : shop]];
+            [inventoryList reloadAllComponents];
             break;
         case 1:
-            NSLog(@"Only shopping list items display");
             shop = YES;
+            [self.listItems setArray:[self getLeaves:[self getDbFilePath] : shop]];
+            [inventoryList reloadAllComponents];
             break;
-        default: 
+        default:
             break; 
     }
 }
@@ -93,10 +97,11 @@
     switch (self.perishSwitcher.selectedSegmentIndex)
     {
         case 0:
-            _expDateDisplay.text = @"Not perishable";
+            [_expDateDisplay setHidden:TRUE];
             perish = NO;
             break;
         case 1:
+            [_expDateDisplay setHidden:FALSE];
             _expDateDisplay.text = currExp;
             perish = YES;
             break;
@@ -120,9 +125,15 @@
      {
          textField.placeholder = NSLocalizedString(@"Enter purchase threshold", @"BoxTwo");
      }];
+
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
+     {
+         textField.placeholder = NSLocalizedString(@"Enter expiration date (i.e. 01/01/2017)", @"BoxThree");
+     }];
     
     NSMutableString *newLeafName = [[NSMutableString alloc] init];
     NSMutableString *newThreshold = [[NSMutableString alloc] init];
+    NSMutableString *newExpDate = [[NSMutableString alloc] init];
     
     UIAlertAction *cancelAction = [UIAlertAction
                                    actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
@@ -140,14 +151,17 @@
                                    NSLog(@"Add action");
                                    [newLeafName setString:alertController.textFields[0].text];
                                    [newThreshold setString:alertController.textFields[1].text];
+                                   [newExpDate setString:alertController.textFields[2].text];
                                    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
                                    f.numberStyle = NSNumberFormatterDecimalStyle;
                                    NSNumber *threshNum = [f numberFromString:newThreshold];
-                                   [self insertLeaf:[self getDbFilePath] : newLeafName : threshNum];
+                                   [self insertLeaf:[self getDbFilePath] : newLeafName : threshNum : newExpDate];
                                    [listItems insertObject:newLeafName atIndex:0];
                                    //[self.listItems addObject:newLeafName];
                                    [inventoryList reloadAllComponents];
+                                   NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
                                    _leafName.text = listItems[0];
+                                   _expDateDisplay.text = currentRow[0];
                                }];
     
     [alertController addAction:cancelAction];
@@ -195,10 +209,11 @@
     return [docsPath stringByAppendingPathComponent:@"inventory.db"];
 }
 
--(int) insertLeaf:(NSString *)filePath : (NSString *) newLeaf : (NSNumber *) newThreshold
+-(int) insertLeaf:(NSString *)filePath : (NSString *) newLeaf : (NSNumber *) newThreshold : (NSString *) newExpDate
 {
     sqlite3* db = NULL;
     int rc=0;
+    NSString *query;
     rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
     if (SQLITE_OK != rc)
     {
@@ -207,8 +222,12 @@
     }
     else
     {
-        NSString * query  = [NSString
-                             stringWithFormat:@"INSERT INTO Inventory (branch, leaf, threshold) VALUES (\"%@\", \"%@\", \"%@\")", [self.detailItem description], newLeaf, newThreshold];
+        if([newExpDate isEqualToString:@""]) {
+            query  = [NSString stringWithFormat:@"INSERT INTO Inventory (branch, leaf, threshold) VALUES (\"%@\", \"%@\", \"%@\")", [self.detailItem description], newLeaf, newThreshold];
+        }
+        else {
+            query  = [NSString stringWithFormat:@"INSERT INTO Inventory (branch, leaf, threshold, expDate) VALUES (\"%@\", \"%@\", \"%@\", \"%@\")", [self.detailItem description], newLeaf, newThreshold, newExpDate];
+        }
         char * errMsg;
         rc = sqlite3_exec(db, [query UTF8String] , NULL, NULL, &errMsg);
         if(SQLITE_OK != rc)
@@ -220,9 +239,10 @@
     return rc;
 }
 
--(NSArray *) getLeaves:(NSString*) filePath
+-(NSArray *) getLeaves:(NSString*) filePath : (BOOL) shopping
 {
     NSMutableArray * totalLeaves =[[NSMutableArray alloc] init];
+    NSString *query = @"SELECT * from Inventory";
     sqlite3 * db = NULL;
     sqlite3_stmt * stmt =NULL;
     int rc=0;
@@ -234,8 +254,12 @@
     }
     else
     {
-        NSString *query = @"SELECT * from Inventory";
-        query = [query stringByAppendingFormat:@" WHERE branch = \"%@\"",[self.detailItem description]];
+        if(shopping == FALSE) {
+            query = [query stringByAppendingFormat:@" WHERE branch = \"%@\"",[self.detailItem description]];
+        }
+        else {
+            query = [query stringByAppendingFormat:@" WHERE branch = \"%@\" AND shopList = \"YES\"",[self.detailItem description]];
+        }
         //NSString  * query = [[NSString alloc] init];
         //query = [query stringByAppendingFormat:@"SELECT * from Inventory WHERE branch = %@", [self.detailItem description]];
         rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
