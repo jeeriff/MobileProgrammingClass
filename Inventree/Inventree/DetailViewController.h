@@ -14,17 +14,19 @@
     BOOL shop;
     NSMutableString *currExp;
     int currentIndex;
-    
+    int currentShopIndex;
 }
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *listSwitcher;
 -(IBAction)listSwitch:(id)sender;
 -(IBAction)newLeaf:(id)sender;
+-(IBAction)deleteLeaf:(id)sender;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *perishSwitcher;
 -(IBAction)perishSwitch:(id)sender;
 
 @property (retain, nonatomic) UIPickerView *inventoryList;
 @property (retain, nonatomic) NSMutableArray *listItems;
+@property (retain, nonatomic) NSMutableArray *shopItems;
 
 
 @property (weak, nonatomic) NSMutableString *branchCategory;

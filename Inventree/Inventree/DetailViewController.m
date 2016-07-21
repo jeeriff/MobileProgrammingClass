@@ -17,6 +17,7 @@
 
 @synthesize inventoryList;
 @synthesize listItems;
+@synthesize shopItems;
 
 #pragma mark - Managing the detail item
 
@@ -49,10 +50,16 @@
     if(!self.listItems) {
         listItems = [[NSMutableArray alloc] init];
     }
-    [self.listItems setArray:[self getLeaves:[self getDbFilePath] : shop]];
+    [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
+   /* if(!self.shopItems) {
+        shopItems = [[NSMutableArray alloc] init];
+    }
+    [self.shopItems setArray:[self getLeaves:[self getDbFilePath] : YES]];*/
     self.inventoryList.dataSource = self;
     self.inventoryList.delegate = self;
     //[inventoryList reloadAllComponents];
+    
+    
     if([listItems count] > 0) {
         NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
         _leafName.text = listItems[0];
@@ -69,6 +76,8 @@
         _leafName.text = @"Create a leaf now!";
         _expDateDisplay.text = @"Create a leaf";
     }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -81,16 +90,17 @@
     {
         case 0:
             shop = NO;
-            [self.listItems setArray:[self getLeaves:[self getDbFilePath] : shop]];
-            [inventoryList reloadAllComponents];
+      //      [self.listItems setArray:[self getLeaves:[self getDbFilePath] : 0]];
+        //    [inventoryList reloadAllComponents];
             break;
         case 1:
             shop = YES;
-            [self.listItems setArray:[self getLeaves:[self getDbFilePath] : shop]];
-            [inventoryList reloadAllComponents];
+            [inventoryList selectedRowInComponent:0];
+    //        [self.listItems setArray:[self getLeaves:[self getDbFilePath] : 1]];
+      //      [inventoryList reloadAllComponents];
             break;
         default:
-            break; 
+            break;
     }
 }
 
@@ -164,12 +174,22 @@
                                    _leafName.text = listItems[0];
                                    _expDateDisplay.text = currentRow[0];
                                    currentIndex = 0;
+                                   self.perishSwitcher.selectedSegmentIndex = 0;
+                                   [_expDateDisplay setHidden:TRUE];
+                                   self.listSwitcher.selectedSegmentIndex = 0;
                                }];
     
     [alertController addAction:cancelAction];
     [alertController addAction:okAction];
     
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(IBAction)deleteLeaf:(id)sender
+{
+    [self deleteCurrentLeaf:[self getDbFilePath]];
+    [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
+    [inventoryList reloadAllComponents];
 }
 
 //Data Source Method
@@ -184,14 +204,18 @@
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     //return the number of array elements.
-    return [listItems count];
+    if(shop == NO)
+        return [listItems count];
+    return [shopItems count];
 }
 
 //Delegate Method
 //the delegate method gives us a way to retrieve the selected item from the picker view.
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [listItems objectAtIndex:row];
+    if(shop == NO)
+        return [listItems objectAtIndex:row];
+    return [shopItems objectAtIndex:row];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -199,9 +223,18 @@
     // This method is triggered whenever the user makes a change to the picker selection.
     // The parameter named row and component represents what was selected.
     currentIndex = (int)row;
+  //  if(shop == NO) {
     NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[row]]];
-    _leafName.text = listItems[row];
-    _expDateDisplay.text = currentRow[0];
+        _leafName.text = listItems[row];
+        _expDateDisplay.text = currentRow[0];
+        currentIndex = (int)row;
+  //  }
+ /*   else {
+        NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :shopItems[row]]];
+        _leafName.text = shopItems[row];
+        _expDateDisplay.text = currentRow[0];
+        currentShopIndex = (int)row;
+    }*/
 }
 
 
@@ -257,14 +290,12 @@
     }
     else
     {
-        if(shopping == FALSE) {
+        if(shopping == NO) {
             query = [query stringByAppendingFormat:@" WHERE branch = \"%@\"",[self.detailItem description]];
         }
-        else {
-            query = [query stringByAppendingFormat:@" WHERE branch = \"%@\" AND shopList = \"YES\"",[self.detailItem description]];
+        else if (shopping == YES){
+            query = [query stringByAppendingFormat:@" WHERE branch = \"%@\" AND shopList = '1'",[self.detailItem description]];
         }
-        //NSString  * query = [[NSString alloc] init];
-        //query = [query stringByAppendingFormat:@"SELECT * from Inventory WHERE branch = %@", [self.detailItem description]];
         rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
         if(rc == SQLITE_OK)
         {
@@ -272,7 +303,6 @@
             {
                 NSString * nextLeaf = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 2)];
                 [totalLeaves addObject:nextLeaf];
-                
             }
             sqlite3_finalize(stmt);
         }
@@ -301,14 +331,10 @@
     {
         NSString *query = @"SELECT expDate from Inventory";
         query = [query stringByAppendingFormat:@" WHERE leaf = \"%@\" AND branch = \"%@\"",leafName, [self.detailItem description]];
-        //NSString  * query = [[NSString alloc] init];
-        //query = [query stringByAppendingFormat:@"SELECT * from Inventory WHERE branch = %@", [self.detailItem description]];
         rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
         if(rc == SQLITE_OK)
         {
             while(sqlite3_step(stmt) == SQLITE_ROW) {
-           // NSString * leafColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 2)];
-            //[rowData addObject:leafColumn];
             NSString * expColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
             [rowData addObject:expColumn];
                 currExp = [[NSMutableString alloc] initWithString:expColumn];
@@ -322,6 +348,105 @@
         sqlite3_close(db);
     }
     return rowData;
+}
+
+-(NSArray *) checkThresh:(NSString *) filePath : (NSString *) leafName{
+    NSMutableArray * rowData =[[NSMutableArray alloc] init];
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READONLY , NULL);
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString *query = @"SELECT current, threshold from Inventory";
+        query = [query stringByAppendingFormat:@" WHERE leaf = \"%@\" AND branch = \"%@\"",leafName, [self.detailItem description]];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            while(sqlite3_step(stmt) == SQLITE_ROW) {
+                NSString * currColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
+                [rowData addObject:currColumn];
+                NSString * threshColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
+                [rowData addObject:threshColumn];
+            }
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            NSLog(@"Failed to prepare statement with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return rowData;
+}
+
+-(void) addToShopList:(NSString *) filePath : (NSString *) leafName
+{
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+   // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
+    rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
+
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString *query = @"UPDATE Inventory SET shopList = '1'";
+        query = [query stringByAppendingFormat:@" WHERE branch = \"%@\" AND leaf = \"%@\"",[self.detailItem description], leafName];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+}
+
+-(BOOL) deleteCurrentLeaf:(NSString *) filePath
+{
+    BOOL success = NO;
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
+    rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE, NULL);
+    
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString *query = @"DELETE FROM Inventory";
+        query = [query stringByAppendingFormat:@" WHERE branch = \"%@\" AND leaf = \"%@\"",[self.detailItem description], listItems[currentIndex]];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            if(sqlite3_step(stmt) == SQLITE_DONE)
+                success = YES;
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return success;
 }
 
 @end

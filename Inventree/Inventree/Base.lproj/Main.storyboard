@@ -54,21 +54,23 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wB5-Uc-jqi">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                <state key="normal" title="Delete Item"/>
+                                <state key="normal" title="Delete Leaf"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="13" y="97" width="79" height="30"/>
-                                </variation>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JGC-TW-u1P">
-                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                <state key="normal" title="Add Item"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="292" y="97" width="62" height="30"/>
+                                    <rect key="frame" x="14" y="97" width="78" height="30"/>
                                 </variation>
                                 <connections>
-                                    <action selector="newLeaf:" destination="JEX-9P-axG" eventType="touchUpInside" id="Dn5-bB-cur"/>
+                                    <action selector="deleteLeaf:" destination="JEX-9P-axG" eventType="touchUpInside" id="ngY-Fg-6Nr"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expiration Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BL-mP-xBa">
+                                <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="125" y="283" width="117" height="21"/>
+                                </variation>
+                            </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uX3-4j-1wv">
                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -81,7 +83,7 @@
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <state key="normal" title="Add More"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="288" y="148" width="67" height="30"/>
+                                    <rect key="frame" x="293" y="148" width="67" height="30"/>
                                 </variation>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tqr-nS-uBf">
@@ -154,22 +156,23 @@
                                     <rect key="frame" x="139" y="181" width="95" height="30"/>
                                 </variation>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expiration Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BL-mP-xBa">
-                                <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JGC-TW-u1P">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Add Leaf"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="125" y="283" width="117" height="21"/>
+                                    <rect key="frame" x="299" y="97" width="61" height="30"/>
                                 </variation>
-                            </label>
+                                <connections>
+                                    <action selector="newLeaf:" destination="JEX-9P-axG" eventType="touchUpInside" id="Dn5-bB-cur"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="M1Q-cI-Enb"/>
                                 <exclude reference="wB5-Uc-jqi"/>
-                                <exclude reference="JGC-TW-u1P"/>
+                                <exclude reference="8BL-mP-xBa"/>
                                 <exclude reference="uX3-4j-1wv"/>
                                 <exclude reference="hNG-5D-lot"/>
                                 <exclude reference="tqr-nS-uBf"/>
@@ -180,14 +183,14 @@
                                 <exclude reference="YFc-wN-C6t"/>
                                 <exclude reference="Jtn-li-bg1"/>
                                 <exclude reference="Eon-u3-tjm"/>
-                                <exclude reference="8BL-mP-xBa"/>
+                                <exclude reference="JGC-TW-u1P"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="M1Q-cI-Enb"/>
                                 <include reference="wB5-Uc-jqi"/>
-                                <include reference="JGC-TW-u1P"/>
+                                <include reference="8BL-mP-xBa"/>
                                 <include reference="uX3-4j-1wv"/>
                                 <include reference="hNG-5D-lot"/>
                                 <include reference="tqr-nS-uBf"/>
@@ -198,7 +201,7 @@
                                 <include reference="YFc-wN-C6t"/>
                                 <include reference="Jtn-li-bg1"/>
                                 <include reference="Eon-u3-tjm"/>
-                                <include reference="8BL-mP-xBa"/>
+                                <include reference="JGC-TW-u1P"/>
                             </mask>
                         </variation>
                     </view>
