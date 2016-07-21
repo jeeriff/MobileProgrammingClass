@@ -196,7 +196,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     }
     else
     {
-        char * query ="CREATE TABLE IF NOT EXISTS Inventory ( id INTEGER PRIMARY KEY AUTOINCREMENT, branch TEXT, leaf TEXT, expDate TEXT DEFAULT 'Not perishable', current REAL DEFAULT '0', threshold REAL DEFAULT '1', shopList INTEGER DEFAULT '0' )";
+        char * query ="CREATE TABLE IF NOT EXISTS Inventory ( id INTEGER PRIMARY KEY AUTOINCREMENT, branch TEXT, leaf TEXT, expDate TEXT DEFAULT 'Not perishable', current REAL DEFAULT '0', threshold REAL DEFAULT '1', shopList INTEGER DEFAULT '1' )";
         char * errMsg;
         rc = sqlite3_exec(db, query, NULL, NULL, &errMsg);
         

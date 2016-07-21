@@ -165,18 +165,36 @@
                                    [newExpDate setString:alertController.textFields[2].text];
                                    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
                                    f.numberStyle = NSNumberFormatterDecimalStyle;
-                                   NSNumber *threshNum = [f numberFromString:newThreshold];
-                                   [self insertLeaf:[self getDbFilePath] : newLeafName : threshNum : newExpDate];
-                                   [listItems insertObject:newLeafName atIndex:0];
-                                   //[self.listItems addObject:newLeafName];
-                                   [inventoryList reloadAllComponents];
-                                   NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
-                                   _leafName.text = listItems[0];
-                                   _expDateDisplay.text = currentRow[0];
-                                   currentIndex = 0;
-                                   self.perishSwitcher.selectedSegmentIndex = 0;
-                                   [_expDateDisplay setHidden:TRUE];
-                                   self.listSwitcher.selectedSegmentIndex = 0;
+                                  // NSNumber *threshNum = [f numberFromString:newThreshold];
+                                 
+                                   
+                                   NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+                                   if ([newThreshold rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+                                   {
+                                       NSNumber *threshNum = [f numberFromString:newThreshold];
+                                       if(threshNum > 0) {
+                                           [self insertLeaf:[self getDbFilePath] : newLeafName : threshNum : newExpDate];
+                                           [listItems insertObject:newLeafName atIndex:0];
+                                           //[self.listItems addObject:newLeafName];
+                                           [inventoryList reloadAllComponents];
+                                           NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
+                                           _leafName.text = listItems[0];
+                                           _expDateDisplay.text = currentRow[0];
+                                           currentIndex = 0;
+                                           self.perishSwitcher.selectedSegmentIndex = 0;
+                                           [_expDateDisplay setHidden:TRUE];
+                                           self.listSwitcher.selectedSegmentIndex = 0;
+                                           updateThreshold.text = @"";
+                                           increaseCurrent.text = @"";
+                                           reduceCurrent.text = @"";
+                                       }
+                                       else if(threshNum < 0) {
+                                           [self insertValidation];
+                                       }
+                                   }
+                                   else {
+                                       [self insertValidation];
+                                   }
                                }];
     
     [alertController addAction:cancelAction];
@@ -215,45 +233,19 @@
         NSNumber *changeQuantity = [f numberFromString:increaseCurrent.text];
         if(changeQuantity > 0) {
             [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :1 :changeQuantity];
+            [self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]];
             [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
         }
         else if(changeQuantity < 0) {
-            UIAlertController *alertController = [UIAlertController
-                                                  alertControllerWithTitle:@"Please enter a positive number"
-                                                  message:@""
-                                                  preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction *okAction = [UIAlertAction
-                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-                                       style:UIAlertActionStyleDefault
-                                       handler:^(UIAlertAction *action)
-                                       {
-                                           NSLog(@"OK action");
-                                       }];
-
-            [alertController addAction:okAction];
-            alertController.preferredAction = okAction;
-            [self presentViewController:alertController animated:YES completion:nil];
+            [self dataValidation];
         }
     }
     else {
-        UIAlertController *alertController = [UIAlertController
-                                              alertControllerWithTitle:@"Please enter a positive number"
-                                              message:@""
-                                              preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *okAction = [UIAlertAction
-                                   actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-                                   style:UIAlertActionStyleDefault
-                                   handler:^(UIAlertAction *action)
-                                   {
-                                       NSLog(@"OK action");
-                                   }];
-        
-        [alertController addAction:okAction];
-        alertController.preferredAction = okAction;
-        [self presentViewController:alertController animated:YES completion:nil];
+        [self dataValidation];
     }
+    updateThreshold.text = @"";
+    increaseCurrent.text = @"";
+    reduceCurrent.text = @"";
 }
 
 -(IBAction)reduceCurrent:(id)sender
@@ -271,45 +263,19 @@
             if(changeQuantity > currQuantity)
                 changeQuantity = currQuantity;
             [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :0 :changeQuantity];
+            [self checkShopStatusDecrease:[self getDbFilePath] :listItems[currentIndex]];
             [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
         }
         else if(changeQuantity < 0) {
-            UIAlertController *alertController = [UIAlertController
-                                                  alertControllerWithTitle:@"Please enter a positive number"
-                                                  message:@""
-                                                  preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction *okAction = [UIAlertAction
-                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-                                       style:UIAlertActionStyleDefault
-                                       handler:^(UIAlertAction *action)
-                                       {
-                                           NSLog(@"OK action");
-                                       }];
-            
-            [alertController addAction:okAction];
-            alertController.preferredAction = okAction;
-            [self presentViewController:alertController animated:YES completion:nil];
+            [self dataValidation];
         }
     }
     else {
-        UIAlertController *alertController = [UIAlertController
-                                              alertControllerWithTitle:@"Please enter a positive number"
-                                              message:@""
-                                              preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *okAction = [UIAlertAction
-                                   actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-                                   style:UIAlertActionStyleDefault
-                                   handler:^(UIAlertAction *action)
-                                   {
-                                       NSLog(@"OK action");
-                                   }];
-        
-        [alertController addAction:okAction];
-        alertController.preferredAction = okAction;
-        [self presentViewController:alertController animated:YES completion:nil];
+        [self dataValidation];
     }
+    updateThreshold.text = @"";
+    increaseCurrent.text = @"";
+    reduceCurrent.text = @"";
 }
 
 -(IBAction)updateThreshold:(id)sender
@@ -323,45 +289,20 @@
         NSNumber *changeThreshold = [f numberFromString:updateThreshold.text];
         if(changeThreshold > 0) {
             [self updateThreshold:[self getDbFilePath] :listItems[currentIndex] : changeThreshold];
+            [self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]];
+            [self checkShopStatusDecrease:[self getDbFilePath] :listItems[currentIndex]];
             [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
         }
         else if(changeThreshold < 0) {
-            UIAlertController *alertController = [UIAlertController
-                                                  alertControllerWithTitle:@"Please enter a positive number"
-                                                  message:@""
-                                                  preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction *okAction = [UIAlertAction
-                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-                                       style:UIAlertActionStyleDefault
-                                       handler:^(UIAlertAction *action)
-                                       {
-                                           NSLog(@"OK action");
-                                       }];
-            
-            [alertController addAction:okAction];
-            alertController.preferredAction = okAction;
-            [self presentViewController:alertController animated:YES completion:nil];
+            [self dataValidation];
         }
     }
     else {
-        UIAlertController *alertController = [UIAlertController
-                                              alertControllerWithTitle:@"Please enter a positive number"
-                                              message:@""
-                                              preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *okAction = [UIAlertAction
-                                   actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-                                   style:UIAlertActionStyleDefault
-                                   handler:^(UIAlertAction *action)
-                                   {
-                                       NSLog(@"OK action");
-                                   }];
-        
-        [alertController addAction:okAction];
-        alertController.preferredAction = okAction;
-        [self presentViewController:alertController animated:YES completion:nil];
+        [self dataValidation];
     }
+    updateThreshold.text = @"";
+    increaseCurrent.text = @"";
+    reduceCurrent.text = @"";
 }
 
 //Data Source Method
@@ -415,6 +356,51 @@
     }
 }
 
+-(void)dataValidation
+{
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"Please enter a positive number"
+                                          message:@""
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   NSLog(@"OK action");
+                                   increaseCurrent.text = @"";
+                                   reduceCurrent.text = @"";
+                                   updateThreshold.text = @"";
+                               }];
+    
+    [alertController addAction:okAction];
+    alertController.preferredAction = okAction;
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void) insertValidation
+{
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"Please enter a positive number for the purchase threshold"
+                                          message:@""
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   NSLog(@"OK action");
+                                   increaseCurrent.text = @"";
+                                   reduceCurrent.text = @"";
+                                   updateThreshold.text = @"";
+                               }];
+    
+    [alertController addAction:okAction];
+    alertController.preferredAction = okAction;
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 
 //DATABASE METHODS*********************************
 -(NSString *) getDbFilePath
@@ -530,7 +516,7 @@
     }
     return rowData;
 }
-
+/*
 //not currently used or functional
 -(NSArray *) checkThresh:(NSString *) filePath : (NSString *) leafName{
     NSMutableArray * rowData =[[NSMutableArray alloc] init];
@@ -597,6 +583,75 @@
         }
         sqlite3_close(db);
     }
+}
+ */
+
+-(BOOL) checkShopStatusIncrease:(NSString *) filePath : (NSString *) leafName
+{
+    BOOL success;
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
+    rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
+    
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString *query = @"UPDATE Inventory SET shopList = '0'";
+        query = [query stringByAppendingFormat:@" WHERE branch = \"%@\" AND leaf = \"%@\" AND current >= threshold",[self.detailItem description], leafName];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            if(sqlite3_step(stmt) == SQLITE_DONE)
+                success = YES;
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return success;
+}
+
+-(BOOL) checkShopStatusDecrease:(NSString *) filePath : (NSString *) leafName
+{
+    BOOL success;
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
+    rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
+    
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString *query = @"UPDATE Inventory SET shopList = '1'";
+        query = [query stringByAppendingFormat:@" WHERE branch = \"%@\" AND leaf = \"%@\" AND current < threshold",[self.detailItem description], leafName];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            if(sqlite3_step(stmt) == SQLITE_DONE)
+                success = YES;
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return success;
 }
 
 //delete leaf currently selected by the picker view
@@ -724,7 +779,7 @@
     }
     else
     {
-        NSString *query = @"SELECT current, threshold from Inventory";
+        NSString *query = @"SELECT current, threshold, shopList from Inventory";
         query = [query stringByAppendingFormat:@" WHERE leaf = \"%@\" AND branch = \"%@\"",leafName, [self.detailItem description]];
         rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
         if(rc == SQLITE_OK)
@@ -736,6 +791,9 @@
                 NSString * threshColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
                 NSLog(@"Threshold:");
                 NSLog(threshColumn);
+                NSString * shopColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 2)];
+                NSLog(@"ShopList:");
+                NSLog(shopColumn);
             }
             sqlite3_finalize(stmt);
         }
