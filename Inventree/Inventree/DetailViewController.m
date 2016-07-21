@@ -187,9 +187,21 @@
 
 -(IBAction)deleteLeaf:(id)sender
 {
+    if([listItems count] > 0) {
     [self deleteCurrentLeaf:[self getDbFilePath]];
     [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
     [inventoryList reloadAllComponents];
+    if([listItems count] > 0) {
+        NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
+        _leafName.text = listItems[currentIndex];
+        _expDateDisplay.text = currentRow[0];
+    }
+    }
+    if([listItems count] == 0) {
+        _leafName.text = @"Create a leaf now!";
+        _expDateDisplay.text = @"Create leaf";
+        [currExp setString:@""];
+    }
 }
 
 //Data Source Method
@@ -204,6 +216,8 @@
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     //return the number of array elements.
+    if([listItems count] == 0)
+        return 1;
     if(shop == NO)
         return [listItems count];
     return [shopItems count];
@@ -213,6 +227,8 @@
 //the delegate method gives us a way to retrieve the selected item from the picker view.
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
+    if([listItems count] == 0)
+        return nil;
     if(shop == NO)
         return [listItems objectAtIndex:row];
     return [shopItems objectAtIndex:row];
@@ -222,6 +238,7 @@
 {
     // This method is triggered whenever the user makes a change to the picker selection.
     // The parameter named row and component represents what was selected.
+    if([listItems count] > 0) {
     currentIndex = (int)row;
   //  if(shop == NO) {
     NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[row]]];
@@ -235,6 +252,7 @@
         _expDateDisplay.text = currentRow[0];
         currentShopIndex = (int)row;
     }*/
+    }
 }
 
 
