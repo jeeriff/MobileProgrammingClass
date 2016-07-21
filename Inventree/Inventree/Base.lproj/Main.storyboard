@@ -85,6 +85,9 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="293" y="148" width="67" height="30"/>
                                 </variation>
+                                <connections>
+                                    <action selector="increaseCurrent:" destination="JEX-9P-axG" eventType="touchUpInside" id="4Qz-MM-Lud"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tqr-nS-uBf">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -92,6 +95,9 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="13" y="148" width="105" height="30"/>
                                 </variation>
+                                <connections>
+                                    <action selector="reduceCurrent:" destination="JEX-9P-axG" eventType="touchUpInside" id="M7n-RZ-kbW"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5jO-Rt-Jfh">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -210,10 +216,12 @@
                     <connections>
                         <outlet property="detailDescriptionLabel" destination="0XM-y9-sOw" id="deQ-Na-JPF"/>
                         <outlet property="expDateDisplay" destination="uX3-4j-1wv" id="y4T-Jc-TKI"/>
+                        <outlet property="increaseCurrent" destination="r5L-U8-eEI" id="gTa-Vl-PjI"/>
                         <outlet property="inventoryList" destination="tjU-ZC-pwN" id="Biu-WJ-x4E"/>
                         <outlet property="leafName" destination="M1Q-cI-Enb" id="z6s-oF-3vB"/>
                         <outlet property="listSwitcher" destination="YFc-wN-C6t" id="byP-cC-WDv"/>
                         <outlet property="perishSwitcher" destination="Jtn-li-bg1" id="xGj-lf-he5"/>
+                        <outlet property="reduceCurrent" destination="PB6-In-WUO" id="veQ-JH-3r4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>

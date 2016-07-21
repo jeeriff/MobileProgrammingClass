@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface DetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource> {
+    IBOutlet UITextField *increaseCurrent;
+    IBOutlet UITextField *reduceCurrent;
     IBOutlet UIPickerView *inventoryList;
     BOOL perish;
     BOOL shop;
@@ -17,6 +19,8 @@
     int currentShopIndex;
 }
 
+-(IBAction)increaseCurrent:(id)sender;
+-(IBAction)reduceCurrent:(id)sender;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *listSwitcher;
 -(IBAction)listSwitch:(id)sender;
 -(IBAction)newLeaf:(id)sender;

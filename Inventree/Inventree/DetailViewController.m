@@ -199,9 +199,34 @@
     }
     if([listItems count] == 0) {
         _leafName.text = @"Create a leaf now!";
-        _expDateDisplay.text = @"Create leaf";
+        _expDateDisplay.text = @"Create a leaf";
         [currExp setString:@""];
     }
+}
+
+-(IBAction)increaseCurrent:(id)sender
+{
+    [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    NSNumber *changeQuantity = [f numberFromString:increaseCurrent.text];
+    
+    [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :1 :changeQuantity];
+    [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+
+}
+
+-(IBAction)reduceCurrent:(id)sender
+{
+    [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    NSNumber *changeQuantity = [f numberFromString:reduceCurrent.text];
+    
+    [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :0 :changeQuantity];
+    [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+
 }
 
 //Data Source Method
@@ -263,6 +288,7 @@
     return [docsPath stringByAppendingPathComponent:@"inventory.db"];
 }
 
+//insert a new leaf into the currently selected branch
 -(int) insertLeaf:(NSString *)filePath : (NSString *) newLeaf : (NSNumber *) newThreshold : (NSString *) newExpDate
 {
     sqlite3* db = NULL;
@@ -293,6 +319,7 @@
     return rc;
 }
 
+//populate the picker view with all the leaves on the currently selected branch
 -(NSArray *) getLeaves:(NSString*) filePath : (BOOL) shopping
 {
     NSMutableArray * totalLeaves =[[NSMutableArray alloc] init];
@@ -333,6 +360,7 @@
     return totalLeaves;
 }
 
+//retrieve the expiration date for a leaf to display on the screen
 -(NSArray *) getRowData:(NSString*) filePath : (NSString *) leafName
 {
     NSMutableArray * rowData =[[NSMutableArray alloc] init];
@@ -368,6 +396,7 @@
     return rowData;
 }
 
+//not currently used or functional
 -(NSArray *) checkThresh:(NSString *) filePath : (NSString *) leafName{
     NSMutableArray * rowData =[[NSMutableArray alloc] init];
     sqlite3 * db = NULL;
@@ -403,6 +432,8 @@
     return rowData;
 }
 
+
+//not currently used or functional
 -(void) addToShopList:(NSString *) filePath : (NSString *) leafName
 {
     sqlite3 * db = NULL;
@@ -433,6 +464,7 @@
     }
 }
 
+//delete leaf currently selected by the picker view
 -(BOOL) deleteCurrentLeaf:(NSString *) filePath
 {
     BOOL success = NO;
@@ -465,6 +497,84 @@
         sqlite3_close(db);
     }
     return success;
+}
+
+//Used to update the 'current' attribute in the database; set addSub = 0 for reduction, addSub = 1 for increase
+-(BOOL) updateQuantity:(NSString *) filePath : (NSString *) leafName : (int) addSub : (NSNumber *) difference
+{
+    BOOL success = FALSE;
+    NSString *query = @"UPDATE Inventory SET";
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
+    rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
+    
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        if(addSub == 0) { //reduce quantity
+            query = [query stringByAppendingFormat:@" current = current - \"%@\" WHERE branch = \"%@\" AND leaf = \"%@\"",difference, [self.detailItem description], leafName];
+        }
+        else { //increase quantity
+            query = [query stringByAppendingFormat:@" current = current + \"%@\" WHERE branch = \"%@\" AND leaf = \"%@\"",difference, [self.detailItem description], leafName];
+        }
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            if(sqlite3_step(stmt) == SQLITE_DONE)
+                success = YES;
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return success;
+}
+
+
+//This function is used purely for testing purposes and will be removed before we turn in the project******
+-(NSArray *) checkUpdate:(NSString *) filePath : (NSString *) leafName{
+    NSMutableArray * rowData =[[NSMutableArray alloc] init];
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READONLY , NULL);
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString *query = @"SELECT current, threshold from Inventory";
+        query = [query stringByAppendingFormat:@" WHERE leaf = \"%@\" AND branch = \"%@\"",leafName, [self.detailItem description]];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            while(sqlite3_step(stmt) == SQLITE_ROW) {
+                NSString * currColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
+                NSLog(@"Current:");
+                NSLog(currColumn);
+               // NSString * threshColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
+               // NSLog(threshColumn);
+            }
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            NSLog(@"Failed to prepare statement with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return rowData;
 }
 
 @end
