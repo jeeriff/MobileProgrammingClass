@@ -90,14 +90,32 @@
     {
         case 0:
             shop = NO;
-      //      [self.listItems setArray:[self getLeaves:[self getDbFilePath] : 0]];
-        //    [inventoryList reloadAllComponents];
+            [inventoryList selectedRowInComponent:0];
+            [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
+            self.inventoryList.dataSource = self;
+            self.inventoryList.delegate = self;
+            [inventoryList reloadAllComponents];
+            if([listItems count] > 0)
+                _leafName.text = listItems[0];
+            else if([listItems count] == 0) {
+                _leafName.text = @"Create a new leaf!";
+                _expDateDisplay.text = @"Create a leaf";
+            }
+
             break;
         case 1:
             shop = YES;
             [inventoryList selectedRowInComponent:0];
-    //        [self.listItems setArray:[self getLeaves:[self getDbFilePath] : 1]];
-      //      [inventoryList reloadAllComponents];
+            [self.listItems setArray:[self getLeaves:[self getDbFilePath] : YES]];
+            self.inventoryList.dataSource = self;
+            self.inventoryList.delegate = self;
+            [inventoryList reloadAllComponents];
+            if([listItems count] > 0)
+                _leafName.text = listItems[0];
+            else if([listItems count] == 0) {
+                _leafName.text = @"Shopping list is empty";
+                _expDateDisplay.text = @"";
+            }
             break;
         default:
             break;
@@ -319,9 +337,9 @@
     //return the number of array elements.
     if([listItems count] == 0)
         return 1;
-    if(shop == NO)
+    //if(shop == NO)
         return [listItems count];
-    return [shopItems count];
+    //return [shopItems count];
 }
 
 //Delegate Method
@@ -330,9 +348,9 @@
 {
     if([listItems count] == 0)
         return nil;
-    if(shop == NO)
+  //  if(shop == NO)
         return [listItems objectAtIndex:row];
-    return [shopItems objectAtIndex:row];
+   // return [shopItems objectAtIndex:row];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -469,6 +487,7 @@
             {
                 NSString * nextLeaf = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 2)];
                 [totalLeaves addObject:nextLeaf];
+                NSLog(nextLeaf);
             }
             sqlite3_finalize(stmt);
         }
