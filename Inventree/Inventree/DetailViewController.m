@@ -17,7 +17,6 @@
 
 @synthesize inventoryList;
 @synthesize listItems;
-@synthesize shopItems;
 
 #pragma mark - Managing the detail item
 
@@ -40,7 +39,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     perish = NO;
-    shop = NO;
     currentIndex = 0;
     currExp = [[NSMutableString alloc] init];
     // Do any additional setup after loading the view, typically from a nib.
@@ -51,30 +49,37 @@
         listItems = [[NSMutableArray alloc] init];
     }
     [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
-   /* if(!self.shopItems) {
-        shopItems = [[NSMutableArray alloc] init];
-    }
-    [self.shopItems setArray:[self getLeaves:[self getDbFilePath] : YES]];*/
     self.inventoryList.dataSource = self;
     self.inventoryList.delegate = self;
     //[inventoryList reloadAllComponents];
-    
-    
+    self.userInterfaceSwitcher.selectedSegmentIndex = 1;
+    [currentThreshold setHidden:FALSE];
+    [currentThresholdLabel setHidden:FALSE];
+    [currentQuantity setHidden:FALSE];
+    [currentQuantityLabel setHidden:FALSE];
+    self.perishSwitcher.selectedSegmentIndex = 0;
+    [expDateDisplay setHidden:TRUE];
+    [expDateDisplayLabel setHidden:FALSE];
+    [_perishSwitcher setHidden:FALSE];
     if([listItems count] > 0) {
         NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
         _leafName.text = listItems[0];
+        currentQuantity.text = currentRow[1];
+        currentThreshold.text = currentRow[2];
         if(perish == TRUE) {
-            [_expDateDisplay setHidden:FALSE];
-            _expDateDisplay.text = currentRow[0];
+            [expDateDisplay setHidden:FALSE];
+            expDateDisplay.text = currentRow[0];
             currExp = currentRow[0];
         }
         else {
-            [_expDateDisplay setHidden:TRUE];
+            [expDateDisplay setHidden:TRUE];
         }
     }
     else {
         _leafName.text = @"Create a leaf now!";
-        _expDateDisplay.text = @"Create a leaf";
+        expDateDisplay.text = @"Create a leaf";
+        currentQuantity.text = @"";
+        currentThreshold.text = @"";
     }
     
     
@@ -89,32 +94,44 @@
     switch (self.listSwitcher.selectedSegmentIndex)
     {
         case 0:
-            shop = NO;
             [inventoryList selectedRowInComponent:0];
             [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
             self.inventoryList.dataSource = self;
             self.inventoryList.delegate = self;
             [inventoryList reloadAllComponents];
-            if([listItems count] > 0)
+            if([listItems count] > 0) {
+                NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] : listItems[0]]];
                 _leafName.text = listItems[0];
+                expDateDisplay.text = currentRow[0];
+                currentQuantity.text = currentRow[1];
+                currentThreshold.text = currentRow[2];
+            }
             else if([listItems count] == 0) {
                 _leafName.text = @"Create a new leaf!";
-                _expDateDisplay.text = @"Create a leaf";
+                expDateDisplay.text = @"Create a leaf";
+                currentQuantity.text = @"";
+                currentThreshold.text = @"";
             }
 
             break;
         case 1:
-            shop = YES;
             [inventoryList selectedRowInComponent:0];
             [self.listItems setArray:[self getLeaves:[self getDbFilePath] : YES]];
             self.inventoryList.dataSource = self;
             self.inventoryList.delegate = self;
             [inventoryList reloadAllComponents];
-            if([listItems count] > 0)
+            if([listItems count] > 0) {
+                NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] : listItems[0]]];
                 _leafName.text = listItems[0];
+                expDateDisplay.text = currentRow[0];
+                currentQuantity.text = currentRow[1];
+                currentThreshold.text = currentRow[2];
+            }
             else if([listItems count] == 0) {
                 _leafName.text = @"Shopping list is empty";
-                _expDateDisplay.text = @"";
+                expDateDisplay.text = @"";
+                currentQuantity.text = @"";
+                currentThreshold.text = @"";
             }
             break;
         default:
@@ -126,13 +143,41 @@
     switch (self.perishSwitcher.selectedSegmentIndex)
     {
         case 0:
-            [_expDateDisplay setHidden:TRUE];
+            [expDateDisplay setHidden:TRUE];
             perish = NO;
             break;
         case 1:
-            [_expDateDisplay setHidden:FALSE];
-            _expDateDisplay.text = currExp;
+            [expDateDisplay setHidden:FALSE];
+            expDateDisplay.text = currExp;
             perish = YES;
+            break;
+        default:
+            break;
+    }
+}
+
+-(IBAction)userInterfaceSwitch:(id)sender
+{
+    switch (self.userInterfaceSwitcher.selectedSegmentIndex)
+    {
+        case 0:
+            [currentThreshold setHidden:TRUE];
+            [currentThresholdLabel setHidden:TRUE];
+            [currentQuantity setHidden:TRUE];
+            [currentQuantityLabel setHidden:TRUE];
+            [expDateDisplay setHidden:TRUE];
+            [expDateDisplayLabel setHidden:TRUE];
+            [_perishSwitcher setHidden:TRUE];
+            break;
+        case 1:
+            [currentThreshold setHidden:FALSE];
+            [currentThresholdLabel setHidden:FALSE];
+            [currentQuantity setHidden:FALSE];
+            [currentQuantityLabel setHidden:FALSE];
+            self.perishSwitcher.selectedSegmentIndex = 1;
+            [expDateDisplay setHidden:FALSE];
+            [expDateDisplayLabel setHidden:FALSE];
+            [_perishSwitcher setHidden:FALSE];
             break;
         default:
             break;
@@ -183,8 +228,6 @@
                                    [newExpDate setString:alertController.textFields[2].text];
                                    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
                                    f.numberStyle = NSNumberFormatterDecimalStyle;
-                                  // NSNumber *threshNum = [f numberFromString:newThreshold];
-                                 
                                    
                                    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
                                    if ([newThreshold rangeOfCharacterFromSet:notDigits].location == NSNotFound)
@@ -197,10 +240,12 @@
                                            [inventoryList reloadAllComponents];
                                            NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
                                            _leafName.text = listItems[0];
-                                           _expDateDisplay.text = currentRow[0];
+                                           expDateDisplay.text = currentRow[0];
+                                           currentQuantity.text = currentRow[1];
+                                           currentThreshold.text = currentRow[2];
                                            currentIndex = 0;
                                            self.perishSwitcher.selectedSegmentIndex = 0;
-                                           [_expDateDisplay setHidden:TRUE];
+                                           [expDateDisplay setHidden:TRUE];
                                            self.listSwitcher.selectedSegmentIndex = 0;
                                            updateThreshold.text = @"";
                                            increaseCurrent.text = @"";
@@ -230,12 +275,16 @@
     if([listItems count] > 0) {
         NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
         _leafName.text = listItems[currentIndex];
-        _expDateDisplay.text = currentRow[0];
+        expDateDisplay.text = currentRow[0];
+        currentQuantity.text = currentRow[1];
+        currentThreshold.text = currentRow[2];
     }
     }
     if([listItems count] == 0) {
         _leafName.text = @"Create a leaf now!";
-        _expDateDisplay.text = @"Create a leaf";
+        expDateDisplay.text = @"Create a leaf";
+        currentQuantity.text = @"";
+        currentThreshold.text = @"";
         [currExp setString:@""];
     }
 }
@@ -337,9 +386,7 @@
     //return the number of array elements.
     if([listItems count] == 0)
         return 1;
-    //if(shop == NO)
-        return [listItems count];
-    //return [shopItems count];
+    return [listItems count];
 }
 
 //Delegate Method
@@ -348,9 +395,7 @@
 {
     if([listItems count] == 0)
         return nil;
-  //  if(shop == NO)
-        return [listItems objectAtIndex:row];
-   // return [shopItems objectAtIndex:row];
+    return [listItems objectAtIndex:row];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -359,18 +404,12 @@
     // The parameter named row and component represents what was selected.
     if([listItems count] > 0) {
     currentIndex = (int)row;
-  //  if(shop == NO) {
     NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[row]]];
         _leafName.text = listItems[row];
-        _expDateDisplay.text = currentRow[0];
+        expDateDisplay.text = currentRow[0];
+        currentQuantity.text = currentRow[1];
+        currentThreshold.text = currentRow[2];
         currentIndex = (int)row;
-  //  }
- /*   else {
-        NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :shopItems[row]]];
-        _leafName.text = shopItems[row];
-        _expDateDisplay.text = currentRow[0];
-        currentShopIndex = (int)row;
-    }*/
     }
 }
 
@@ -515,50 +554,18 @@
     }
     else
     {
-        NSString *query = @"SELECT expDate from Inventory";
+        NSString *query = @"SELECT expDate, current, threshold from Inventory";
         query = [query stringByAppendingFormat:@" WHERE leaf = \"%@\" AND branch = \"%@\"",leafName, [self.detailItem description]];
         rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
         if(rc == SQLITE_OK)
         {
             while(sqlite3_step(stmt) == SQLITE_ROW) {
-            NSString * expColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
-            [rowData addObject:expColumn];
+                NSString * expColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
+                [rowData addObject:expColumn];
                 currExp = [[NSMutableString alloc] initWithString:expColumn];
-            }
-            sqlite3_finalize(stmt);
-        }
-        else
-        {
-            NSLog(@"Failed to prepare statement with rc:%d",rc);
-        }
-        sqlite3_close(db);
-    }
-    return rowData;
-}
-/*
-//not currently used or functional
--(NSArray *) checkThresh:(NSString *) filePath : (NSString *) leafName{
-    NSMutableArray * rowData =[[NSMutableArray alloc] init];
-    sqlite3 * db = NULL;
-    sqlite3_stmt * stmt =NULL;
-    int rc=0;
-    rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READONLY , NULL);
-    if (SQLITE_OK != rc)
-    {
-        sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
-    }
-    else
-    {
-        NSString *query = @"SELECT current, threshold from Inventory";
-        query = [query stringByAppendingFormat:@" WHERE leaf = \"%@\" AND branch = \"%@\"",leafName, [self.detailItem description]];
-        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
-        if(rc == SQLITE_OK)
-        {
-            while(sqlite3_step(stmt) == SQLITE_ROW) {
-                NSString * currColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
+                NSString * currColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
                 [rowData addObject:currColumn];
-                NSString * threshColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
+                NSString * threshColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 2)];
                 [rowData addObject:threshColumn];
             }
             sqlite3_finalize(stmt);
@@ -572,46 +579,12 @@
     return rowData;
 }
 
-
-//not currently used or functional
--(void) addToShopList:(NSString *) filePath : (NSString *) leafName
-{
-    sqlite3 * db = NULL;
-    sqlite3_stmt * stmt =NULL;
-    int rc=0;
-   // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
-    rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
-
-    if (SQLITE_OK != rc)
-    {
-        sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
-    }
-    else
-    {
-        NSString *query = @"UPDATE Inventory SET shopList = '1'";
-        query = [query stringByAppendingFormat:@" WHERE branch = \"%@\" AND leaf = \"%@\"",[self.detailItem description], leafName];
-        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
-        if(rc == SQLITE_OK)
-        {
-            sqlite3_finalize(stmt);
-        }
-        else
-        {
-            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
-        }
-        sqlite3_close(db);
-    }
-}
- */
-
 -(BOOL) checkShopStatusIncrease:(NSString *) filePath : (NSString *) leafName
 {
     BOOL success;
     sqlite3 * db = NULL;
     sqlite3_stmt * stmt =NULL;
     int rc=0;
-    // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
     rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
     
     if (SQLITE_OK != rc)
@@ -645,7 +618,6 @@
     sqlite3 * db = NULL;
     sqlite3_stmt * stmt =NULL;
     int rc=0;
-    // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
     rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
     
     if (SQLITE_OK != rc)
@@ -680,7 +652,6 @@
     sqlite3 * db = NULL;
     sqlite3_stmt * stmt =NULL;
     int rc=0;
-    // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
     rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE, NULL);
     
     if (SQLITE_OK != rc)
@@ -716,7 +687,6 @@
     sqlite3 * db = NULL;
     sqlite3_stmt * stmt =NULL;
     int rc=0;
-    // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
     rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
     
     if (SQLITE_OK != rc)
@@ -748,6 +718,7 @@
     return success;
 }
 
+//used the update the threshold attribute
 -(BOOL) updateThreshold:(NSString *) filePath : (NSString *) leafName : (NSNumber *) newThreshold
 {
     BOOL success = FALSE;
@@ -755,7 +726,6 @@
     sqlite3 * db = NULL;
     sqlite3_stmt * stmt =NULL;
     int rc=0;
-    // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
     rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
     
     if (SQLITE_OK != rc)
@@ -825,7 +795,7 @@
     return rowData;
 }
 
-//This function is used purely for testing purposes and will be removed before we turn in the project******
+//returns the current attribute to check if a reduction will dip below 0 (in IBAction reduceQuantity)
 -(NSArray *) getCurrent:(NSString *) filePath : (NSString *) leafName{
     NSMutableArray * rowData =[[NSMutableArray alloc] init];
     sqlite3 * db = NULL;

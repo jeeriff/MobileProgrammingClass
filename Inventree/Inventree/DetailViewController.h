@@ -12,9 +12,14 @@
     IBOutlet UITextField *increaseCurrent;
     IBOutlet UITextField *reduceCurrent;
     IBOutlet UITextField *updateThreshold;
+    IBOutlet UILabel *expDateDisplayLabel;
+    IBOutlet UITextField *expDateDisplay;
+    IBOutlet UILabel *currentQuantityLabel;
+    IBOutlet UITextField *currentQuantity;
+    IBOutlet UILabel *currentThresholdLabel;
+    IBOutlet UITextField *currentThreshold;
     IBOutlet UIPickerView *inventoryList;
     BOOL perish;
-    BOOL shop;
     NSMutableString *currExp;
     int currentIndex;
     int currentShopIndex;
@@ -29,6 +34,9 @@
 -(IBAction)deleteLeaf:(id)sender;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *perishSwitcher;
 -(IBAction)perishSwitch:(id)sender;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *userInterfaceSwitcher;
+-(IBAction)userInterfaceSwitch:(id)sender;
+
 
 @property (retain, nonatomic) UIPickerView *inventoryList;
 @property (retain, nonatomic) NSMutableArray *listItems;
@@ -39,7 +47,6 @@
 @property (strong, nonatomic) id detailItem;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *leafName;
-@property (weak, nonatomic) IBOutlet UITextField *expDateDisplay;
 
 @end
 
