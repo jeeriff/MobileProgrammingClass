@@ -11,6 +11,7 @@
 @interface DetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource> {
     IBOutlet UITextField *increaseCurrent;
     IBOutlet UITextField *reduceCurrent;
+    IBOutlet UITextField *updateThreshold;
     IBOutlet UIPickerView *inventoryList;
     BOOL perish;
     BOOL shop;
@@ -21,6 +22,7 @@
 
 -(IBAction)increaseCurrent:(id)sender;
 -(IBAction)reduceCurrent:(id)sender;
+-(IBAction)updateThreshold:(id)sender;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *listSwitcher;
 -(IBAction)listSwitch:(id)sender;
 -(IBAction)newLeaf:(id)sender;

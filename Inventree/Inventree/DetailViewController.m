@@ -206,27 +206,162 @@
 
 -(IBAction)increaseCurrent:(id)sender
 {
-    [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
-    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-    f.numberStyle = NSNumberFormatterDecimalStyle;
-    NSNumber *changeQuantity = [f numberFromString:increaseCurrent.text];
-    
-    [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :1 :changeQuantity];
-    [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    if ([increaseCurrent.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+    {
+        [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        NSNumber *changeQuantity = [f numberFromString:increaseCurrent.text];
+        if(changeQuantity > 0) {
+            [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :1 :changeQuantity];
+            [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+        }
+        else if(changeQuantity < 0) {
+            UIAlertController *alertController = [UIAlertController
+                                                  alertControllerWithTitle:@"Please enter a positive number"
+                                                  message:@""
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                           NSLog(@"OK action");
+                                       }];
 
+            [alertController addAction:okAction];
+            alertController.preferredAction = okAction;
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
+    }
+    else {
+        UIAlertController *alertController = [UIAlertController
+                                              alertControllerWithTitle:@"Please enter a positive number"
+                                              message:@""
+                                              preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *okAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                   style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       NSLog(@"OK action");
+                                   }];
+        
+        [alertController addAction:okAction];
+        alertController.preferredAction = okAction;
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 -(IBAction)reduceCurrent:(id)sender
 {
-    [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    if ([reduceCurrent.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+    {
+        [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+        NSArray *temp = [[NSArray alloc] initWithArray:[self getCurrent:[self getDbFilePath] :listItems[currentIndex]]];
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        NSNumber *changeQuantity = [f numberFromString:reduceCurrent.text];
+        if(changeQuantity > 0) {
+            NSNumber *currQuantity = [f numberFromString:temp[0]];
+            if(changeQuantity > currQuantity)
+                changeQuantity = currQuantity;
+            [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :0 :changeQuantity];
+            [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+        }
+        else if(changeQuantity < 0) {
+            UIAlertController *alertController = [UIAlertController
+                                                  alertControllerWithTitle:@"Please enter a positive number"
+                                                  message:@""
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                           NSLog(@"OK action");
+                                       }];
+            
+            [alertController addAction:okAction];
+            alertController.preferredAction = okAction;
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
+    }
+    else {
+        UIAlertController *alertController = [UIAlertController
+                                              alertControllerWithTitle:@"Please enter a positive number"
+                                              message:@""
+                                              preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *okAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                   style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       NSLog(@"OK action");
+                                   }];
+        
+        [alertController addAction:okAction];
+        alertController.preferredAction = okAction;
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
 
-    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-    f.numberStyle = NSNumberFormatterDecimalStyle;
-    NSNumber *changeQuantity = [f numberFromString:reduceCurrent.text];
-    
-    [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :0 :changeQuantity];
-    [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
-
+-(IBAction)updateThreshold:(id)sender
+{
+    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    if ([updateThreshold.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+    {
+        [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        NSNumber *changeThreshold = [f numberFromString:updateThreshold.text];
+        if(changeThreshold > 0) {
+            [self updateThreshold:[self getDbFilePath] :listItems[currentIndex] : changeThreshold];
+            [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+        }
+        else if(changeThreshold < 0) {
+            UIAlertController *alertController = [UIAlertController
+                                                  alertControllerWithTitle:@"Please enter a positive number"
+                                                  message:@""
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                           NSLog(@"OK action");
+                                       }];
+            
+            [alertController addAction:okAction];
+            alertController.preferredAction = okAction;
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
+    }
+    else {
+        UIAlertController *alertController = [UIAlertController
+                                              alertControllerWithTitle:@"Please enter a positive number"
+                                              message:@""
+                                              preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *okAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                   style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       NSLog(@"OK action");
+                                   }];
+        
+        [alertController addAction:okAction];
+        alertController.preferredAction = okAction;
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
 }
 
 //Data Source Method
@@ -539,6 +674,41 @@
     return success;
 }
 
+-(BOOL) updateThreshold:(NSString *) filePath : (NSString *) leafName : (NSNumber *) newThreshold
+{
+    BOOL success = FALSE;
+    NSString *query = @"UPDATE Inventory SET";
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    // rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READWRITE , NULL);
+    rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE , NULL);
+    
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        query = [query stringByAppendingFormat:@" threshold = \"%@\" WHERE branch = \"%@\" AND leaf = \"%@\"",newThreshold, [self.detailItem description], leafName];
+
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            if(sqlite3_step(stmt) == SQLITE_DONE)
+                success = YES;
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return success;
+}
+
 
 //This function is used purely for testing purposes and will be removed before we turn in the project******
 -(NSArray *) checkUpdate:(NSString *) filePath : (NSString *) leafName{
@@ -563,8 +733,47 @@
                 NSString * currColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
                 NSLog(@"Current:");
                 NSLog(currColumn);
-               // NSString * threshColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
-               // NSLog(threshColumn);
+                NSString * threshColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
+                NSLog(@"Threshold:");
+                NSLog(threshColumn);
+            }
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            NSLog(@"Failed to prepare statement with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return rowData;
+}
+
+//This function is used purely for testing purposes and will be removed before we turn in the project******
+-(NSArray *) getCurrent:(NSString *) filePath : (NSString *) leafName{
+    NSMutableArray * rowData =[[NSMutableArray alloc] init];
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READONLY , NULL);
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString *query = @"SELECT current from Inventory";
+        query = [query stringByAppendingFormat:@" WHERE leaf = \"%@\" AND branch = \"%@\"",leafName, [self.detailItem description]];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            while(sqlite3_step(stmt) == SQLITE_ROW) {
+                NSString * currColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
+                NSLog(@"Current Check:");
+                NSLog(currColumn);
+                [rowData addObject:currColumn];
+                // NSString * threshColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
+                // NSLog(threshColumn);
             }
             sqlite3_finalize(stmt);
         }

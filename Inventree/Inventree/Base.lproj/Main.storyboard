@@ -105,6 +105,9 @@
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="125" y="148" width="132" height="30"/>
                                 </variation>
+                                <connections>
+                                    <action selector="updateThreshold:" destination="JEX-9P-axG" eventType="touchUpInside" id="0Z1-OY-CGf"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PB6-In-WUO">
                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
@@ -222,6 +225,7 @@
                         <outlet property="listSwitcher" destination="YFc-wN-C6t" id="byP-cC-WDv"/>
                         <outlet property="perishSwitcher" destination="Jtn-li-bg1" id="xGj-lf-he5"/>
                         <outlet property="reduceCurrent" destination="PB6-In-WUO" id="veQ-JH-3r4"/>
+                        <outlet property="updateThreshold" destination="Eon-u3-tjm" id="Lcr-vZ-XQ3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
