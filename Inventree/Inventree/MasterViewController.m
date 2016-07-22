@@ -22,8 +22,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    self.navigationItem.leftBarButtonItem.tintColor = Rgb2UIColor(102, 51, 0);
+    self.navigationItem.leftBarButtonItem.tintColor = Rgb2UIColor(255, 255, 255);
     self.title = @"Add or select a branch!";
     //[self.title.font setFont:[UIFont fontWithName:@"your font name here" size:fontsizehere]];
     [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(0, 102, 0)];
@@ -33,8 +34,8 @@
     shadow.shadowOffset = CGSizeMake(0.0f, 1.0f);
     shadow.shadowColor = [UIColor blackColor];
     [[UINavigationBar appearance] setTitleTextAttributes: @{
-                                                            NSForegroundColorAttributeName: [UIColor greenColor],
-                                                            NSFontAttributeName: [UIFont fontWithName:@"Helvetica-Bold" size:18.0f],
+                                                            NSForegroundColorAttributeName: [UIColor whiteColor],
+                                                            NSFontAttributeName: [UIFont fontWithName:@"MarkerFelt-Thin" size:18.0f],
                                                             NSShadowAttributeName: shadow
                                                             }];
     
@@ -47,7 +48,7 @@
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
-    self.navigationItem.rightBarButtonItem.tintColor = Rgb2UIColor(102, 51, 0);
+    self.navigationItem.rightBarButtonItem.tintColor = Rgb2UIColor(255, 255, 255);
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
     UIView *patternView = [[UIView alloc] initWithFrame:self.tableView.frame];
@@ -106,7 +107,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
                                    style:UIAlertActionStyleCancel
                                    handler:^(UIAlertAction *action)
                                    {
-                                       NSLog(@"Cancel action");
+                                       //NSLog(@"Cancel action");
                                    }];
     
     UIAlertAction *okAction = [UIAlertAction
@@ -114,7 +115,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction *action)
                                {
-                                   NSLog(@"OK action");
+                                   //NSLog(@"OK action");
                                    [newItem setString:alertController.textFields[0].text];
                                    [self.objects insertObject:newItem atIndex:0];
                                    [self insert:[self getDbFilePath] : alertController.textFields[0].text];
@@ -154,7 +155,8 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
     cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.textColor = [UIColor grayColor];
+    cell.textLabel.textColor = Rgb2UIColor(0, 214, 71);
+    cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:18.0f];
 
     NSMutableString *object = self.objects[indexPath.row];
     cell.textLabel.text = [object description];
@@ -168,6 +170,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self deleteBranch:[self getDbFilePath] :self.objects[indexPath.row]];
         [self.objects removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
@@ -192,7 +195,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -202,7 +205,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
         
         if(SQLITE_OK != rc)
         {
-            NSLog(@"Failed to create table rc:%d, msg=%s", rc, errMsg);
+            //NSLog(@"Failed to create table rc:%d, msg=%s", rc, errMsg);
         }
         
         query ="CREATE TABLE IF NOT EXISTS Branches ( id INTEGER PRIMARY KEY AUTOINCREMENT, branchName TEXT )";
@@ -210,7 +213,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
         
         if(SQLITE_OK != rc)
         {
-            NSLog(@"Failed to create table rc:%d, msg=%s", rc, errMsg);
+            //NSLog(@"Failed to create table rc:%d, msg=%s", rc, errMsg);
         }
         
         sqlite3_close(db);
@@ -227,7 +230,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -237,7 +240,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
         rc = sqlite3_exec(db, [query UTF8String] , NULL, NULL, &errMsg);
         if(SQLITE_OK != rc)
         {
-            NSLog(@"Failed to insert record  rc:%d, msg=%s", rc, errMsg);
+            //NSLog(@"Failed to insert record  rc:%d, msg=%s", rc, errMsg);
         }
         sqlite3_close(db);
     }
@@ -254,7 +257,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -273,10 +276,55 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
         }
         else
         {
-            NSLog(@"Failed to prepare statement with rc:%d",rc);
+            //NSLog(@"Failed to prepare statement with rc:%d",rc);
         }
         sqlite3_close(db);
     }
     return totalBranches;
 }
+
+-(BOOL) deleteBranch:(NSString *) filePath : (NSArray *) branch
+{
+    BOOL success = NO;
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE, NULL);
+    
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        //NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString *query = @"DELETE FROM Inventory";
+        query = [query stringByAppendingFormat:@" WHERE branch = \"%@\"", branch];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            //NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+        }
+        NSString *query2 = @"DELETE FROM Branches";
+        query2 = [query2 stringByAppendingFormat:@" WHERE branchName = \"%@\"", branch];
+        rc =sqlite3_prepare_v2(db, [query2 UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            if(sqlite3_step(stmt) == SQLITE_DONE)
+                success = YES;
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            //NSLog(@"Failed to prepare statement 2 with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return success;
+}
+
 @end

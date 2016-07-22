@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @interface DetailViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource> {
+    IBOutlet UILabel *leafNameLabel;
+    IBOutlet UIButton *increaseCurrentButton;
+    IBOutlet UIButton *reduceCurrentButton;
+    IBOutlet UIButton *updateThresholdButton;
+    IBOutlet UIButton *newLeafButton;
+    IBOutlet UIButton *deleteLeafButton;
     IBOutlet UITextField *increaseCurrent;
     IBOutlet UITextField *reduceCurrent;
     IBOutlet UITextField *updateThreshold;
@@ -32,8 +38,6 @@
 -(IBAction)listSwitch:(id)sender;
 -(IBAction)newLeaf:(id)sender;
 -(IBAction)deleteLeaf:(id)sender;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *perishSwitcher;
--(IBAction)perishSwitch:(id)sender;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *userInterfaceSwitcher;
 -(IBAction)userInterfaceSwitch:(id)sender;
 
@@ -45,8 +49,6 @@
 
 @property (weak, nonatomic) NSMutableString *branchCategory;
 @property (strong, nonatomic) id detailItem;
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
-@property (weak, nonatomic) IBOutlet UILabel *leafName;
 
 @end
 

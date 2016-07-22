@@ -33,67 +33,52 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" text="Detail view content goes here" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="0XM-y9-sOw">
-                                <rect key="frame" x="20" y="292" width="560" height="17"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" size="system"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="2" y="72" width="360" height="17"/>
-                                </variation>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name of Item" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M1Q-cI-Enb">
-                                <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="2" y="97" width="378" height="21"/>
-                                </variation>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wB5-Uc-jqi">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <color key="backgroundColor" red="0.061530835926532745" green="0.91068494319915771" blue="0.048333488404750824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" red="0.059687539935112" green="0.019587140530347824" blue="0.010942375287413597" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Delete Leaf"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="14" y="97" width="78" height="30"/>
+                                    <rect key="frame" x="13" y="97" width="86" height="30"/>
                                 </variation>
                                 <connections>
-                                    <action selector="deleteLeaf:" destination="JEX-9P-axG" eventType="touchUpInside" id="ngY-Fg-6Nr"/>
+                                    <action selector="deleteLeaf:" destination="JEX-9P-axG" eventType="touchUpInside" id="Fbr-f4-73g"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expiration Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BL-mP-xBa">
                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.99607473611831665" green="0.99220293760299683" blue="0.99199241399765015" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="241" y="219" width="121" height="21"/>
                                 </variation>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JGC-TW-u1P">
-                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                <state key="normal" title="Add Leaf"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="299" y="97" width="61" height="30"/>
-                                </variation>
-                                <connections>
-                                    <action selector="newLeaf:" destination="JEX-9P-axG" eventType="touchUpInside" id="Dn5-bB-cur"/>
-                                </connections>
-                            </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uX3-4j-1wv">
                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="244" y="243" width="116" height="30"/>
+                                    <rect key="frame" x="255" y="243" width="105" height="30"/>
                                 </variation>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hNG-5D-lot">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <color key="backgroundColor" red="0.061530835926532745" green="0.91068494319915771" blue="0.048333488404750824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Add to Leaf"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="268" y="153" width="79" height="30"/>
+                                    <rect key="frame" x="268" y="145" width="79" height="33"/>
                                 </variation>
                                 <connections>
                                     <action selector="increaseCurrent:" destination="JEX-9P-axG" eventType="touchUpInside" id="4Qz-MM-Lud"/>
@@ -101,11 +86,18 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="tqr-nS-uBf">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <color key="backgroundColor" red="0.061530835926532745" green="0.91068494319915771" blue="0.048333488404750824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="titleShadowOffset" width="2.2250738585072014e-308" height="0.0"/>
                                 <state key="normal" title="Subtract from Leaf"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="36" y="139" width="58" height="47"/>
+                                    <rect key="frame" x="27" y="145" width="76" height="33"/>
                                 </variation>
                                 <connections>
                                     <action selector="reduceCurrent:" destination="JEX-9P-axG" eventType="touchUpInside" id="M7n-RZ-kbW"/>
@@ -113,10 +105,17 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="5jO-Rt-Jfh">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <color key="backgroundColor" red="0.061530835926532745" green="0.91068494319915771" blue="0.048333488404750824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Update Threshhold"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="145" y="148" width="83" height="30"/>
+                                    <rect key="frame" x="145" y="145" width="83" height="33"/>
                                 </variation>
                                 <connections>
                                     <action selector="updateThreshold:" destination="JEX-9P-axG" eventType="touchUpInside" id="0Z1-OY-CGf"/>
@@ -150,6 +149,7 @@
                                     <segment title="All"/>
                                     <segment title="Shopping List"/>
                                 </segments>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="85" y="348" width="195" height="29"/>
                                 </variation>
@@ -184,7 +184,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Threshold" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aHq-u0-tNP">
                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.99607473611831665" green="0.99220293760299683" blue="0.99199241399765015" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="129" y="219" width="115" height="21"/>
@@ -193,7 +193,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Quantity" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wjs-zn-DDt">
                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.99607473611831665" green="0.99220293760299683" blue="0.99199241399765015" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="1" y="219" width="128" height="21"/>
@@ -205,6 +205,7 @@
                                     <segment title="Hide UI"/>
                                     <segment title="Show UI"/>
                                 </segments>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
                                     <rect key="frame" x="118" y="312" width="129" height="29"/>
                                 </variation>
@@ -212,27 +213,39 @@
                                     <action selector="userInterfaceSwitch:" destination="JEX-9P-axG" eventType="valueChanged" id="EYJ-Uu-whs"/>
                                 </connections>
                             </segmentedControl>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Jtn-li-bg1">
-                                <rect key="frame" x="-60" y="-14" width="121" height="29"/>
-                                <segments>
-                                    <segment title="Hide"/>
-                                    <segment title="Show"/>
-                                </segments>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name of Item" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M1Q-cI-Enb">
+                                <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="253" y="276" width="97" height="29"/>
+                                    <rect key="frame" x="2" y="72" width="378" height="26"/>
+                                </variation>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JGC-TW-u1P">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <color key="backgroundColor" red="0.061530835926532745" green="0.91068494319915771" blue="0.048333488404750824" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" red="0.091392390429973602" green="0.027193086221814156" blue="0.022380568087100983" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Add Leaf"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="287" y="97" width="73" height="30"/>
                                 </variation>
                                 <connections>
-                                    <action selector="perishSwitch:" destination="JEX-9P-axG" eventType="valueChanged" id="z0r-7c-Gnj"/>
+                                    <action selector="newLeaf:" destination="JEX-9P-axG" eventType="touchUpInside" id="aSx-cM-9Y1"/>
                                 </connections>
-                            </segmentedControl>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="M1Q-cI-Enb"/>
                                 <exclude reference="wB5-Uc-jqi"/>
                                 <exclude reference="8BL-mP-xBa"/>
-                                <exclude reference="JGC-TW-u1P"/>
                                 <exclude reference="uX3-4j-1wv"/>
                                 <exclude reference="hNG-5D-lot"/>
                                 <exclude reference="tqr-nS-uBf"/>
@@ -247,15 +260,14 @@
                                 <exclude reference="aHq-u0-tNP"/>
                                 <exclude reference="Wjs-zn-DDt"/>
                                 <exclude reference="khE-eI-YVv"/>
-                                <exclude reference="Jtn-li-bg1"/>
+                                <exclude reference="M1Q-cI-Enb"/>
+                                <exclude reference="JGC-TW-u1P"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
-                                <include reference="M1Q-cI-Enb"/>
                                 <include reference="wB5-Uc-jqi"/>
                                 <include reference="8BL-mP-xBa"/>
-                                <include reference="JGC-TW-u1P"/>
                                 <include reference="uX3-4j-1wv"/>
                                 <include reference="hNG-5D-lot"/>
                                 <include reference="tqr-nS-uBf"/>
@@ -270,7 +282,8 @@
                                 <include reference="aHq-u0-tNP"/>
                                 <include reference="Wjs-zn-DDt"/>
                                 <include reference="khE-eI-YVv"/>
-                                <include reference="Jtn-li-bg1"/>
+                                <include reference="M1Q-cI-Enb"/>
+                                <include reference="JGC-TW-u1P"/>
                             </mask>
                         </variation>
                     </view>
@@ -281,16 +294,19 @@
                         <outlet property="currentQuantityLabel" destination="Wjs-zn-DDt" id="Qh8-qe-3Er"/>
                         <outlet property="currentThreshold" destination="joC-lu-Mrh" id="uD9-RJ-dKK"/>
                         <outlet property="currentThresholdLabel" destination="aHq-u0-tNP" id="Dzy-Qd-0rk"/>
-                        <outlet property="detailDescriptionLabel" destination="0XM-y9-sOw" id="deQ-Na-JPF"/>
+                        <outlet property="deleteLeafButton" destination="wB5-Uc-jqi" id="dVN-nK-pMd"/>
                         <outlet property="expDateDisplay" destination="uX3-4j-1wv" id="Mn7-Qe-bqO"/>
                         <outlet property="expDateDisplayLabel" destination="8BL-mP-xBa" id="JiQ-0X-HSC"/>
                         <outlet property="increaseCurrent" destination="r5L-U8-eEI" id="gTa-Vl-PjI"/>
+                        <outlet property="increaseCurrentButton" destination="hNG-5D-lot" id="wp2-RI-uOi"/>
                         <outlet property="inventoryList" destination="tjU-ZC-pwN" id="Biu-WJ-x4E"/>
-                        <outlet property="leafName" destination="M1Q-cI-Enb" id="z6s-oF-3vB"/>
+                        <outlet property="leafNameLabel" destination="M1Q-cI-Enb" id="YqZ-8S-ses"/>
                         <outlet property="listSwitcher" destination="YFc-wN-C6t" id="byP-cC-WDv"/>
-                        <outlet property="perishSwitcher" destination="Jtn-li-bg1" id="tiH-Hq-yaz"/>
+                        <outlet property="newLeafButton" destination="JGC-TW-u1P" id="frt-6P-VJ8"/>
                         <outlet property="reduceCurrent" destination="PB6-In-WUO" id="veQ-JH-3r4"/>
+                        <outlet property="reduceCurrentButton" destination="tqr-nS-uBf" id="IFQ-nL-PQs"/>
                         <outlet property="updateThreshold" destination="Eon-u3-tjm" id="Lcr-vZ-XQ3"/>
+                        <outlet property="updateThresholdButton" destination="5jO-Rt-Jfh" id="fkH-Ew-hyN"/>
                         <outlet property="userInterfaceSwitcher" destination="khE-eI-YVv" id="FrH-W0-y2E"/>
                     </connections>
                 </viewController>

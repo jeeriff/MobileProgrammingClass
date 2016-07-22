@@ -9,6 +9,7 @@
 #import "DetailViewController.h"
 #import <sqlite3.h>
 
+
 @interface DetailViewController ()
 
 @end
@@ -23,7 +24,6 @@
 - (void)setDetailItem:(id)newDetailItem {
     if (_detailItem != newDetailItem) {
         _detailItem = newDetailItem;
-        
         // Update the view.
         [self configureView];
     }
@@ -31,14 +31,27 @@
 
 - (void)configureView {
     // Update the user interface for the detail item.
-    if (self.detailItem) {
-        self.detailDescriptionLabel.text = [self.detailItem description];
-    }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    perish = NO;
+    self.title = [self.detailItem description];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"leaves.png"]];
+    leafNameLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:24.0f];
+    [increaseCurrentButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    increaseCurrentButton.titleLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
+    [reduceCurrentButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    reduceCurrentButton.titleLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
+    [updateThresholdButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    updateThresholdButton.titleLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
+    
+    currentQuantity.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
+    currentQuantityLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
+    currentThreshold.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
+    currentThresholdLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
+    expDateDisplay.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
+    expDateDisplayLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
+    
     currentIndex = 0;
     currExp = [[NSMutableString alloc] init];
     // Do any additional setup after loading the view, typically from a nib.
@@ -51,32 +64,21 @@
     [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
     self.inventoryList.dataSource = self;
     self.inventoryList.delegate = self;
-    //[inventoryList reloadAllComponents];
     self.userInterfaceSwitcher.selectedSegmentIndex = 1;
     [currentThreshold setHidden:FALSE];
     [currentThresholdLabel setHidden:FALSE];
     [currentQuantity setHidden:FALSE];
     [currentQuantityLabel setHidden:FALSE];
-    self.perishSwitcher.selectedSegmentIndex = 0;
-    [expDateDisplay setHidden:TRUE];
     [expDateDisplayLabel setHidden:FALSE];
-    [_perishSwitcher setHidden:FALSE];
     if([listItems count] > 0) {
         NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
-        _leafName.text = listItems[0];
+        leafNameLabel.text = listItems[0];
+        expDateDisplay.text = currentRow[0];
         currentQuantity.text = currentRow[1];
         currentThreshold.text = currentRow[2];
-        if(perish == TRUE) {
-            [expDateDisplay setHidden:FALSE];
-            expDateDisplay.text = currentRow[0];
-            currExp = currentRow[0];
-        }
-        else {
-            [expDateDisplay setHidden:TRUE];
-        }
     }
     else {
-        _leafName.text = @"Create a leaf now!";
+        leafNameLabel.text = @"Create a leaf now!";
         expDateDisplay.text = @"Create a leaf";
         currentQuantity.text = @"";
         currentThreshold.text = @"";
@@ -94,6 +96,15 @@
     switch (self.listSwitcher.selectedSegmentIndex)
     {
         case 0:
+            newLeafButton.hidden = NO;
+            deleteLeafButton.hidden = NO;
+            increaseCurrent.hidden = NO;
+            increaseCurrentButton.hidden = NO;
+            reduceCurrent.hidden = NO;
+            reduceCurrentButton.hidden = NO;
+            updateThreshold.hidden = NO;
+            updateThresholdButton.hidden = NO;
+            [self.inventoryList selectRow:0 inComponent:0 animated:NO];
             [inventoryList selectedRowInComponent:0];
             [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
             self.inventoryList.dataSource = self;
@@ -101,13 +112,13 @@
             [inventoryList reloadAllComponents];
             if([listItems count] > 0) {
                 NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] : listItems[0]]];
-                _leafName.text = listItems[0];
+                leafNameLabel.text = listItems[0];
                 expDateDisplay.text = currentRow[0];
                 currentQuantity.text = currentRow[1];
                 currentThreshold.text = currentRow[2];
             }
             else if([listItems count] == 0) {
-                _leafName.text = @"Create a new leaf!";
+                leafNameLabel.text = @"Create a new leaf!";
                 expDateDisplay.text = @"Create a leaf";
                 currentQuantity.text = @"";
                 currentThreshold.text = @"";
@@ -115,6 +126,15 @@
 
             break;
         case 1:
+            newLeafButton.hidden = YES;
+            deleteLeafButton.hidden = YES;
+            increaseCurrent.hidden = YES;
+            increaseCurrentButton.hidden = YES;
+            reduceCurrent.hidden = YES;
+            reduceCurrentButton.hidden = YES;
+            updateThreshold.hidden = YES;
+            updateThresholdButton.hidden = YES;
+            [self.inventoryList selectRow:0 inComponent:0 animated:NO];
             [inventoryList selectedRowInComponent:0];
             [self.listItems setArray:[self getLeaves:[self getDbFilePath] : YES]];
             self.inventoryList.dataSource = self;
@@ -122,34 +142,17 @@
             [inventoryList reloadAllComponents];
             if([listItems count] > 0) {
                 NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] : listItems[0]]];
-                _leafName.text = listItems[0];
+                leafNameLabel.text = listItems[0];
                 expDateDisplay.text = currentRow[0];
                 currentQuantity.text = currentRow[1];
                 currentThreshold.text = currentRow[2];
             }
             else if([listItems count] == 0) {
-                _leafName.text = @"Shopping list is empty";
+                leafNameLabel.text = @"Shopping list is empty";
                 expDateDisplay.text = @"";
                 currentQuantity.text = @"";
                 currentThreshold.text = @"";
             }
-            break;
-        default:
-            break;
-    }
-}
-
--(IBAction)perishSwitch:(id)sender {
-    switch (self.perishSwitcher.selectedSegmentIndex)
-    {
-        case 0:
-            [expDateDisplay setHidden:TRUE];
-            perish = NO;
-            break;
-        case 1:
-            [expDateDisplay setHidden:FALSE];
-            expDateDisplay.text = currExp;
-            perish = YES;
             break;
         default:
             break;
@@ -167,17 +170,14 @@
             [currentQuantityLabel setHidden:TRUE];
             [expDateDisplay setHidden:TRUE];
             [expDateDisplayLabel setHidden:TRUE];
-            [_perishSwitcher setHidden:TRUE];
             break;
         case 1:
             [currentThreshold setHidden:FALSE];
             [currentThresholdLabel setHidden:FALSE];
             [currentQuantity setHidden:FALSE];
             [currentQuantityLabel setHidden:FALSE];
-            self.perishSwitcher.selectedSegmentIndex = 1;
             [expDateDisplay setHidden:FALSE];
             [expDateDisplayLabel setHidden:FALSE];
-            [_perishSwitcher setHidden:FALSE];
             break;
         default:
             break;
@@ -214,7 +214,7 @@
                                    style:UIAlertActionStyleDestructive
                                    handler:^(UIAlertAction *action)
                                    {
-                                       NSLog(@"Cancel action");
+                                       //NSLog(@"Cancel action");
                                    }];
     
     UIAlertAction *okAction = [UIAlertAction
@@ -222,7 +222,7 @@
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction *action)
                                {
-                                   NSLog(@"Add action");
+                                   //NSLog(@"Add action");
                                    [newLeafName setString:alertController.textFields[0].text];
                                    [newThreshold setString:alertController.textFields[1].text];
                                    [newExpDate setString:alertController.textFields[2].text];
@@ -236,16 +236,13 @@
                                        if(threshNum > 0) {
                                            [self insertLeaf:[self getDbFilePath] : newLeafName : threshNum : newExpDate];
                                            [listItems insertObject:newLeafName atIndex:0];
-                                           //[self.listItems addObject:newLeafName];
                                            [inventoryList reloadAllComponents];
                                            NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
-                                           _leafName.text = listItems[0];
+                                           leafNameLabel.text = listItems[0];
                                            expDateDisplay.text = currentRow[0];
                                            currentQuantity.text = currentRow[1];
                                            currentThreshold.text = currentRow[2];
                                            currentIndex = 0;
-                                           self.perishSwitcher.selectedSegmentIndex = 0;
-                                           [expDateDisplay setHidden:TRUE];
                                            self.listSwitcher.selectedSegmentIndex = 0;
                                            updateThreshold.text = @"";
                                            increaseCurrent.text = @"";
@@ -269,19 +266,21 @@
 -(IBAction)deleteLeaf:(id)sender
 {
     if([listItems count] > 0) {
-    [self deleteCurrentLeaf:[self getDbFilePath]];
-    [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
-    [inventoryList reloadAllComponents];
-    if([listItems count] > 0) {
-        NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
-        _leafName.text = listItems[currentIndex];
-        expDateDisplay.text = currentRow[0];
-        currentQuantity.text = currentRow[1];
-        currentThreshold.text = currentRow[2];
-    }
+        [self deleteCurrentLeaf:[self getDbFilePath]];
+        [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
+        [inventoryList reloadAllComponents];
+        if([listItems count] > 0) {
+            if(currentIndex > 0)
+                --currentIndex;
+            NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
+            leafNameLabel.text = listItems[currentIndex];
+            expDateDisplay.text = currentRow[0];
+            currentQuantity.text = currentRow[1];
+            currentThreshold.text = currentRow[2];
+        }
     }
     if([listItems count] == 0) {
-        _leafName.text = @"Create a leaf now!";
+        leafNameLabel.text = @"Create a leaf now!";
         expDateDisplay.text = @"Create a leaf";
         currentQuantity.text = @"";
         currentThreshold.text = @"";
@@ -291,24 +290,27 @@
 
 -(IBAction)increaseCurrent:(id)sender
 {
-    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-    if ([increaseCurrent.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
-    {
-        [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
-        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-        f.numberStyle = NSNumberFormatterDecimalStyle;
-        NSNumber *changeQuantity = [f numberFromString:increaseCurrent.text];
-        if(changeQuantity > 0) {
-            [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :1 :changeQuantity];
-            [self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]];
-            [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+    if([listItems count] > 0) {
+        NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+        if ([increaseCurrent.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+        {
+            NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+            f.numberStyle = NSNumberFormatterDecimalStyle;
+            NSNumber *changeQuantity = [f numberFromString:increaseCurrent.text];
+            if(changeQuantity > 0) {
+                [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :1 :changeQuantity];
+                [self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]];
+                NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
+                currentQuantity.text = currentRow[1];
+                currentThreshold.text = currentRow[2];
+            }
+            else if(changeQuantity < 0) {
+                [self dataValidation];
+            }
         }
-        else if(changeQuantity < 0) {
+        else {
             [self dataValidation];
         }
-    }
-    else {
-        [self dataValidation];
     }
     updateThreshold.text = @"";
     increaseCurrent.text = @"";
@@ -317,28 +319,31 @@
 
 -(IBAction)reduceCurrent:(id)sender
 {
-    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-    if ([reduceCurrent.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
-    {
-        [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
-        NSArray *temp = [[NSArray alloc] initWithArray:[self getCurrent:[self getDbFilePath] :listItems[currentIndex]]];
-        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-        f.numberStyle = NSNumberFormatterDecimalStyle;
-        NSNumber *changeQuantity = [f numberFromString:reduceCurrent.text];
-        if(changeQuantity > 0) {
-            NSNumber *currQuantity = [f numberFromString:temp[0]];
-            if(changeQuantity > currQuantity)
-                changeQuantity = currQuantity;
-            [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :0 :changeQuantity];
-            [self checkShopStatusDecrease:[self getDbFilePath] :listItems[currentIndex]];
-            [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+    if([listItems count] > 0) {
+        NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+        if ([reduceCurrent.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+        {
+            NSArray *temp = [[NSArray alloc] initWithArray:[self getCurrent:[self getDbFilePath] :listItems[currentIndex]]];
+            NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+            f.numberStyle = NSNumberFormatterDecimalStyle;
+            NSNumber *changeQuantity = [f numberFromString:reduceCurrent.text];
+            if(changeQuantity > 0) {
+                NSNumber *currQuantity = [f numberFromString:temp[0]];
+                if(changeQuantity > currQuantity)
+                    changeQuantity = currQuantity;
+                [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :0 :changeQuantity];
+                [self checkShopStatusDecrease:[self getDbFilePath] :listItems[currentIndex]];
+                NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
+                currentQuantity.text = currentRow[1];
+                currentThreshold.text = currentRow[2];
+            }
+            else if(changeQuantity < 0) {
+                [self dataValidation];
+            }
         }
-        else if(changeQuantity < 0) {
+        else {
             [self dataValidation];
         }
-    }
-    else {
-        [self dataValidation];
     }
     updateThreshold.text = @"";
     increaseCurrent.text = @"";
@@ -347,25 +352,28 @@
 
 -(IBAction)updateThreshold:(id)sender
 {
-    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-    if ([updateThreshold.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
-    {
-        [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
-        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-        f.numberStyle = NSNumberFormatterDecimalStyle;
-        NSNumber *changeThreshold = [f numberFromString:updateThreshold.text];
-        if(changeThreshold > 0) {
-            [self updateThreshold:[self getDbFilePath] :listItems[currentIndex] : changeThreshold];
-            [self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]];
-            [self checkShopStatusDecrease:[self getDbFilePath] :listItems[currentIndex]];
-            [self checkUpdate:[self getDbFilePath] :listItems[currentIndex]];
+    if([listItems count] > 0) {
+        NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+        if ([updateThreshold.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+        {
+            NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+            f.numberStyle = NSNumberFormatterDecimalStyle;
+            NSNumber *changeThreshold = [f numberFromString:updateThreshold.text];
+            if(changeThreshold > 0) {
+                [self updateThreshold:[self getDbFilePath] :listItems[currentIndex] : changeThreshold];
+                [self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]];
+                [self checkShopStatusDecrease:[self getDbFilePath] :listItems[currentIndex]];
+                NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
+                currentQuantity.text = currentRow[1];
+                currentThreshold.text = currentRow[2];
+            }
+            else if(changeThreshold < 0) {
+                [self dataValidation];
+            }
         }
-        else if(changeThreshold < 0) {
+        else {
             [self dataValidation];
         }
-    }
-    else {
-        [self dataValidation];
     }
     updateThreshold.text = @"";
     increaseCurrent.text = @"";
@@ -405,7 +413,7 @@
     if([listItems count] > 0) {
     currentIndex = (int)row;
     NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[row]]];
-        _leafName.text = listItems[row];
+        leafNameLabel.text = listItems[row];
         expDateDisplay.text = currentRow[0];
         currentQuantity.text = currentRow[1];
         currentThreshold.text = currentRow[2];
@@ -413,10 +421,22 @@
     }
 }
 
+-(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
+{
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, pickerView.frame.size.width, 44)];
+    label.backgroundColor = [UIColor brownColor];
+    label.textColor = [UIColor whiteColor];
+    label.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:22.0f];
+    if([listItems count] > 0)
+        label.text = [NSString stringWithFormat:@"  %@", listItems[row]];
+    label.textAlignment = NSTextAlignmentCenter;
+    return label;
+}
+
 -(void)dataValidation
 {
     UIAlertController *alertController = [UIAlertController
-                                          alertControllerWithTitle:@"Please enter a positive number"
+                                          alertControllerWithTitle:@"Please enter a positive integer"
                                           message:@""
                                           preferredStyle:UIAlertControllerStyleAlert];
     
@@ -425,7 +445,7 @@
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction *action)
                                {
-                                   NSLog(@"OK action");
+                                   //NSLog(@"OK action");
                                    increaseCurrent.text = @"";
                                    reduceCurrent.text = @"";
                                    updateThreshold.text = @"";
@@ -439,7 +459,7 @@
 -(void) insertValidation
 {
     UIAlertController *alertController = [UIAlertController
-                                          alertControllerWithTitle:@"Please enter a positive number for the purchase threshold"
+                                          alertControllerWithTitle:@"Please enter a positive integer for the purchase threshold"
                                           message:@""
                                           preferredStyle:UIAlertControllerStyleAlert];
     
@@ -448,7 +468,7 @@
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction *action)
                                {
-                                   NSLog(@"OK action");
+                                   //NSLog(@"OK action");
                                    increaseCurrent.text = @"";
                                    reduceCurrent.text = @"";
                                    updateThreshold.text = @"";
@@ -476,7 +496,7 @@
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -490,7 +510,7 @@
         rc = sqlite3_exec(db, [query UTF8String] , NULL, NULL, &errMsg);
         if(SQLITE_OK != rc)
         {
-            NSLog(@"Failed to insert record  rc:%d, msg=%s", rc, errMsg);
+            //NSLog(@"Failed to insert record  rc:%d, msg=%s", rc, errMsg);
         }
         sqlite3_close(db);
     }
@@ -509,7 +529,7 @@
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -526,13 +546,13 @@
             {
                 NSString * nextLeaf = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 2)];
                 [totalLeaves addObject:nextLeaf];
-                NSLog(nextLeaf);
+                //NSLog(nextLeaf);
             }
             sqlite3_finalize(stmt);
         }
         else
         {
-            NSLog(@"Failed to prepare statement with rc:%d",rc);
+            //NSLog(@"Failed to prepare statement with rc:%d",rc);
         }
         sqlite3_close(db);
     }
@@ -550,7 +570,7 @@
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -572,7 +592,7 @@
         }
         else
         {
-            NSLog(@"Failed to prepare statement with rc:%d",rc);
+            //NSLog(@"Failed to prepare statement with rc:%d",rc);
         }
         sqlite3_close(db);
     }
@@ -590,7 +610,7 @@
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -605,7 +625,7 @@
         }
         else
         {
-            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+            //NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
         }
         sqlite3_close(db);
     }
@@ -623,7 +643,7 @@
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -638,7 +658,7 @@
         }
         else
         {
-            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+            //NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
         }
         sqlite3_close(db);
     }
@@ -657,7 +677,7 @@
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -672,7 +692,7 @@
         }
         else
         {
-            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+            //NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
         }
         sqlite3_close(db);
     }
@@ -692,7 +712,7 @@
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -711,7 +731,7 @@
         }
         else
         {
-            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+            //NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
         }
         sqlite3_close(db);
     }
@@ -731,7 +751,7 @@
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -746,7 +766,7 @@
         }
         else
         {
-            NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+            //NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
         }
         sqlite3_close(db);
     }
@@ -755,7 +775,7 @@
 
 
 //This function is used purely for testing purposes and will be removed before we turn in the project******
--(NSArray *) checkUpdate:(NSString *) filePath : (NSString *) leafName{
+/*-(NSArray *) checkUpdate:(NSString *) filePath : (NSString *) leafName{
     NSMutableArray * rowData =[[NSMutableArray alloc] init];
     sqlite3 * db = NULL;
     sqlite3_stmt * stmt =NULL;
@@ -764,7 +784,7 @@
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -793,7 +813,7 @@
         sqlite3_close(db);
     }
     return rowData;
-}
+}*/
 
 //returns the current attribute to check if a reduction will dip below 0 (in IBAction reduceQuantity)
 -(NSArray *) getCurrent:(NSString *) filePath : (NSString *) leafName{
@@ -805,7 +825,7 @@
     if (SQLITE_OK != rc)
     {
         sqlite3_close(db);
-        NSLog(@"Failed to open db connection");
+        //NSLog(@"Failed to open db connection");
     }
     else
     {
@@ -817,10 +837,8 @@
             while(sqlite3_step(stmt) == SQLITE_ROW) {
                 NSString * currColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
                 NSLog(@"Current Check:");
-                NSLog(currColumn);
+                //NSLog(currColumn);
                 [rowData addObject:currColumn];
-                // NSString * threshColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
-                // NSLog(threshColumn);
             }
             sqlite3_finalize(stmt);
         }
