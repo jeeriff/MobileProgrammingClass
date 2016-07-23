@@ -79,7 +79,7 @@
     }
     else {
         leafNameLabel.text = @"Create a leaf now!";
-        expDateDisplay.text = @"Create a leaf";
+        expDateDisplay.text = @"";
         currentQuantity.text = @"";
         currentThreshold.text = @"";
     }
@@ -119,7 +119,7 @@
             }
             else if([listItems count] == 0) {
                 leafNameLabel.text = @"Create a new leaf!";
-                expDateDisplay.text = @"Create a leaf";
+                expDateDisplay.text = @"";
                 currentQuantity.text = @"";
                 currentThreshold.text = @"";
             }
@@ -222,38 +222,43 @@
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction *action)
                                {
-                                   //NSLog(@"Add action");
-                                   [newLeafName setString:alertController.textFields[0].text];
-                                   [newThreshold setString:alertController.textFields[1].text];
-                                   [newExpDate setString:alertController.textFields[2].text];
-                                   NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-                                   f.numberStyle = NSNumberFormatterDecimalStyle;
-                                   
-                                   NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-                                   if ([newThreshold rangeOfCharacterFromSet:notDigits].location == NSNotFound)
-                                   {
-                                       NSNumber *threshNum = [f numberFromString:newThreshold];
-                                       if(threshNum > 0) {
-                                           [self insertLeaf:[self getDbFilePath] : newLeafName : threshNum : newExpDate];
-                                           [listItems insertObject:newLeafName atIndex:0];
-                                           [inventoryList reloadAllComponents];
-                                           NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
-                                           leafNameLabel.text = listItems[0];
-                                           expDateDisplay.text = currentRow[0];
-                                           currentQuantity.text = currentRow[1];
-                                           currentThreshold.text = currentRow[2];
-                                           currentIndex = 0;
-                                           self.listSwitcher.selectedSegmentIndex = 0;
-                                           updateThreshold.text = @"";
-                                           increaseCurrent.text = @"";
-                                           reduceCurrent.text = @"";
+                                   if([self checkLeaves:[self getDbFilePath] : alertController.textFields[0].text] == NO) {
+                                       //NSLog(@"Add action");
+                                       [newLeafName setString:alertController.textFields[0].text];
+                                       [newThreshold setString:alertController.textFields[1].text];
+                                       [newExpDate setString:alertController.textFields[2].text];
+                                       NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+                                       f.numberStyle = NSNumberFormatterDecimalStyle;
+                                       
+                                       NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+                                       if ([newThreshold rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+                                       {
+                                           NSNumber *threshNum = [f numberFromString:newThreshold];
+                                           if(threshNum > 0) {
+                                               [self insertLeaf:[self getDbFilePath] : newLeafName : threshNum : newExpDate];
+                                               [listItems insertObject:newLeafName atIndex:0];
+                                               [inventoryList reloadAllComponents];
+                                               NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
+                                               leafNameLabel.text = listItems[0];
+                                               expDateDisplay.text = currentRow[0];
+                                               currentQuantity.text = currentRow[1];
+                                               currentThreshold.text = currentRow[2];
+                                               currentIndex = 0;
+                                               self.listSwitcher.selectedSegmentIndex = 0;
+                                               updateThreshold.text = @"";
+                                               increaseCurrent.text = @"";
+                                               reduceCurrent.text = @"";
+                                           }
+                                           else if(threshNum < 0) {
+                                               [self insertValidation];
+                                           }
                                        }
-                                       else if(threshNum < 0) {
+                                       else {
                                            [self insertValidation];
                                        }
                                    }
                                    else {
-                                       [self insertValidation];
+                                       [self leafNameValidaton];
                                    }
                                }];
     
@@ -281,7 +286,7 @@
     }
     if([listItems count] == 0) {
         leafNameLabel.text = @"Create a leaf now!";
-        expDateDisplay.text = @"Create a leaf";
+        expDateDisplay.text = @"";
         currentQuantity.text = @"";
         currentThreshold.text = @"";
         [currExp setString:@""];
@@ -472,6 +477,26 @@
                                    increaseCurrent.text = @"";
                                    reduceCurrent.text = @"";
                                    updateThreshold.text = @"";
+                               }];
+    
+    [alertController addAction:okAction];
+    alertController.preferredAction = okAction;
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void) leafNameValidaton
+{
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"Please enter a unique name for your new leaf"
+                                          message:@""
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   //NSLog(@"OK action");
                                }];
     
     [alertController addAction:okAction];
@@ -849,6 +874,38 @@
         sqlite3_close(db);
     }
     return rowData;
+}
+
+-(BOOL) checkLeaves:(NSString*) filePath : (NSString *) newLeaf
+{
+    BOOL found = NO;
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READONLY , NULL);
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        //NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString  * query = @"SELECT * from Inventory";
+        query = [query stringByAppendingFormat:@" WHERE branch = \"%@\" AND leaf = \"%@\"", [self.detailItem description], newLeaf];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            if(sqlite3_step(stmt) == SQLITE_ROW)
+                found = YES;
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            //NSLog(@"Failed to prepare statement with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return found;
 }
 
 @end

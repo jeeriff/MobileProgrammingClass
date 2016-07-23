@@ -22,6 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.navigationItem.leftBarButtonItem.tintColor = Rgb2UIColor(255, 255, 255);
@@ -117,10 +118,15 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
                                {
                                    //NSLog(@"OK action");
                                    [newItem setString:alertController.textFields[0].text];
+                                   if([self checkBranches:[self getDbFilePath] : newItem] == NO){
                                    [self.objects insertObject:newItem atIndex:0];
                                    [self insert:[self getDbFilePath] : alertController.textFields[0].text];
                                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
                                    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                                   }
+                                   else {
+                                       [self insertValidation];
+                                   }
                                }];
     
     [alertController addAction:cancelAction];
@@ -176,6 +182,26 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }
+}
+
+-(void) insertValidation
+{
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"Please enter a unique name for your new branch"
+                                          message:@""
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   //NSLog(@"OK action");
+                               }];
+    
+    [alertController addAction:okAction];
+    alertController.preferredAction = okAction;
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 //Dataabase Methods*****
@@ -283,7 +309,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     return totalBranches;
 }
 
--(BOOL) deleteBranch:(NSString *) filePath : (NSArray *) branch
+-(BOOL) deleteBranch:(NSString *) filePath : (NSString *) branch
 {
     BOOL success = NO;
     sqlite3 * db = NULL;
@@ -309,6 +335,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
         {
             //NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
         }
+        stmt = NULL;
         NSString *query2 = @"DELETE FROM Branches";
         query2 = [query2 stringByAppendingFormat:@" WHERE branchName = \"%@\"", branch];
         rc =sqlite3_prepare_v2(db, [query2 UTF8String], -1, &stmt, NULL);
@@ -325,6 +352,38 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
         sqlite3_close(db);
     }
     return success;
+}
+
+-(BOOL) checkBranches:(NSString*) filePath : (NSString *) newBranch
+{
+    BOOL found = NO;
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt =NULL;
+    int rc=0;
+    rc = sqlite3_open_v2([filePath UTF8String], &db, SQLITE_OPEN_READONLY , NULL);
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        //NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString  * query = @"SELECT * from Branches";
+        query = [query stringByAppendingFormat:@" WHERE branchName = \"%@\"", newBranch];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
+        if(rc == SQLITE_OK)
+        {
+            if(sqlite3_step(stmt) == SQLITE_ROW)
+                found = YES;
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            //NSLog(@"Failed to prepare statement with rc:%d",rc);
+        }
+        sqlite3_close(db);
+    }
+    return found;
 }
 
 @end
