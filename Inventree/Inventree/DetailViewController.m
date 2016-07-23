@@ -111,6 +111,7 @@
             self.inventoryList.delegate = self;
             [inventoryList reloadAllComponents];
             if([listItems count] > 0) {
+                currentIndex = 0;
                 NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] : listItems[0]]];
                 leafNameLabel.text = listItems[0];
                 expDateDisplay.text = currentRow[0];
@@ -141,6 +142,7 @@
             self.inventoryList.delegate = self;
             [inventoryList reloadAllComponents];
             if([listItems count] > 0) {
+                currentIndex = 0;
                 NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] : listItems[0]]];
                 leafNameLabel.text = listItems[0];
                 expDateDisplay.text = currentRow[0];
@@ -861,7 +863,7 @@
         {
             while(sqlite3_step(stmt) == SQLITE_ROW) {
                 NSString * currColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
-                NSLog(@"Current Check:");
+                //NSLog(@"Current Check:");
                 //NSLog(currColumn);
                 [rowData addObject:currColumn];
             }
