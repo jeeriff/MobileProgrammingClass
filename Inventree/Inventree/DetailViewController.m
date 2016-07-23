@@ -119,7 +119,7 @@
                 currentThreshold.text = currentRow[2];
             }
             else if([listItems count] == 0) {
-                leafNameLabel.text = @"Create a new leaf!";
+                leafNameLabel.text = @"Create a leaf now!";
                 expDateDisplay.text = @"";
                 currentQuantity.text = @"";
                 currentThreshold.text = @"";

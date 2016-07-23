@@ -176,7 +176,8 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self deleteBranch:[self getDbFilePath] :self.objects[indexPath.row]];
+        [self deleteInventoryBranch:[self getDbFilePath] :self.objects[indexPath.row]];
+        [self deleteBranchesBranch:[self getDbFilePath] :self.objects[indexPath.row]];
         [self.objects removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
@@ -309,11 +310,11 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     return totalBranches;
 }
 
--(BOOL) deleteBranch:(NSString *) filePath : (NSString *) branch
+-(BOOL) deleteInventoryBranch:(NSString *) filePath : (NSString *) branch
 {
     BOOL success = NO;
     sqlite3 * db = NULL;
-    sqlite3_stmt * stmt =NULL;
+    sqlite3_stmt * stmt = NULL;
     int rc=0;
     rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE, NULL);
     
@@ -329,16 +330,37 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
         rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
         if(rc == SQLITE_OK)
         {
+            if(sqlite3_step(stmt) == SQLITE_DONE)
+                success = YES;
             sqlite3_finalize(stmt);
         }
         else
         {
-            //NSLog(@"Failed to prepare statement 1 with rc:%d",rc);
+            //NSLog(@"Failed to prepare statement with rc:%d",rc);
         }
-        stmt = NULL;
-        NSString *query2 = @"DELETE FROM Branches";
-        query2 = [query2 stringByAppendingFormat:@" WHERE branchName = \"%@\"", branch];
-        rc =sqlite3_prepare_v2(db, [query2 UTF8String], -1, &stmt, NULL);
+        sqlite3_close(db);
+    }
+    return success;
+}
+
+-(BOOL) deleteBranchesBranch:(NSString *) filePath : (NSString *) branch
+{
+    BOOL success = NO;
+    sqlite3 * db = NULL;
+    sqlite3_stmt * stmt = NULL;
+    int rc=0;
+    rc = sqlite3_open_v2([[self getDbFilePath] cStringUsingEncoding:NSUTF8StringEncoding], &db, SQLITE_OPEN_READWRITE, NULL);
+    
+    if (SQLITE_OK != rc)
+    {
+        sqlite3_close(db);
+        //NSLog(@"Failed to open db connection");
+    }
+    else
+    {
+        NSString *query = @"DELETE FROM Branches";
+        query = [query stringByAppendingFormat:@" WHERE branchName = \"%@\"", branch];
+        rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
         if(rc == SQLITE_OK)
         {
             if(sqlite3_step(stmt) == SQLITE_DONE)
@@ -347,7 +369,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
         }
         else
         {
-            //NSLog(@"Failed to prepare statement 2 with rc:%d",rc);
+            //NSLog(@"Failed to prepare statement with rc:%d",rc);
         }
         sqlite3_close(db);
     }
