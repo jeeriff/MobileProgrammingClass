@@ -127,10 +127,10 @@
 
             break;
         case 1:
-            newLeafButton.hidden = YES;
-            deleteLeafButton.hidden = YES;
-            increaseCurrent.hidden = YES;
-            increaseCurrentButton.hidden = YES;
+            //newLeafButton.hidden = YES;
+            //deleteLeafButton.hidden = YES;
+            //increaseCurrent.hidden = YES;
+            //increaseCurrentButton.hidden = YES;
             reduceCurrent.hidden = YES;
             reduceCurrentButton.hidden = YES;
             updateThreshold.hidden = YES;
@@ -143,6 +143,7 @@
             [inventoryList reloadAllComponents];
             if([listItems count] > 0) {
                 currentIndex = 0;
+                [listItems setArray:[self getLeaves:[self getDbFilePath] :YES]];
                 NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] : listItems[0]]];
                 leafNameLabel.text = listItems[0];
                 expDateDisplay.text = currentRow[0];
@@ -240,6 +241,7 @@
                                                [self insertLeaf:[self getDbFilePath] : newLeafName : threshNum : newExpDate];
                                                [listItems insertObject:newLeafName atIndex:0];
                                                [inventoryList reloadAllComponents];
+                                               [inventoryList selectRow:0 inComponent:0 animated:NO];
                                                NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
                                                leafNameLabel.text = listItems[0];
                                                expDateDisplay.text = currentRow[0];
@@ -274,7 +276,10 @@
 {
     if([listItems count] > 0) {
         [self deleteCurrentLeaf:[self getDbFilePath]];
-        [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
+        if(self.listSwitcher.selectedSegmentIndex == 0)
+            [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
+        else
+            [self.listItems setArray:[self getLeaves:[self getDbFilePath] : YES]];
         [inventoryList reloadAllComponents];
         if([listItems count] > 0) {
             if(currentIndex > 0)
@@ -306,10 +311,18 @@
             NSNumber *changeQuantity = [f numberFromString:increaseCurrent.text];
             if(changeQuantity > 0) {
                 [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :1 :changeQuantity];
-                [self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]];
+                if([self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]] == TRUE && [listItems count] > 0 && self.listSwitcher.selectedSegmentIndex == 1 && currentIndex < [listItems count] - 1)
+                    ++currentIndex;
+                else if([self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]] == TRUE && [listItems count] > 0 && self.listSwitcher.selectedSegmentIndex == 1)
+                    --currentIndex;
                 NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
                 currentQuantity.text = currentRow[1];
                 currentThreshold.text = currentRow[2];
+                if(self.listSwitcher.selectedSegmentIndex == 0)
+                    [listItems setArray:[self getLeaves:[self getDbFilePath] :NO]];
+                else
+                    [listItems setArray:[self getLeaves:[self getDbFilePath] :YES]];
+                [inventoryList reloadAllComponents];
             }
             else if(changeQuantity < 0) {
                 [self dataValidation];
@@ -646,7 +659,7 @@
         rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
         if(rc == SQLITE_OK)
         {
-            if(sqlite3_step(stmt) == SQLITE_DONE)
+            if(sqlite3_step(stmt) == SQLITE_DONE && sqlite3_changes(db) > 0)
                 success = YES;
             sqlite3_finalize(stmt);
         }
