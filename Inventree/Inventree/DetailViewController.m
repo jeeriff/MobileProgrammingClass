@@ -127,10 +127,6 @@
 
             break;
         case 1:
-            //newLeafButton.hidden = YES;
-            //deleteLeafButton.hidden = YES;
-            //increaseCurrent.hidden = YES;
-            //increaseCurrentButton.hidden = YES;
             reduceCurrent.hidden = YES;
             reduceCurrentButton.hidden = YES;
             updateThreshold.hidden = YES;
