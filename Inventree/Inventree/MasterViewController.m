@@ -2,9 +2,15 @@
 //  MasterViewController.m
 //  Inventree
 //
-//  Created by Matthew Harrison on 7/6/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
-//
+//  Mobile Programming (iOS)
+//  Final Project
+/*
+ Team:
+ Matthew Harrison       msh13d
+ Garrett Pierzynski     gep13
+ Hannah McLaughlin      hmm14e
+ Justin Dowell          jed13d
+ */
 
 #import "MasterViewController.h"
 #import "DetailViewController.h"
@@ -21,52 +27,43 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    self.navigationItem.leftBarButtonItem.tintColor = Rgb2UIColor(255, 255, 255);
-    self.title = @"Add or select a branch!";
-    //[self.title.font setFont:[UIFont fontWithName:@"your font name here" size:fontsizehere]];
-    [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(0, 102, 0)];
-    //[[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : Rgb2UIColor(102, 51, 0)}];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone; //Hide the table view gridlines
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //Set Back button color to white on detail view
+    self.navigationItem.leftBarButtonItem = self.editButtonItem; //Set the left navigation button button to be Edit
+    self.navigationItem.leftBarButtonItem.tintColor = Rgb2UIColor(255, 255, 255); //Set Edit button color to white
+    self.title = @"Add or select a branch!"; //Set table view title
+    [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(0, 102, 0)]; //Set navigation bar color to green
 
     NSShadow* shadow = [NSShadow new];
     shadow.shadowOffset = CGSizeMake(0.0f, 1.0f);
-    shadow.shadowColor = [UIColor blackColor];
+    shadow.shadowColor = [UIColor blackColor]; //Format the navigation bar title to have a faint shadow
     [[UINavigationBar appearance] setTitleTextAttributes: @{
                                                             NSForegroundColorAttributeName: [UIColor whiteColor],
                                                             NSFontAttributeName: [UIFont fontWithName:@"MarkerFelt-Thin" size:18.0f],
                                                             NSShadowAttributeName: shadow
                                                             }];
     
-    
-    
-    
-    
-    
-    
-    
+    //Add button calls alert which adds new branch via an embedded method
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
-    self.navigationItem.rightBarButtonItem.tintColor = Rgb2UIColor(255, 255, 255);
+    self.navigationItem.rightBarButtonItem = addButton; //Set right navigation bar button to be Add
+    self.navigationItem.rightBarButtonItem.tintColor = Rgb2UIColor(255, 255, 255);  //Set Add buton color to white
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
+    //Set background of table view to be image of tree trunk
     UIView *patternView = [[UIView alloc] initWithFrame:self.tableView.frame];
-    //patternView.backgroundColor = [UIColor brownColor];
     patternView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    //self.tableView.backgroundView = patternView;
-    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Untitled.png"]];
+    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ImageFiles/Untitled.png"]];
     
-    if(![[NSFileManager defaultManager] fileExistsAtPath:[self getDbFilePath]]) //if the file does not exist
+    //If they don't exist, create the database tables
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[self getDbFilePath]])
     {
         [self createTable:[self getDbFilePath]];
     }
+    //If the objects array has not been initialized, initialize it
     if (!self.objects) {
         self.objects = [[NSMutableArray alloc] init];
     }
-    
-    [self.objects setArray:[self getBranches:[self getDbFilePath]]];
+    [self.objects setArray:[self getBranches:[self getDbFilePath]]]; //Load the objects array with all branch names in the Branches table
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -76,28 +73,29 @@
 - (void)tableView: (UITableView*)tableView
   willDisplayCell: (UITableViewCell*)cell
 forRowAtIndexPath: (NSIndexPath*)indexPath
-{
-    cell.backgroundView= [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"branch2.png"]];
+{ //Set the cell background to be an image of a tree branch
+    cell.backgroundView= [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ImageFiles/branch2.png"]];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+//Display an alert to the user that allows them to create a new branch (but prevents the creation of a duplicate)
 - (void)insertNewObject:(id)sender {
-    
+
     NSMutableString *newItem = [[NSMutableString alloc] init];
-    
     UIAlertController *alertController = [UIAlertController
                                           alertControllerWithTitle:@"Enter new branch name!"
                                           message:@""
-                                          preferredStyle:UIAlertControllerStyleAlert];
+                                          preferredStyle:UIAlertControllerStyleAlert]; //The alert itself
     
+    //Set the color of the alert to green
     UIView * firstView = alertController.view.subviews.firstObject;
     UIView * nextView = firstView.subviews.firstObject;
     nextView.backgroundColor = [UIColor greenColor];
     
-    
+    //Adds a text field to the alert where the user can name the new branch
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
      {
          textField.placeholder = NSLocalizedString(@"New branch name", @"NewBranch");
@@ -118,14 +116,14 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
                                {
                                    //NSLog(@"OK action");
                                    [newItem setString:alertController.textFields[0].text];
-                                   if([self checkBranches:[self getDbFilePath] : newItem] == NO){
-                                   [self.objects insertObject:newItem atIndex:0];
-                                   [self insert:[self getDbFilePath] : alertController.textFields[0].text];
-                                   NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-                                   [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                                   if([self checkBranches:[self getDbFilePath] : newItem] == NO){ //If the entered branch is not a duplicate, add it
+                                       [self.objects insertObject:newItem atIndex:0];
+                                       [self insert:[self getDbFilePath] : alertController.textFields[0].text];
+                                       NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                                       [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                                    }
                                    else {
-                                       [self insertValidation];
+                                       [self insertValidation]; //If the entered branch already exists, show an alert and prevent the add
                                    }
                                }];
     
@@ -159,7 +157,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    
+    //Set the font and color of text in table view cells
     cell.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = Rgb2UIColor(0, 214, 71);
     cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:18.0f];
@@ -170,21 +168,20 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
     return YES;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self deleteInventoryBranch:[self getDbFilePath] :self.objects[indexPath.row]];
-        [self deleteBranchesBranch:[self getDbFilePath] :self.objects[indexPath.row]];
-        [self.objects removeObjectAtIndex:indexPath.row];
+        [self deleteInventoryBranch:[self getDbFilePath] :self.objects[indexPath.row]]; //Delete all leaves in Inventory table associated with the branch
+        [self deleteBranchesBranch:[self getDbFilePath] :self.objects[indexPath.row]]; //Delete branch from Branch table
+        [self.objects removeObjectAtIndex:indexPath.row]; //Remove branch from objects array, removing it from the table view
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }
 }
 
+//Called when the user attempts to add a duplicate branch
 -(void) insertValidation
 {
     UIAlertController *alertController = [UIAlertController
@@ -274,6 +271,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     return rc;
 }
 
+//Returns all of the branch names stored in the Branches table
 -(NSArray *) getBranches:(NSString*) filePath
 {
     NSMutableArray * totalBranches =[[NSMutableArray alloc] init];
@@ -310,6 +308,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     return totalBranches;
 }
 
+//Deletes all leaves in the Inventory table that are associated with the selected branch
 -(BOOL) deleteInventoryBranch:(NSString *) filePath : (NSString *) branch
 {
     BOOL success = NO;
@@ -343,6 +342,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     return success;
 }
 
+//Delete the selected branch from the Branches table
 -(BOOL) deleteBranchesBranch:(NSString *) filePath : (NSString *) branch
 {
     BOOL success = NO;
@@ -376,6 +376,7 @@ forRowAtIndexPath: (NSIndexPath*)indexPath
     return success;
 }
 
+//Returns YES if the selected branch already exist in the Branches table; returns NO if it does not yet exist
 -(BOOL) checkBranches:(NSString*) filePath : (NSString *) newBranch
 {
     BOOL found = NO;

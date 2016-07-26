@@ -2,9 +2,15 @@
 //  DetailViewController.m
 //  Inventree
 //
-//  Created by Matthew Harrison on 7/6/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
-//
+//  Mobile Programming (iOS)
+//  Final Project
+/*
+ Team:
+ Matthew Harrison       msh13d
+ Garrett Pierzynski     gep13
+ Hannah McLaughlin      hmm14e
+ Justin Dowell          jed13d
+ */
 
 #import "DetailViewController.h"
 #import <sqlite3.h>
@@ -35,8 +41,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = [self.detailItem description];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"leaves.png"]];
+    self.title = [self.detailItem description]; //Set title to name of branch
+    //Format font and color of buttons and labels
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ImageFiles/leaves.png"]]; //Set background to be image of leaves
     leafNameLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:24.0f];
     [increaseCurrentButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
     increaseCurrentButton.titleLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
@@ -52,32 +59,24 @@
     expDateDisplay.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
     expDateDisplayLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];
     
-    currentIndex = 0;
-    currExp = [[NSMutableString alloc] init];
-    // Do any additional setup after loading the view, typically from a nib.
+    currentIndex = 0; //Used to manually index into listItems, 0 by default
     [self configureView];
-    [_branchCategory setString:[self.detailItem description]];
-    
+    //Initialized listItems array if it hasn't been
     if(!self.listItems) {
         listItems = [[NSMutableArray alloc] init];
     }
-    [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
-    self.inventoryList.dataSource = self;
-    self.inventoryList.delegate = self;
-    self.userInterfaceSwitcher.selectedSegmentIndex = 1;
-    [currentThreshold setHidden:FALSE];
-    [currentThresholdLabel setHidden:FALSE];
-    [currentQuantity setHidden:FALSE];
-    [currentQuantityLabel setHidden:FALSE];
-    [expDateDisplayLabel setHidden:FALSE];
-    if([listItems count] > 0) {
+    [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]]; //Load listItems with all leaves on current branch via a database query
+    self.inventoryList.dataSource = self; //Set picker view data source
+    self.inventoryList.delegate = self;   //Set picker view delegate
+    self.userInterfaceSwitcher.selectedSegmentIndex = 1; //Default the hideable UI elements (via UISwitcher) to be shown
+    if([listItems count] > 0) { //If there is at least one leaf in the database associated with the current branch, populate the screen with the first leaf's data
         NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[0]]];
         leafNameLabel.text = listItems[0];
         expDateDisplay.text = currentRow[0];
         currentQuantity.text = currentRow[1];
         currentThreshold.text = currentRow[2];
     }
-    else {
+    else { //If not leaves are on the current branch, default the elements on the screen to prompt the creation of a leaf
         leafNameLabel.text = @"Create a leaf now!";
         expDateDisplay.text = @"";
         currentQuantity.text = @"";
@@ -92,25 +91,22 @@
     // Dispose of any resources that can be recreated.
 }
 
+//Switch between showing all leaves on the current branch (set to 0) and only those on the shopping list (set to 1)
 -(IBAction)listSwitch:(id)sender {
     switch (self.listSwitcher.selectedSegmentIndex)
     {
         case 0:
-            newLeafButton.hidden = NO;
-            deleteLeafButton.hidden = NO;
-            increaseCurrent.hidden = NO;
-            increaseCurrentButton.hidden = NO;
             reduceCurrent.hidden = NO;
             reduceCurrentButton.hidden = NO;
             updateThreshold.hidden = NO;
             updateThresholdButton.hidden = NO;
-            [self.inventoryList selectRow:0 inComponent:0 animated:NO];
+            [self.inventoryList selectRow:0 inComponent:0 animated:NO]; //Default the picker view to show the first element
             [inventoryList selectedRowInComponent:0];
-            [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
+            [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]]; //The final parameter is NO to get ALL leaves on the current branch
             self.inventoryList.dataSource = self;
             self.inventoryList.delegate = self;
             [inventoryList reloadAllComponents];
-            if([listItems count] > 0) {
+            if([listItems count] > 0) { //If there's at least one leaf on the current branch, populate the screen with its data
                 currentIndex = 0;
                 NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] : listItems[0]]];
                 leafNameLabel.text = listItems[0];
@@ -131,15 +127,15 @@
             reduceCurrentButton.hidden = YES;
             updateThreshold.hidden = YES;
             updateThresholdButton.hidden = YES;
-            [self.inventoryList selectRow:0 inComponent:0 animated:NO];
+            [self.inventoryList selectRow:0 inComponent:0 animated:NO]; //Default the picker view to show the first element
             [inventoryList selectedRowInComponent:0];
             [self.listItems setArray:[self getLeaves:[self getDbFilePath] : YES]];
             self.inventoryList.dataSource = self;
             self.inventoryList.delegate = self;
             [inventoryList reloadAllComponents];
-            if([listItems count] > 0) {
+            if([listItems count] > 0) { //If there's at least one leaf on the current branch, populate the screen with its data
                 currentIndex = 0;
-                [listItems setArray:[self getLeaves:[self getDbFilePath] :YES]];
+                [listItems setArray:[self getLeaves:[self getDbFilePath] :YES]]; //The final parameter is YES to get the leaves on the shopping list
                 NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] : listItems[0]]];
                 leafNameLabel.text = listItems[0];
                 expDateDisplay.text = currentRow[0];
@@ -158,6 +154,7 @@
     }
 }
 
+//Allows the user to show/hide part of the UI
 -(IBAction)userInterfaceSwitch:(id)sender
 {
     switch (self.userInterfaceSwitcher.selectedSegmentIndex)
@@ -183,6 +180,7 @@
     }
 }
 
+//Add a new leaf to the current branch
 -(IBAction)newLeaf:(id)sender {
     UIAlertController *alertController = [UIAlertController
                                           alertControllerWithTitle:@"Create a new leaf!"
@@ -221,7 +219,7 @@
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction *action)
                                {
-                                   if([self checkLeaves:[self getDbFilePath] : alertController.textFields[0].text] == NO) {
+                                   if([self checkLeaves:[self getDbFilePath] : alertController.textFields[0].text] == NO) { //Check if the leaf already exists on the current branch
                                        //NSLog(@"Add action");
                                        [newLeafName setString:alertController.textFields[0].text];
                                        [newThreshold setString:alertController.textFields[1].text];
@@ -230,10 +228,10 @@
                                        f.numberStyle = NSNumberFormatterDecimalStyle;
                                        
                                        NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-                                       if ([newThreshold rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+                                       if ([newThreshold rangeOfCharacterFromSet:notDigits].location == NSNotFound) //Check if the entered threshold is an integer
                                        {
                                            NSNumber *threshNum = [f numberFromString:newThreshold];
-                                           if(threshNum > 0) {
+                                           if(threshNum > 0) { //Check if the entered threshold is positive
                                                [self insertLeaf:[self getDbFilePath] : newLeafName : threshNum : newExpDate];
                                                [listItems insertObject:newLeafName atIndex:0];
                                                [inventoryList reloadAllComponents];
@@ -249,15 +247,15 @@
                                                increaseCurrent.text = @"";
                                                reduceCurrent.text = @"";
                                            }
-                                           else if(threshNum < 0) {
+                                           else if(threshNum < 0) { //If entered threshold is negative
                                                [self insertValidation];
                                            }
                                        }
-                                       else {
+                                       else { //If entered threshold is not an integer
                                            [self insertValidation];
                                        }
                                    }
-                                   else {
+                                   else { //If entered leaf is already on the current branch
                                        [self leafNameValidaton];
                                    }
                                }];
@@ -268,48 +266,49 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+//Delete a leaf from the current branch
 -(IBAction)deleteLeaf:(id)sender
 {
-    if([listItems count] > 0) {
+    if([listItems count] > 0) { //If there is a leaf to delete, the delete can proceed
         [self deleteCurrentLeaf:[self getDbFilePath]];
-        if(self.listSwitcher.selectedSegmentIndex == 0)
+        if(self.listSwitcher.selectedSegmentIndex == 0) //If the delete took place when showing all items
             [self.listItems setArray:[self getLeaves:[self getDbFilePath] : NO]];
-        else
+        else //If the delete took place while looking at the shopping list
             [self.listItems setArray:[self getLeaves:[self getDbFilePath] : YES]];
         [inventoryList reloadAllComponents];
-        if([listItems count] > 0) {
+        if([listItems count] > 0) { //If there are still leaves remaining, decrement currentIndex
             if(currentIndex > 0)
                 --currentIndex;
             NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
-            leafNameLabel.text = listItems[currentIndex];
+            leafNameLabel.text = listItems[currentIndex]; //Load the next leaves data to the screen
             expDateDisplay.text = currentRow[0];
             currentQuantity.text = currentRow[1];
             currentThreshold.text = currentRow[2];
         }
     }
-    if([listItems count] == 0) {
+    if([listItems count] == 0) { //If there are no leaves left after the delete, display the default text to the screen
         leafNameLabel.text = @"Create a leaf now!";
         expDateDisplay.text = @"";
         currentQuantity.text = @"";
         currentThreshold.text = @"";
-        [currExp setString:@""];
     }
 }
 
+//Add to the current quantity of the currently selected leaf
 -(IBAction)increaseCurrent:(id)sender
 {
-    if([listItems count] > 0) {
+    if([listItems count] > 0) { //If there is a leaf to modify, the increase can proceed
         NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-        if ([increaseCurrent.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+        if ([increaseCurrent.text rangeOfCharacterFromSet:notDigits].location == NSNotFound) //Check if the entered number is an integer
         {
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             f.numberStyle = NSNumberFormatterDecimalStyle;
             NSNumber *changeQuantity = [f numberFromString:increaseCurrent.text];
-            if(changeQuantity > 0) {
+            if(changeQuantity > 0) { //Check if the entered number if positive
                 [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :1 :changeQuantity];
-                if([self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]] == TRUE && [listItems count] > 0 && self.listSwitcher.selectedSegmentIndex == 1 && currentIndex < [listItems count] - 1)
+                if([self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]] == TRUE && [listItems count] > 0 && self.listSwitcher.selectedSegmentIndex == 1 && currentIndex < [listItems count] - 1) //Check if the increase gets the item off the shopping list while user is on the shopping list view
                     ++currentIndex;
-                else if([self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]] == TRUE && [listItems count] > 0 && self.listSwitcher.selectedSegmentIndex == 1)
+                else if([self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]] == TRUE && [listItems count] > 0 && self.listSwitcher.selectedSegmentIndex == 1) //Check if the increase gets the item off the shopping list while user is on the shopping list view
                     --currentIndex;
                 NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
                 currentQuantity.text = currentRow[1];
@@ -320,11 +319,11 @@
                     [listItems setArray:[self getLeaves:[self getDbFilePath] :YES]];
                 [inventoryList reloadAllComponents];
             }
-            else if(changeQuantity < 0) {
+            else if(changeQuantity < 0) { //If the enter number is negative
                 [self dataValidation];
             }
         }
-        else {
+        else { //If the entered number is not an integer
             [self dataValidation];
         }
     }
@@ -333,19 +332,20 @@
     reduceCurrent.text = @"";
 }
 
+//Reduce the current quantity of the currently selected leaf
 -(IBAction)reduceCurrent:(id)sender
 {
-    if([listItems count] > 0) {
+    if([listItems count] > 0) { //If there is a leaf to modify, the reduction can proceed
         NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-        if ([reduceCurrent.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+        if ([reduceCurrent.text rangeOfCharacterFromSet:notDigits].location == NSNotFound) //Check if the entered number is an integer
         {
             NSArray *temp = [[NSArray alloc] initWithArray:[self getCurrent:[self getDbFilePath] :listItems[currentIndex]]];
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             f.numberStyle = NSNumberFormatterDecimalStyle;
             NSNumber *changeQuantity = [f numberFromString:reduceCurrent.text];
-            if(changeQuantity > 0) {
+            if(changeQuantity > 0) { //Check if the entered number is positive
                 NSNumber *currQuantity = [f numberFromString:temp[0]];
-                if(changeQuantity > currQuantity)
+                if(changeQuantity > currQuantity) //Check if the entered number is greater than the current quantity total
                     changeQuantity = currQuantity;
                 [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :0 :changeQuantity];
                 [self checkShopStatusDecrease:[self getDbFilePath] :listItems[currentIndex]];
@@ -353,11 +353,11 @@
                 currentQuantity.text = currentRow[1];
                 currentThreshold.text = currentRow[2];
             }
-            else if(changeQuantity < 0) {
+            else if(changeQuantity < 0) { //If the entered number is negative
                 [self dataValidation];
             }
         }
-        else {
+        else { //if the entered number is not an integer
             [self dataValidation];
         }
     }
@@ -366,16 +366,17 @@
     reduceCurrent.text = @"";
 }
 
+//Allow the user to modify the purchase threshold of the current leaf
 -(IBAction)updateThreshold:(id)sender
 {
-    if([listItems count] > 0) {
+    if([listItems count] > 0) { //If there is a leaf to modify, the update can proceed
         NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-        if ([updateThreshold.text rangeOfCharacterFromSet:notDigits].location == NSNotFound)
+        if ([updateThreshold.text rangeOfCharacterFromSet:notDigits].location == NSNotFound) //Check if entered number is an integer
         {
             NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
             f.numberStyle = NSNumberFormatterDecimalStyle;
             NSNumber *changeThreshold = [f numberFromString:updateThreshold.text];
-            if(changeThreshold > 0) {
+            if(changeThreshold > 0) { //Check if entered number is positive
                 [self updateThreshold:[self getDbFilePath] :listItems[currentIndex] : changeThreshold];
                 [self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]];
                 [self checkShopStatusDecrease:[self getDbFilePath] :listItems[currentIndex]];
@@ -383,11 +384,11 @@
                 currentQuantity.text = currentRow[1];
                 currentThreshold.text = currentRow[2];
             }
-            else if(changeThreshold < 0) {
+            else if(changeThreshold < 0) { //If entered number is negative
                 [self dataValidation];
             }
         }
-        else {
+        else { //If entered number is not an integer
             [self dataValidation];
         }
     }
@@ -408,7 +409,7 @@
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     //return the number of array elements.
-    if([listItems count] == 0)
+    if([listItems count] == 0) //If there are no leaves on the current branch, allow there to be one empty element in the picker
         return 1;
     return [listItems count];
 }
@@ -417,7 +418,7 @@
 //the delegate method gives us a way to retrieve the selected item from the picker view.
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if([listItems count] == 0)
+    if([listItems count] == 0) //If there are no leaves on the current branch, the single empty picker element will be blank
         return nil;
     return [listItems objectAtIndex:row];
 }
@@ -437,6 +438,7 @@
     }
 }
 
+//Modifies the display style of the picker
 -(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, pickerView.frame.size.width, 44)];
@@ -449,6 +451,7 @@
     return label;
 }
 
+//Used when checking input in Add to Leaf, Subtract from Leaf, and Update Threshold buttons
 -(void)dataValidation
 {
     UIAlertController *alertController = [UIAlertController
@@ -472,6 +475,7 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+//Used when checking Threshold input in Add Leaf button
 -(void) insertValidation
 {
     UIAlertController *alertController = [UIAlertController
@@ -495,6 +499,7 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+//Used when checking for duplicate leaf names in Add Leaf button
 -(void) leafNameValidaton
 {
     UIAlertController *alertController = [UIAlertController
@@ -522,7 +527,7 @@
     return [docsPath stringByAppendingPathComponent:@"inventory.db"];
 }
 
-//insert a new leaf into the currently selected branch
+//Insert a new leaf into the currently selected branch
 -(int) insertLeaf:(NSString *)filePath : (NSString *) newLeaf : (NSNumber *) newThreshold : (NSString *) newExpDate
 {
     sqlite3* db = NULL;
@@ -536,7 +541,7 @@
     }
     else
     {
-        if([newExpDate isEqualToString:@""]) {
+        if([newExpDate isEqualToString:@""]) { //If the user doesn't enter an expiration date, the default value of 'Not perishable' is used
             query  = [NSString stringWithFormat:@"INSERT INTO Inventory (branch, leaf, threshold) VALUES (\"%@\", \"%@\", \"%@\")", [self.detailItem description], newLeaf, newThreshold];
         }
         else {
@@ -553,7 +558,7 @@
     return rc;
 }
 
-//populate the picker view with all the leaves on the currently selected branch
+//Populate the picker view with all the leaves on the currently selected branch
 -(NSArray *) getLeaves:(NSString*) filePath : (BOOL) shopping
 {
     NSMutableArray * totalLeaves =[[NSMutableArray alloc] init];
@@ -569,10 +574,10 @@
     }
     else
     {
-        if(shopping == NO) {
+        if(shopping == NO) { //Get ALL the leaves on the current branch
             query = [query stringByAppendingFormat:@" WHERE branch = \"%@\"",[self.detailItem description]];
         }
-        else if (shopping == YES){
+        else if (shopping == YES){ //Get only the leaves on the shopping list
             query = [query stringByAppendingFormat:@" WHERE branch = \"%@\" AND shopList = '1'",[self.detailItem description]];
         }
         rc =sqlite3_prepare_v2(db, [query UTF8String], -1, &stmt, NULL);
@@ -595,7 +600,7 @@
     return totalLeaves;
 }
 
-//retrieve the expiration date for a leaf to display on the screen
+//Retrieve the expiration date for a leaf to display on the screen
 -(NSArray *) getRowData:(NSString*) filePath : (NSString *) leafName
 {
     NSMutableArray * rowData =[[NSMutableArray alloc] init];
@@ -618,7 +623,6 @@
             while(sqlite3_step(stmt) == SQLITE_ROW) {
                 NSString * expColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 0)];
                 [rowData addObject:expColumn];
-                currExp = [[NSMutableString alloc] initWithString:expColumn];
                 NSString * currColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
                 [rowData addObject:currColumn];
                 NSString * threshColumn = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 2)];
@@ -635,6 +639,7 @@
     return rowData;
 }
 
+//Check if Add to Leaf or Update Threshold caused the current attribute to become greater than the threshold
 -(BOOL) checkShopStatusIncrease:(NSString *) filePath : (NSString *) leafName
 {
     BOOL success;
@@ -668,6 +673,7 @@
     return success;
 }
 
+//Check if Subtract from Leaf or Update Threshold caused the threshold attribute to become greater than the current
 -(BOOL) checkShopStatusDecrease:(NSString *) filePath : (NSString *) leafName
 {
     BOOL success;
@@ -701,7 +707,7 @@
     return success;
 }
 
-//delete leaf currently selected by the picker view
+//dDelete leaf currently selected by the picker view
 -(BOOL) deleteCurrentLeaf:(NSString *) filePath
 {
     BOOL success = NO;
@@ -735,7 +741,7 @@
     return success;
 }
 
-//Used to update the 'current' attribute in the database; set addSub = 0 for reduction, addSub = 1 for increase
+//Used to update the current attribute in the database; set addSub = 0 for reduction, addSub = 1 for increase
 -(BOOL) updateQuantity:(NSString *) filePath : (NSString *) leafName : (int) addSub : (NSNumber *) difference
 {
     BOOL success = FALSE;
@@ -774,7 +780,7 @@
     return success;
 }
 
-//used the update the threshold attribute
+//Used the update the threshold attribute
 -(BOOL) updateThreshold:(NSString *) filePath : (NSString *) leafName : (NSNumber *) newThreshold
 {
     BOOL success = FALSE;
@@ -809,8 +815,7 @@
     return success;
 }
 
-
-//This function is used purely for testing purposes and will be removed before we turn in the project******
+//Used to log the current, threshold, and shopList attributes to the screen.  Useful for testing, and could be used in the future
 /*-(NSArray *) checkUpdate:(NSString *) filePath : (NSString *) leafName{
     NSMutableArray * rowData =[[NSMutableArray alloc] init];
     sqlite3 * db = NULL;
@@ -851,7 +856,7 @@
     return rowData;
 }*/
 
-//returns the current attribute to check if a reduction will dip below 0 (in IBAction reduceQuantity)
+//Returns the current attribute to check if a reduction will dip below 0 (in IBAction reduceQuantity)
 -(NSArray *) getCurrent:(NSString *) filePath : (NSString *) leafName{
     NSMutableArray * rowData =[[NSMutableArray alloc] init];
     sqlite3 * db = NULL;
@@ -887,6 +892,7 @@
     return rowData;
 }
 
+//Used to determine if the user is attempting to add a duplicate leaf
 -(BOOL) checkLeaves:(NSString*) filePath : (NSString *) newLeaf
 {
     BOOL found = NO;

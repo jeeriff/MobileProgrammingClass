@@ -2,9 +2,15 @@
 //  MasterViewController.h
 //  Inventree
 //
-//  Created by Matthew Harrison on 7/6/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
-//
+//  Mobile Programming (iOS)
+//  Final Project
+/*
+ Team:
+ Matthew Harrison       msh13d
+ Garrett Pierzynski     gep13
+ Hannah McLaughlin      hmm14e
+ Justin Dowell          jed13d
+ */
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
@@ -12,9 +18,7 @@
 
 @class DetailViewController;
 
-@interface MasterViewController : UITableViewController <NSFetchedResultsControllerDelegate> {
-    NSMutableArray *Branches;
-}
+@interface MasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 

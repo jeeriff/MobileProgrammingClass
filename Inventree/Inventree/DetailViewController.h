@@ -2,9 +2,15 @@
 //  DetailViewController.h
 //  Inventree
 //
-//  Created by Matthew Harrison on 7/6/16.
-//  Copyright © 2016 Matthew Harrison. All rights reserved.
-//
+//  Mobile Programming (iOS)
+//  Final Project
+/*
+ Team:
+ Matthew Harrison       msh13d
+ Garrett Pierzynski     gep13
+ Hannah McLaughlin      hmm14e
+ Justin Dowell          jed13d
+ */
 
 #import <UIKit/UIKit.h>
 
@@ -26,29 +32,24 @@
     IBOutlet UITextField *currentThreshold;
     IBOutlet UIPickerView *inventoryList;
     BOOL perish;
-    NSMutableString *currExp;
     int currentIndex;
-    int currentShopIndex;
 }
 
--(IBAction)increaseCurrent:(id)sender;
--(IBAction)reduceCurrent:(id)sender;
--(IBAction)updateThreshold:(id)sender;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *listSwitcher;
--(IBAction)listSwitch:(id)sender;
--(IBAction)newLeaf:(id)sender;
--(IBAction)deleteLeaf:(id)sender;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *userInterfaceSwitcher;
--(IBAction)userInterfaceSwitch:(id)sender;
+-(IBAction)increaseCurrent:(id)sender; //Add to Leaf button
+-(IBAction)reduceCurrent:(id)sender;   //Subtract from Leaf button
+-(IBAction)updateThreshold:(id)sender; //Update Threshold button
+@property (weak, nonatomic) IBOutlet UISegmentedControl *listSwitcher; //Switch between All and Shopping List
+-(IBAction)listSwitch:(id)sender;      //Switch between ALL and Shopping List
+-(IBAction)newLeaf:(id)sender;      //Add Leaf button
+-(IBAction)deleteLeaf:(id)sender;   //Delete Leaf button
+@property (weak, nonatomic) IBOutlet UISegmentedControl *userInterfaceSwitcher; //Turn on/off part of UI
+-(IBAction)userInterfaceSwitch:(id)sender; //Turn on/off part of UI
 
 
-@property (retain, nonatomic) UIPickerView *inventoryList;
-@property (retain, nonatomic) NSMutableArray *listItems;
-@property (retain, nonatomic) NSMutableArray *shopItems;
+@property (retain, nonatomic) UIPickerView *inventoryList; //Displays leaves
+@property (retain, nonatomic) NSMutableArray *listItems;   //Stores leaves to populate inventoryList
 
-
-@property (weak, nonatomic) NSMutableString *branchCategory;
-@property (strong, nonatomic) id detailItem;
+@property (strong, nonatomic) id detailItem; //Used to access branch name for display and queries
 
 @end
 
