@@ -59,11 +59,11 @@
 		5C29680B1D2D638C000EA144 /* InventreeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InventreeUITests.m; sourceTree = "<group>"; };
 		5C29680D1D2D638C000EA144 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C2968581D2FF4C3000EA144 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		5C41E5301D485125003F5C76 /* Launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Launch.png; path = "../../../Pictures/Inventree Pics/ImageFiles/Launch.png"; sourceTree = "<group>"; };
-		5C41E53C1D485181003F5C76 /* branch2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = branch2.png; path = "../../../Pictures/Inventree Pics/ImageFiles/branch2.png"; sourceTree = "<group>"; };
-		5C41E53E1D485196003F5C76 /* leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = leaves.png; path = "../../../Pictures/Inventree Pics/ImageFiles/leaves.png"; sourceTree = "<group>"; };
-		5C41E5401D4851A3003F5C76 /* Untitled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Untitled.png; path = "../../../Pictures/Inventree Pics/ImageFiles/Untitled.png"; sourceTree = "<group>"; };
-		5C7EE3711D426C250029CF96 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = "../../../Pictures/Inventree Pics/Media.xcassets"; sourceTree = "<group>"; };
+		5C41E5301D485125003F5C76 /* Launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Launch.png; sourceTree = "<group>"; };
+		5C41E53C1D485181003F5C76 /* branch2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = branch2.png; sourceTree = "<group>"; };
+		5C41E53E1D485196003F5C76 /* leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaves.png; sourceTree = "<group>"; };
+		5C41E5401D4851A3003F5C76 /* Untitled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Untitled.png; sourceTree = "<group>"; };
+		5C7EE3711D426C250029CF96 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
