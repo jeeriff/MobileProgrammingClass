@@ -16,8 +16,11 @@
 		5C2968011D2D638C000EA144 /* InventreeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2968001D2D638C000EA144 /* InventreeTests.m */; };
 		5C29680C1D2D638C000EA144 /* InventreeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C29680B1D2D638C000EA144 /* InventreeUITests.m */; };
 		5C2968591D2FF4C4000EA144 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C2968581D2FF4C3000EA144 /* libsqlite3.tbd */; };
+		5C41E5311D485125003F5C76 /* Launch.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C41E5301D485125003F5C76 /* Launch.png */; };
+		5C41E53D1D485181003F5C76 /* branch2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C41E53C1D485181003F5C76 /* branch2.png */; };
+		5C41E53F1D485196003F5C76 /* leaves.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C41E53E1D485196003F5C76 /* leaves.png */; };
+		5C41E5411D4851A3003F5C76 /* Untitled.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C41E5401D4851A3003F5C76 /* Untitled.png */; };
 		5C7EE3721D426C250029CF96 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C7EE3711D426C250029CF96 /* Media.xcassets */; };
-		5C7EE3801D466D840029CF96 /* ImageFiles in Resources */ = {isa = PBXBuildFile; fileRef = 5C7EE37F1D466D840029CF96 /* ImageFiles */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,8 +59,11 @@
 		5C29680B1D2D638C000EA144 /* InventreeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InventreeUITests.m; sourceTree = "<group>"; };
 		5C29680D1D2D638C000EA144 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C2968581D2FF4C3000EA144 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		5C41E5301D485125003F5C76 /* Launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Launch.png; path = "../../../Pictures/Inventree Pics/ImageFiles/Launch.png"; sourceTree = "<group>"; };
+		5C41E53C1D485181003F5C76 /* branch2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = branch2.png; path = "../../../Pictures/Inventree Pics/ImageFiles/branch2.png"; sourceTree = "<group>"; };
+		5C41E53E1D485196003F5C76 /* leaves.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = leaves.png; path = "../../../Pictures/Inventree Pics/ImageFiles/leaves.png"; sourceTree = "<group>"; };
+		5C41E5401D4851A3003F5C76 /* Untitled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Untitled.png; path = "../../../Pictures/Inventree Pics/ImageFiles/Untitled.png"; sourceTree = "<group>"; };
 		5C7EE3711D426C250029CF96 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = "../../../Pictures/Inventree Pics/Media.xcassets"; sourceTree = "<group>"; };
-		5C7EE37F1D466D840029CF96 /* ImageFiles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ImageFiles; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,7 +134,10 @@
 		5C2967E31D2D638C000EA144 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				5C7EE37F1D466D840029CF96 /* ImageFiles */,
+				5C41E5301D485125003F5C76 /* Launch.png */,
+				5C41E53C1D485181003F5C76 /* branch2.png */,
+				5C41E53E1D485196003F5C76 /* leaves.png */,
+				5C41E5401D4851A3003F5C76 /* Untitled.png */,
 				5C2967E41D2D638C000EA144 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -258,7 +267,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C7EE3801D466D840029CF96 /* ImageFiles in Resources */,
+				5C41E53F1D485196003F5C76 /* leaves.png in Resources */,
+				5C41E5311D485125003F5C76 /* Launch.png in Resources */,
+				5C41E5411D4851A3003F5C76 /* Untitled.png in Resources */,
+				5C41E53D1D485181003F5C76 /* branch2.png in Resources */,
 				5C2967F61D2D638C000EA144 /* LaunchScreen.storyboard in Resources */,
 				5C7EE3721D426C250029CF96 /* Media.xcassets in Resources */,
 				5C2967F11D2D638C000EA144 /* Main.storyboard in Resources */,

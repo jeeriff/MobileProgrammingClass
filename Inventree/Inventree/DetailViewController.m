@@ -43,7 +43,7 @@
     [super viewDidLoad];
     self.title = [self.detailItem description]; //Set title to name of branch
     //Format font and color of buttons and labels
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ImageFiles/leaves.png"]]; //Set background to be image of leaves
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"leaves.png"]]; //Set background to be image of leaves
     leafNameLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:24.0f];
     [increaseCurrentButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
     increaseCurrentButton.titleLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:14.0f];

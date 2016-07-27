@@ -52,7 +52,7 @@
     //Set background of table view to be image of tree trunk
     UIView *patternView = [[UIView alloc] initWithFrame:self.tableView.frame];
     patternView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ImageFiles/Untitled.png"]];
+    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Untitled.png"]];
     
     //If they don't exist, create the database tables
     if(![[NSFileManager defaultManager] fileExistsAtPath:[self getDbFilePath]])
@@ -74,7 +74,7 @@
   willDisplayCell: (UITableViewCell*)cell
 forRowAtIndexPath: (NSIndexPath*)indexPath
 { //Set the cell background to be an image of a tree branch
-    cell.backgroundView= [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ImageFiles/branch2.png"]];
+    cell.backgroundView= [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"branch2.png"]];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
