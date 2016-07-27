@@ -306,18 +306,25 @@
             NSNumber *changeQuantity = [f numberFromString:increaseCurrent.text];
             if(changeQuantity > 0) { //Check if the entered number if positive
                 [self updateQuantity:[self getDbFilePath] :listItems[currentIndex] :1 :changeQuantity];
-                if([self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]] == TRUE && [listItems count] > 0 && self.listSwitcher.selectedSegmentIndex == 1 && currentIndex < [listItems count] - 1) //Check if the increase gets the item off the shopping list while user is on the shopping list view
-                    ++currentIndex;
-                else if([self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]] == TRUE && [listItems count] > 0 && self.listSwitcher.selectedSegmentIndex == 1) //Check if the increase gets the item off the shopping list while user is on the shopping list view
-                    --currentIndex;
-                NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
-                currentQuantity.text = currentRow[1];
-                currentThreshold.text = currentRow[2];
+                BOOL result = [self checkShopStatusIncrease:[self getDbFilePath] :listItems[currentIndex]];
                 if(self.listSwitcher.selectedSegmentIndex == 0)
                     [listItems setArray:[self getLeaves:[self getDbFilePath] :NO]];
                 else
                     [listItems setArray:[self getLeaves:[self getDbFilePath] :YES]];
                 [inventoryList reloadAllComponents];
+                if([listItems count] > 0) {
+                    if(result && [listItems count] > 0 && self.listSwitcher.selectedSegmentIndex == 1 && currentIndex < [listItems count] - 1) //Check if the increase gets the item off the shopping list while user is on the shopping list view
+                        ++currentIndex;
+                    else if(result && [listItems count] > 0 && self.listSwitcher.selectedSegmentIndex == 1) //Check if the increase gets the item off the shopping list while user is on the shopping list view
+                        --currentIndex;
+                    NSArray *currentRow = [[NSArray alloc] initWithArray:[self getRowData:[self getDbFilePath] :listItems[currentIndex]]];
+                    currentQuantity.text = currentRow[1];
+                    currentThreshold.text = currentRow[2];
+                }
+                else {
+                    currentQuantity.text = @"";
+                    currentThreshold.text = @"";
+                }
             }
             else if(changeQuantity < 0) { //If the enter number is negative
                 [self dataValidation];
